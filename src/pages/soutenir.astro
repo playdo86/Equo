@@ -2,6 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PageHero from '@/components/PageHero.astro';
 import HelloAssoButton from '@/components/HelloAssoButton.astro';
+import HelloAssoWidget from '@/components/HelloAssoWidget.astro';
 import Button from '@/components/Button.astro';
 import Icon from '@/components/Icon.astro';
 import { site, helloasso } from '@/config/site';
@@ -24,9 +25,13 @@ const utilisations = [
     lead="Votre soutien contribue au développement d’actions de prévention concrètes, accessibles et adaptées aux besoins des personnes et des territoires."
   >
     <div class="reveal mt-9" style="--delai:240ms">
-      <HelloAssoButton cle="donPonctuel" label="Faire un don avec HelloAsso" />
+      <HelloAssoButton cle="donPonctuel" label="Faire un don avec HelloAsso" ancre="faire-un-don" />
     </div>
   </PageHero>
+
+  <section class="container-equo pb-10" aria-label="Formulaire de don">
+    <HelloAssoWidget cle="donPonctuel" titre="Faire un don en ligne" id="faire-un-don" />
+  </section>
 
   <section class="pb-20 pt-6" aria-labelledby="facons">
     <div class="container-equo">
@@ -36,7 +41,7 @@ const utilisations = [
           <Icon name="coeur" class="h-8 w-8 text-or-texte" />
           <h3 class="mt-4 text-2xl font-medium">Faire un don ponctuel</h3>
           <p class="mt-3 text-anthracite/80">Un geste simple, du montant de votre choix, pour soutenir l’ensemble de nos actions.</p>
-          <div class="mt-auto pt-6"><HelloAssoButton cle="donPonctuel" label="Faire un don" /></div>
+          <div class="mt-auto pt-6"><HelloAssoButton cle="donPonctuel" label="Faire un don" ancre="faire-un-don" /></div>
         </article>
         <article class="reveal flex flex-col rounded-[var(--radius-carte)] bg-creme p-7 shadow-douce ring-1 ring-sable sm:p-9" style="--delai:80ms">
           <Icon name="souffle" class="h-8 w-8 text-or-texte" />
