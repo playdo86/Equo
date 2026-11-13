@@ -1,4 +1,5 @@
 ---
+import { u } from '@/lib/url';
 interface Props {
   href: string;
   variant?: 'primaire' | 'secondaire' | 'clair' | 'fantome';
@@ -20,7 +21,7 @@ const variants = {
 ---
 
 <a
-  href={href}
+  href={u(href)}
   class:list={[base, sizes[size], variants[variant], className]}
   {...external ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
 >

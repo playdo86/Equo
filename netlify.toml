@@ -1,0 +1,8 @@
+# Alternative à GitHub Pages (utile plus tard pour l'administration et les formulaires).
+# Sur Netlify, le site est servi à la racine : pas de BASE_PATH.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"

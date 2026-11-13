@@ -7,14 +7,17 @@ import sitemap from '@astrojs/sitemap';
 // au moment du déploiement (ex. https://www.equo-association.fr).
 const SITE_URL = process.env.SITE_URL ?? 'https://equo.example';
 
+// Sous-dossier éventuel (GitHub Pages : « /Equo »). Vide sur un nom de domaine.
+const BASE_PATH = process.env.BASE_PATH ?? '/';
+
 export default defineConfig({
   site: SITE_URL,
+  base: BASE_PATH,
   trailingSlash: 'ignore',
   build: { format: 'directory' },
   integrations: [
     sitemap({
       filter: (page) => !page.includes('/espace-membres'),
-      i18n: undefined,
     }),
   ],
   vite: { plugins: [tailwindcss()] },

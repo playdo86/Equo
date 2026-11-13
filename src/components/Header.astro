@@ -1,16 +1,17 @@
 ---
+import { u, sansBase } from '@/lib/url';
 import Logo from './Logo.astro';
 import Button from './Button.astro';
 import Icon from './Icon.astro';
 import { mainNav } from '@/config/site';
 
-const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const path = sansBase(Astro.url.pathname);
 const isCurrent = (href: string) => path === href || path.startsWith(href + '/');
 ---
 
 <header id="site-header" class="sticky top-0 z-40 border-b border-transparent bg-creme/90 backdrop-blur-md transition-[border-color,box-shadow] duration-300">
   <div class="container-equo flex h-[4.5rem] items-center justify-between gap-6">
-    <a href="/" class="shrink-0 rounded-lg" aria-label="ÉQUO — retour à l'accueil">
+    <a href={u('/')} class="shrink-0 rounded-lg" aria-label="ÉQUO — retour à l'accueil">
       <Logo />
     </a>
 
@@ -20,7 +21,7 @@ const isCurrent = (href: string) => path === href || path.startsWith(href + '/')
           mainNav.map((item) => (
             <li>
               <a
-                href={item.href}
+                href={u(item.href)}
                 aria-current={isCurrent(item.href) ? 'page' : undefined}
                 class="nav-lien relative rounded-full px-3.5 py-2 text-[0.95rem] font-bold text-anthracite/85 transition-colors hover:text-foret"
               >
@@ -33,7 +34,7 @@ const isCurrent = (href: string) => path === href || path.startsWith(href + '/')
     </nav>
 
     <div class="hidden items-center gap-2 xl:flex">
-      <a href="/contact" class="rounded-full px-3.5 py-2 text-[0.95rem] font-bold text-anthracite/85 hover:text-foret" aria-current={isCurrent('/contact') ? 'page' : undefined}>Contact</a>
+      <a href={u('/contact')} class="rounded-full px-3.5 py-2 text-[0.95rem] font-bold text-anthracite/85 hover:text-foret" aria-current={isCurrent('/contact') ? 'page' : undefined}>Contact</a>
       <Button href="/rejoindre">Rejoindre ÉQUO</Button>
     </div>
 
@@ -56,7 +57,7 @@ const isCurrent = (href: string) => path === href || path.startsWith(href + '/')
           [{ label: 'Accueil', href: '/' }, ...mainNav, { label: 'Contact', href: '/contact' }].map((item) => (
             <li>
               <a
-                href={item.href}
+                href={u(item.href)}
                 aria-current={(item.href === '/' ? path === '/' : isCurrent(item.href)) ? 'page' : undefined}
                 class="flex items-center justify-between border-b border-sable/80 py-3.5 text-lg font-bold text-anthracite aria-[current=page]:text-foret"
               >

@@ -11,7 +11,7 @@ npm run build      # vérification des types + génération dans dist/
 npm run preview    # prévisualise la version générée
 ```
 
-Au déploiement, définir `SITE_URL` (ex. `https://www.mon-domaine.fr`) : l'URL est utilisée pour les liens canoniques, le sitemap et robots.txt.
+Au déploiement, définir `SITE_URL` (adresse du site) et, si le site est dans un sous-dossier, `BASE_PATH` (ex. `/Equo` pour GitHub Pages). Mise en ligne : voir la section 11 de `docs/ARCHITECTURE.md`.
 
 ## Où modifier quoi
 
