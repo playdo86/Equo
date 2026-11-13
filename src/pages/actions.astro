@@ -6,6 +6,7 @@ import Button from '@/components/Button.astro';
 import Icon from '@/components/Icon.astro';
 import Visual from '@/components/Visual.astro';
 import { domaines } from '@/data/domaines';
+import { photo } from '@/lib/photos';
 ---
 
 <BaseLayout
@@ -30,7 +31,7 @@ import { domaines } from '@/data/domaines';
     <section id={d.id} class:list={['scroll-mt-20 py-20 sm:py-24', i % 2 === 1 && 'bg-sable-clair']} aria-labelledby={`${d.id}-titre`}>
       <div class="container-equo grid items-start gap-12 lg:grid-cols-12">
         <div class:list={['reveal lg:col-span-5', i % 2 === 1 && 'lg:order-2 lg:col-start-8']}>
-          <Visual motif={d.motif} attendu={d.photo} ratio="4 / 5" class="shadow-relief" />
+          <Visual motif={d.motif} attendu={d.photo} src={photo(d.id).src} alt={photo(d.id).alt} ratio="4 / 5" class="shadow-relief" />
         </div>
         <div class:list={['lg:col-span-6', i % 2 === 1 ? 'lg:order-1 lg:col-start-1' : 'lg:col-start-7']}>
           <div class="reveal flex items-center gap-3">

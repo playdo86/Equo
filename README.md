@@ -13,13 +13,18 @@ npm run preview    # prévisualise la version générée
 
 Au déploiement, définir `SITE_URL` (adresse du site) et, si le site est dans un sous-dossier, `BASE_PATH` (ex. `/Equo` pour GitHub Pages). Mise en ligne : voir la section 11 de `docs/ARCHITECTURE.md`.
 
-## Où modifier quoi
+## Administration
+
+Interface : https://playdo86.github.io/Equo/admin/ — mode d'emploi dans [docs/ADMINISTRATION.md](docs/ADMINISTRATION.md).
+Les réglages modifiables sont dans `src/data/reglages/*.json`.
+
+## Où modifier quoi (pour les développeurs)
 
 | Quoi | Où |
 |---|---|
-| Coordonnées, réseaux, interrupteurs | `src/config/site.ts` → `site` |
-| Liens HelloAsso | `src/config/site.ts` → `helloasso` (`null` = « Prochainement ») |
-| Tarifs | `src/config/site.ts` → `tarifs` |
+| Coordonnées, réseaux, options | `src/data/reglages/general.json` |
+| Liens HelloAsso | `src/data/reglages/helloasso.json` (vide = « Prochainement ») |
+| Tarifs | `src/data/reglages/tarifs.json` |
 | Couleurs, polices | `src/styles/global.css` (`@theme`) |
 | Les 3 domaines d'action | `src/data/domaines.ts` |
 | Activités, actualités, partenaires, documents | `src/content/*` (modèles dans `src/content.config.ts`) |
@@ -33,7 +38,7 @@ Le site étant statique, les formulaires (contact, partenariat) passent par un s
 Sans configuration, ils ouvrent la messagerie du visiteur avec le message prérempli.
 
 1. Aller sur https://web3forms.com, saisir `contact.equo@gmail.com` : une clé est envoyée par e-mail.
-2. Dans `src/config/site.ts` → `forms`, mettre `provider: 'web3forms'` et coller la clé dans `web3formsKey`.
+2. Dans l'administration, rubrique « Envoi des formulaires » : choisir Web3Forms et coller la clé.
 
 La politique de confidentialité s'adapte automatiquement.
 

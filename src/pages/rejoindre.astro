@@ -28,8 +28,8 @@ const etapesInscription = [
   { titre: 'Fournir les documents', texte: 'La liste sera communiquée à l’ouverture des inscriptions.' },
   { titre: 'Commencer à son rythme', texte: 'Un premier échange permet d’adapter la pratique.' },
 ];
-const adhesionValidee = tarifs.adhesion.statut === 'valide';
-const licenceValidee = tarifs.licence.statut === 'valide';
+const adhesionValidee = tarifs.adhesion.valide;
+const licenceValidee = tarifs.licence.valide;
 ---
 
 <BaseLayout

@@ -11,11 +11,16 @@ import { glob } from 'astro/loaders';
 
 const domaine = z.enum(['mouvement', 'emotions', 'education']);
 
+/**
+ * Les images sont déposées via l'administration dans `public/uploads/`
+ * et référencées par leur chemin (ex. « /uploads/atelier.webp »).
+ */
+const cheminImage = z.string().optional().transform((v) => (v && v.trim() ? v.trim() : undefined));
+
 /** Activités et ateliers (catalogue + agenda). */
 const activites = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/activites' }),
-  schema: ({ image }) =>
-    z.object({
+  schema: z.object({
       titre: z.string(),
       domaine,
       type: z.enum(['reguliere', 'atelier', 'stage', 'evenement']),
@@ -36,9 +41,9 @@ const activites = defineCollection({
       reserveLicencies: z.boolean().default(false),
       inscription: z.object({
         statut: z.enum(['prochainement', 'ouverte', 'complet', 'terminee']).default('prochainement'),
-        helloassoUrl: z.string().url().optional(),
+        helloassoUrl: z.string().url().or(z.literal('')).optional(),
       }),
-      photo: image().optional(),
+      photo: cheminImage,
       photoAlt: z.string().optional(),
       publie: z.boolean().default(false),
     }),
@@ -47,12 +52,11 @@ const activites = defineCollection({
 /** Actualités de l'association. */
 const actualites = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/actualites' }),
-  schema: ({ image }) =>
-    z.object({
+  schema: z.object({
       titre: z.string(),
       date: z.coerce.date(),
       resume: z.string().max(280),
-      photo: image().optional(),
+      photo: cheminImage,
       photoAlt: z.string().optional(),
       /** 'public' ou réservé à l'espace membres (étape 6). */
       visibilite: z.enum(['public', 'adherents', 'licencies']).default('public'),
@@ -63,8 +67,7 @@ const actualites = defineCollection({
 /** Partenaires : publiés uniquement après validation. */
 const partenaires = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/partenaires' }),
-  schema: ({ image }) =>
-    z.object({
+  schema: z.object({
       nom: z.string(),
       categorie: z.enum([
         'collectivite',
@@ -74,8 +77,8 @@ const partenaires = defineCollection({
         'entreprise',
         'institution',
       ]),
-      logo: image().optional(),
-      url: z.string().url().optional(),
+      logo: cheminImage,
+      url: z.string().url().or(z.literal('')).optional(),
       /** Accord explicite du partenaire pour figurer sur le site. */
       valide: z.boolean().default(false),
     }),
@@ -86,7 +89,7 @@ const documents = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/documents' }),
   schema: z.object({
     titre: z.string(),
-    fichier: z.string(), // chemin dans /public/documents/
+    fichier: z.string(), // chemin public, ex. « /documents/statuts.pdf »
     description: z.string().optional(),
     visibilite: z.enum(['public', 'adherents', 'licencies']).default('public'),
     ordre: z.number().default(0),

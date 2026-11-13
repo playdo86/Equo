@@ -1,0 +1,4 @@
+{
+  "adhesion": { "montant": 25, "valide": true },
+  "licence": { "montantMin": 150, "valide": false }
+}

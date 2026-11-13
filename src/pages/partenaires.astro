@@ -6,6 +6,9 @@ import Icon from '@/components/Icon.astro';
 import Visual from '@/components/Visual.astro';
 import Formulaire from '@/components/forms/Formulaire.astro';
 import Champ from '@/components/forms/Champ.astro';
+import { photo } from '@/lib/photos';
+import { u } from '@/lib/url';
+const photoPartenaires = photo('partenaires');
 
 const partenaires = await getCollection('partenaires', (p) => p.data.valide);
 
@@ -51,7 +54,7 @@ const libelles = {
     <a href="#demande" class="reveal mt-8 inline-flex items-center gap-2 rounded-full bg-foret px-7 py-3.5 font-extrabold text-creme shadow-douce hover:bg-foret-sombre" style="--delai:240ms">
       Proposer un partenariat <Icon name="fleche" class="h-4 w-4" />
     </a>
-    <Visual slot="aside" motif="territoire" attendu="Réunion de travail entre professionnels autour d’une carte du territoire" ratio="4 / 3" class="shadow-relief" />
+    <Visual slot="aside" motif="territoire" src={photoPartenaires.src} alt={photoPartenaires.alt} attendu="Réunion de travail entre professionnels autour d’une carte du territoire" ratio="4 / 3" class="shadow-relief" />
   </PageHero>
 
   <section class="py-20 sm:py-24" aria-labelledby="avec-qui">
@@ -89,10 +92,19 @@ const libelles = {
       <section class="py-20" aria-labelledby="ils-nous-font-confiance">
         <div class="container-equo">
           <h2 id="ils-nous-font-confiance" class="text-3xl font-medium">Ils travaillent avec ÉQUO</h2>
-          <ul class="mt-10 flex flex-wrap items-center gap-8">
-            {partenaires.map((p) => (
-              <li class="font-titre text-lg text-foret-sombre">{p.data.url ? <a href={p.data.url} target="_blank" rel="noopener noreferrer">{p.data.nom}</a> : p.data.nom}</li>
-            ))}
+          <ul class="mt-10 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5">
+            {partenaires.map((p) => {
+              const contenu = p.data.logo ? (
+                <img src={u(p.data.logo)} alt={p.data.nom} loading="lazy" class="max-h-16 w-auto object-contain" />
+              ) : (
+                <span class="font-titre text-lg text-foret-sombre">{p.data.nom}</span>
+              );
+              return (
+                <li class="grid min-h-28 place-items-center rounded-2xl bg-creme p-5 text-center ring-1 ring-sable">
+                  {p.data.url ? <a href={p.data.url} target="_blank" rel="noopener noreferrer">{contenu}<span class="sr-only"> (nouvel onglet)</span></a> : contenu}
+                </li>
+              );
+            })}
           </ul>
         </div>
       </section>

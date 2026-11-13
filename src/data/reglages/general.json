@@ -1,0 +1,14 @@
+{
+  "email": "contact.equo@gmail.com",
+  "localite": "Mercurey",
+  "region": "Saône-et-Loire",
+  "codePostal": "71640",
+  "adresse": "2 rue du Liard",
+  "rna": "W712009450",
+  "reseaux": { "facebook": "", "instagram": "", "linkedin": "" },
+  "options": {
+    "reperesPhotos": true,
+    "affiliationFederale": false,
+    "recusFiscaux": false
+  }
+}

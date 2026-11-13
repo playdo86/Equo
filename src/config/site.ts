@@ -1,14 +1,22 @@
 /**
  * Configuration centrale du site ÉQUO.
  *
- * Toutes les informations susceptibles d'évoluer (coordonnées, liens HelloAsso,
- * réseaux sociaux, tarifs, interrupteurs de fonctionnalités) sont ici, en un
- * seul endroit. À l'étape « Administration », ce fichier sera remplacé par un
- * fichier de données éditable depuis l'interface d'administration.
+ * Les valeurs modifiables (coordonnées, liens HelloAsso, tarifs, bureau,
+ * formulaires, options) sont stockées dans `src/data/reglages/*.json`,
+ * éditables depuis l'interface d'administration (/admin).
+ * Ce fichier les lit, les vérifie et les expose au reste du site.
  *
- * Règle : une valeur `null` signifie « pas encore disponible ». Le site affiche
+ * Règle : une valeur vide signifie « pas encore disponible ». Le site affiche
  * alors un état « Prochainement disponible » au lieu d'un lien fictif.
  */
+import general from '@/data/reglages/general.json';
+import helloassoData from '@/data/reglages/helloasso.json';
+import tarifsData from '@/data/reglages/tarifs.json';
+import bureauData from '@/data/reglages/bureau.json';
+import formulairesData from '@/data/reglages/formulaires.json';
+
+/** Chaîne vide ou absente → null. */
+const ou = (v: string | null | undefined) => (v && v.trim() ? v.trim() : null);
 
 export const site = {
   name: 'ÉQUO',
@@ -20,79 +28,64 @@ export const site = {
     "ÉQUO est une association de prévention qui propose des actions concrètes, accessibles et progressives pour permettre à chacun de construire ses propres équilibres autour du mouvement, des émotions et des modes de vie.",
   founded: 2026,
   /** Numéro au Répertoire national des associations. */
-  rna: 'W712009450',
+  rna: general.rna,
   locale: 'fr_FR',
 
   contact: {
-    email: 'contact.equo@gmail.com',
-    locality: 'Mercurey',
-    region: 'Saône-et-Loire',
-    postalCode: '71640',
-    // Adresse du siège social (statuts). Affichée uniquement dans les mentions légales.
-    streetAddress: '2 rue du Liard',
+    email: general.email,
+    locality: general.localite,
+    region: general.region,
+    postalCode: general.codePostal,
+    /** Adresse du siège social (statuts). Affichée uniquement dans les mentions légales. */
+    streetAddress: general.adresse,
   },
 
-  /** Réseaux sociaux : laisser `null` tant que les comptes n'existent pas. */
+  /** Réseaux sociaux : vides tant que les comptes n'existent pas. */
   social: {
-    facebook: null as string | null,
-    instagram: null as string | null,
-    linkedin: null as string | null,
+    facebook: ou(general.reseaux.facebook),
+    instagram: ou(general.reseaux.instagram),
+    linkedin: ou(general.reseaux.linkedin),
   },
 
   /** Interrupteurs de fonctionnalités. */
   features: {
-    /** Affiche un petit repère « Photo à venir » sur les emplacements photo. */
-    showPhotoHints: true,
+    /** Affiche un petit repère « Photo à venir » sur les emplacements photo sans image. */
+    showPhotoHints: general.options.reperesPhotos,
     /** Espace adhérents / licenciés (étape 6). */
     memberArea: false,
-    /** Affiliation fédérale effective (ex. Fédération Française Sports pour Tous). */
-    federationAffiliation: false,
-    /** Éligibilité au mécénat confirmée (reçus fiscaux). */
-    taxReceiptsEligible: false,
+    /** Affiliation fédérale effective. */
+    federationAffiliation: general.options.affiliationFederale,
+    /** Éligibilité aux reçus fiscaux confirmée. */
+    taxReceiptsEligible: general.options.recusFiscaux,
   },
-} as const;
+};
 
 /* ------------------------------------------------------------------ */
-/* HelloAsso : liens officiels à renseigner quand ils seront créés.    */
+/* HelloAsso                                                           */
 /* ------------------------------------------------------------------ */
 
-export type HelloAssoKey =
-  | 'adhesion'
-  | 'licence'
-  | 'donPonctuel'
-  | 'donMensuel'
-  | 'campagne'
-  | 'evenements';
+export type HelloAssoKey = 'adhesion' | 'licence' | 'donPonctuel' | 'donMensuel' | 'campagne' | 'evenements';
 
 export interface HelloAssoLink {
   label: string;
-  /** URL de la page HelloAsso (ex. https://www.helloasso.com/associations/equo/adhesions/...) */
+  /** URL de la page HelloAsso (https://www.helloasso.com/associations/...) */
   url: string | null;
-  /** URL du widget HelloAsso, si une intégration embarquée est souhaitée. */
+  /** URL du widget HelloAsso (se termine par /widget), pour l'intégration dans la page. */
   widgetUrl: string | null;
 }
 
-export const helloasso: Record<HelloAssoKey, HelloAssoLink> = {
-  adhesion: {
-    label: 'Adhérer à ÉQUO',
-    url: 'https://www.helloasso.com/associations/association-equo/adhesions/adhesion-associative-equo',
-    widgetUrl: 'https://www.helloasso.com/associations/association-equo/adhesions/adhesion-associative-equo/widget',
-  },
-  licence: { label: "S'inscrire à la pratique sport-santé", url: null, widgetUrl: null },
-  donPonctuel: {
-    label: 'Faire un don avec HelloAsso',
-    url: 'https://www.helloasso.com/associations/association-equo/formulaires/1',
-    widgetUrl: 'https://www.helloasso.com/associations/association-equo/formulaires/1/widget',
-  },
-  // Même formulaire que le don ponctuel : le choix « mensuel » se fait dans le formulaire HelloAsso.
-  donMensuel: {
-    label: 'Faire un don mensuel',
-    url: 'https://www.helloasso.com/associations/association-equo/formulaires/1',
-    widgetUrl: 'https://www.helloasso.com/associations/association-equo/formulaires/1/widget',
-  },
-  campagne: { label: 'Soutenir la campagne en cours', url: null, widgetUrl: null },
-  evenements: { label: "S'inscrire à un atelier", url: null, widgetUrl: null },
-};
+const helloassoValide = (v: string | null) => (v && /^https:\/\/(www\.)?helloasso\.com\//.test(v) ? v : null);
+
+export const helloasso = Object.fromEntries(
+  (Object.keys(helloassoData) as HelloAssoKey[]).map((k) => [
+    k,
+    {
+      label: helloassoData[k].label,
+      url: helloassoValide(ou(helloassoData[k].url)),
+      widgetUrl: helloassoValide(ou(helloassoData[k].widgetUrl)),
+    },
+  ]),
+) as Record<HelloAssoKey, HelloAssoLink>;
 
 /* ------------------------------------------------------------------ */
 /* Formulaires (contact, partenariat)                                  */
@@ -102,16 +95,18 @@ export const helloasso: Record<HelloAssoKey, HelloAssoLink> = {
  * Le site est statique : l'envoi des formulaires passe par un service
  * externe gratuit. Tant qu'aucun service n'est configuré, le formulaire
  * prépare un e-mail dans la messagerie du visiteur (aucun envoi simulé).
- *
- * Web3Forms : créer une clé gratuite sur https://web3forms.com avec
- * l'adresse contact.equo@gmail.com, puis renseigner `web3formsKey`.
- * (Cette clé est publique par conception : elle peut figurer ici.)
+ * Web3Forms : clé gratuite sur https://web3forms.com (publique par conception).
  */
+const service = formulairesData.service;
 export const forms = {
-  provider: null as null | 'web3forms' | 'formspree',
-  web3formsKey: null as string | null,
-  /** Identifiant Formspree (ex. « xyzabcd »), si ce service est préféré. */
-  formspreeId: null as string | null,
+  provider:
+    service === 'web3forms' && ou(formulairesData.web3formsKey)
+      ? ('web3forms' as const)
+      : service === 'formspree' && ou(formulairesData.formspreeId)
+        ? ('formspree' as const)
+        : null,
+  web3formsKey: ou(formulairesData.web3formsKey),
+  formspreeId: ou(formulairesData.formspreeId),
 };
 
 export const typesDemande = [
@@ -124,22 +119,23 @@ export const typesDemande = [
 ] as const;
 
 /* ------------------------------------------------------------------ */
-/* Bureau : renseigner les noms uniquement avec l'accord des personnes. */
+/* Bureau : noms publiés uniquement avec l'accord des personnes.       */
 /* ------------------------------------------------------------------ */
 
-export const bureau: { role: string; nom: string | null; presentation?: string }[] = [
-  { role: 'Présidente', nom: null },
-  { role: 'Trésorière', nom: null },
-  { role: 'Secrétaire', nom: null },
-];
+export const bureau = bureauData.membres.map((m) => ({
+  role: m.role,
+  nom: ou(m.nom),
+  presentation: ou(m.presentation),
+  photo: ou(m.photo),
+}));
 
 /* ------------------------------------------------------------------ */
-/* Tarifs : affichés avec leur statut de validation.                   */
+/* Tarifs                                                              */
 /* ------------------------------------------------------------------ */
 
 export const tarifs = {
-  adhesion: { montant: 25, periode: 'an', statut: 'valide' as 'envisage' | 'valide' },
-  licence: { montantMin: 150, periode: 'an', statut: 'a-confirmer' as 'a-confirmer' | 'valide' },
+  adhesion: { montant: tarifsData.adhesion.montant, periode: 'an', valide: tarifsData.adhesion.valide },
+  licence: { montantMin: tarifsData.licence.montantMin, periode: 'an', valide: tarifsData.licence.valide },
 };
 
 /* ------------------------------------------------------------------ */
@@ -163,6 +159,7 @@ export const mainNav: NavItem[] = [
 export const footerNav: NavItem[] = [
   { label: 'Accueil', href: '/' },
   ...mainNav,
+  { label: 'Actualités', href: '/actualites' },
   { label: 'Rejoindre ÉQUO', href: '/rejoindre' },
   { label: 'Contact', href: '/contact' },
 ];

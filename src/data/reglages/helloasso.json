@@ -1,0 +1,20 @@
+{
+  "adhesion": {
+    "label": "Adhérer à ÉQUO",
+    "url": "https://www.helloasso.com/associations/association-equo/adhesions/adhesion-associative-equo",
+    "widgetUrl": "https://www.helloasso.com/associations/association-equo/adhesions/adhesion-associative-equo/widget"
+  },
+  "licence": { "label": "S'inscrire à la pratique sport-santé", "url": "", "widgetUrl": "" },
+  "donPonctuel": {
+    "label": "Faire un don avec HelloAsso",
+    "url": "https://www.helloasso.com/associations/association-equo/formulaires/1",
+    "widgetUrl": "https://www.helloasso.com/associations/association-equo/formulaires/1/widget"
+  },
+  "donMensuel": {
+    "label": "Faire un don mensuel",
+    "url": "https://www.helloasso.com/associations/association-equo/formulaires/1",
+    "widgetUrl": "https://www.helloasso.com/associations/association-equo/formulaires/1/widget"
+  },
+  "campagne": { "label": "Soutenir la campagne en cours", "url": "", "widgetUrl": "" },
+  "evenements": { "label": "S'inscrire à un atelier", "url": "", "widgetUrl": "" }
+}

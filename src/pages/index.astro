@@ -6,12 +6,16 @@ import Icon from '@/components/Icon.astro';
 import Visual from '@/components/Visual.astro';
 import { site } from '@/config/site';
 import { domaines } from '@/data/domaines';
+import accueil from '@/data/reglages/accueil.json';
+import { photo } from '@/lib/photos';
+import { getCollection } from 'astro:content';
 
-const pourquoi = [
-  'Parce que beaucoup veulent aller mieux, sans toujours savoir par où commencer.',
-  'Parce que les solutions proposées ne correspondent pas toujours aux réalités du quotidien.',
-  'Parce que la santé se construit progressivement, à travers des expériences, des ajustements et des choix personnels.',
-];
+const pourquoi = accueil.pourquoi.filter((p) => p.trim());
+const photoAccueil = photo('accueil');
+const actualites = (await getCollection('actualites', (a) => a.data.publie && a.data.visibilite === 'public'))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
+const fmtDate = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Paris' });
 
 const principes = [
   {
@@ -40,14 +44,14 @@ const principes = [
       <div class="lg:col-span-6 xl:col-span-6">
         <p class="eyebrow reveal"><span>Association de prévention<span class="hidden sm:inline">&nbsp;· {site.contact.region}</span></span></p>
         <h1 id="hero-titre" class="reveal mt-5 text-[2.6rem] leading-[1.05] font-medium sm:text-6xl lg:text-[4.1rem]" style="--delai:80ms">
-          Construire les équilibres <em class="font-normal italic text-lagon">du quotidien</em>
+          {accueil.heroTitre} <em class="font-normal italic text-lagon">{accueil.heroTitreAccent}</em>
         </h1>
         <p class="reveal mt-6 font-titre text-xl text-foret sm:text-2xl" style="--delai:160ms">
-          <span class="signature">Bouger.</span> <span class="signature">Respirer.</span> <span class="signature">Ajuster.</span>
-          <span class="mt-1 block text-lg italic text-gris sm:text-xl">Prendre soin de soi, à son rythme.</span>
+          {accueil.heroSignature.split(/(?<=\.)\s+/).map((mot) => <span class="signature">{mot} </span>)}
+          <span class="mt-1 block text-lg italic text-gris sm:text-xl">{accueil.heroSousSignature}</span>
         </p>
         <p class="reveal mt-6 max-w-xl text-lg leading-relaxed text-anthracite/85" style="--delai:240ms">
-          {site.description}
+          {accueil.heroTexte}
         </p>
         <div class="reveal mt-9 flex flex-col gap-3 sm:flex-row" style="--delai:320ms">
           <Button href="/actions" size="lg">
@@ -66,6 +70,8 @@ const principes = [
             ratio="5 / 6"
             priority
             hint="haut"
+            src={photoAccueil.src}
+            alt={photoAccueil.alt}
             attendu="Personnes d’âges différents qui marchent ensemble en extérieur, lumière naturelle"
             class="shadow-relief relative"
           />
@@ -87,7 +93,7 @@ const principes = [
       <div class="lg:col-span-4">
         <p class="eyebrow reveal">Pourquoi ÉQUO&nbsp;?</p>
         <h2 id="pourquoi-titre" class="reveal mt-4 text-3xl leading-tight font-medium sm:text-4xl" style="--delai:80ms">
-          Parce qu’aller mieux ne devrait pas être un parcours d’obstacles.
+          {accueil.pourquoiTitre}
         </h2>
       </div>
       <div class="lg:col-span-7 lg:col-start-6">
@@ -102,7 +108,7 @@ const principes = [
           }
         </ul>
         <p class="reveal mt-10 border-l-4 border-sauge pl-6 text-xl font-extrabold text-foret sm:text-2xl" style="--delai:300ms">
-          ÉQUO est né pour rendre ces équilibres accessibles.
+          {accueil.pourquoiConclusion}
         </p>
       </div>
     </div>
@@ -128,7 +134,7 @@ const principes = [
           domaines.map((d, i) => (
             <li class="reveal" style={`--delai:${i * 110}ms`}>
               <article class="carte group relative flex h-full flex-col overflow-hidden rounded-[var(--radius-carte)] bg-creme shadow-douce transition-shadow duration-300 hover:shadow-relief">
-                <Visual motif={d.motif} attendu={d.photo} ratio="16 / 10" class="rounded-none" />
+                <Visual motif={d.motif} attendu={d.photo} src={photo(d.id).src} alt={photo(d.id).alt} ratio="16 / 10" class="rounded-none" />
                 <div class="flex flex-1 flex-col p-6 sm:p-7">
                   <div class="flex items-center gap-3">
                     <span class="grid h-10 w-10 place-items-center rounded-full bg-sauge-clair text-foret">
@@ -195,7 +201,7 @@ const principes = [
       <figure class="reveal mx-auto mt-20 max-w-4xl text-center">
         <svg viewBox="0 0 40 30" class="mx-auto h-7 w-9 text-or" aria-hidden="true"><path fill="currentColor" d="M0 30V17C0 7 5 1.5 15 0l1.5 3.5C11 5 8.5 8.5 8.3 14H16v16H0Zm24 0V17C24 7 29 1.5 39 0l1 3.5C35 5 32.5 8.5 32.3 14H40v16H24Z" opacity=".7"/></svg>
         <blockquote class="mt-5 font-titre text-2xl leading-snug font-light text-foret-sombre italic sm:text-[2.1rem]">
-          Ce qui compte n’est pas seulement la pratique en elle-même, mais la résonance qu’elle crée dans le quotidien.
+          {accueil.citation}
         </blockquote>
         <figcaption class="mt-6">
           <a href={u('/approche')} class="lien-fleche">Découvrir notre approche <Icon name="fleche" class="h-4 w-4" /></a>
@@ -254,6 +260,33 @@ const principes = [
     </div>
   </section>
 
+  {
+    actualites.length > 0 && (
+      <section class="pb-20 sm:pb-28" aria-labelledby="actus-titre">
+        <div class="container-equo">
+          <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+            <div>
+              <p class="eyebrow reveal"><span>Actualités</span></p>
+              <h2 id="actus-titre" class="reveal mt-4 text-3xl leading-tight font-medium sm:text-[2.6rem]">Les dernières nouvelles</h2>
+            </div>
+            <a href={u('/actualites')} class="lien-fleche reveal shrink-0">Toutes les actualités <Icon name="fleche" class="h-4 w-4" /></a>
+          </div>
+          <ul class="mt-10 grid gap-6 md:grid-cols-3">
+            {actualites.map((a) => (
+              <li class="reveal">
+                <article class="relative flex h-full flex-col rounded-[var(--radius-carte)] bg-creme p-6 shadow-douce ring-1 ring-sable hover:shadow-relief">
+                  <time datetime={a.data.date.toISOString()} class="text-sm font-bold text-or-texte">{fmtDate.format(a.data.date)}</time>
+                  <h3 class="mt-2 text-xl leading-snug font-medium"><a href={u(`/actualites/${a.id}`)} class="after:absolute after:inset-0">{a.data.titre}</a></h3>
+                  <p class="mt-2 text-[0.95rem] text-anthracite/80">{a.data.resume}</p>
+                </article>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
   <!-- ================================================== APPEL À L'ACTION -->
   <section class="relative overflow-hidden bg-sable py-20 sm:py-24" aria-labelledby="cta-titre">
     <svg class="pointer-events-none absolute inset-x-0 bottom-0 h-24 w-full text-sable-clair" viewBox="0 0 1440 100" preserveAspectRatio="none" aria-hidden="true">
@@ -261,7 +294,7 @@ const principes = [
     </svg>
     <div class="container-equo relative text-center">
       <h2 id="cta-titre" class="reveal mx-auto max-w-3xl text-3xl leading-tight font-medium sm:text-5xl">
-        Et si nous construisions ensemble <em class="italic text-lagon">de nouveaux équilibres</em>&nbsp;?
+        {accueil.ctaTitre} <em class="italic text-lagon">{accueil.ctaTitreAccent}</em>&nbsp;?
       </h2>
       <div class="reveal mt-10 flex flex-col justify-center gap-3 sm:flex-row" style="--delai:120ms">
         <Button href="/rejoindre" size="lg">Rejoindre ÉQUO</Button>

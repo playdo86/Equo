@@ -1,0 +1,308 @@
+# Administration du site ÉQUO — Sveltia CMS
+# Chaque enregistrement crée une modification sur GitHub ; le site se met
+# à jour automatiquement en 1 à 2 minutes.
+
+backend:
+  name: github
+  repo: playdo86/Equo
+  branch: main
+  auth_methods: [token]
+  commit_messages:
+    create: "Admin : ajout de {{collection}} « {{slug}} »"
+    update: "Admin : modification de {{collection}} « {{slug}} »"
+    delete: "Admin : suppression de {{collection}} « {{slug}} »"
+    uploadMedia: "Admin : ajout du fichier « {{path}} »"
+    deleteMedia: "Admin : suppression du fichier « {{path}} »"
+
+app_title: Administration ÉQUO
+site_url: https://playdo86.github.io/Equo/
+display_url: https://playdo86.github.io/Equo/
+logo:
+  src: ../favicon.svg
+
+media_folder: public/uploads
+public_folder: /uploads
+media_libraries:
+  default:
+    config:
+      max_file_size: 15000000
+      slugify_filename: true
+      transformations:
+        raster_image:
+          format: webp
+          quality: 82
+          width: 1800
+          height: 1800
+
+slug:
+  encoding: ascii
+  clean_accents: true
+
+collections:
+  # ------------------------------------------------------------------ ACTIVITÉS
+  - name: activites
+    label: Activités & agenda
+    label_singular: activité
+    description: Ateliers, activités régulières, stages et événements. Seules les activités « Publiée » apparaissent sur le site.
+    icon: event
+    folder: src/content/activites
+    create: true
+    slug: "{{titre}}"
+    identifier_field: titre
+    summary: "{{titre}} — {{type}}{{publie | ternary(' ✓ publiée', ' (brouillon)')}}"
+    sortable_fields: [titre, type, domaine]
+    preview_path: "agenda/{{slug}}"
+    fields:
+      - { name: titre, label: Titre, widget: string }
+      - name: domaine
+        label: Domaine
+        widget: select
+        options:
+          - { label: Mouvement et activité physique adaptée, value: mouvement }
+          - { label: Régulation émotionnelle et mieux-être, value: emotions }
+          - { label: Éducation et accompagnement, value: education }
+      - name: type
+        label: Type
+        widget: select
+        options:
+          - { label: Activité régulière, value: reguliere }
+          - { label: Atelier, value: atelier }
+          - { label: Stage, value: stage }
+          - { label: Événement, value: evenement }
+      - { name: resume, label: Résumé (240 caractères max.), widget: text, maxlength: 240 }
+      - { name: public, label: Public concerné, widget: string, hint: "Ex. : Adultes et seniors peu ou pas actifs" }
+      - { name: lieu, label: Lieu, widget: string, required: false }
+      - { name: intervenant, label: Intervenant·e, widget: string, required: false }
+      - name: dates
+        label: Dates
+        label_singular: date
+        widget: list
+        required: false
+        hint: Pour un atelier, un stage ou un événement. Laisser vide pour une activité régulière.
+        summary: "{{debut | date('D MMM YYYY, HH:mm')}}"
+        fields:
+          - { name: debut, label: Début, widget: datetime, format: "YYYY-MM-DDTHH:mm:ssZ" }
+          - { name: fin, label: Fin, widget: datetime, format: "YYYY-MM-DDTHH:mm:ssZ", required: false }
+      - { name: recurrence, label: Horaires réguliers, widget: string, required: false, hint: "Ex. : Tous les mardis, 10 h – 11 h 30, hors vacances scolaires" }
+      - { name: places, label: Nombre de places, widget: number, value_type: int, min: 1, required: false }
+      - { name: tarif, label: Tarif, widget: string, required: false, hint: "Ex. : 10 € (8 € pour les adhérents)" }
+      - { name: conditions, label: Conditions d'accès, widget: text, required: false }
+      - { name: reserveLicencies, label: Réservé aux licenciés sport-santé, widget: boolean, default: false }
+      - name: inscription
+        label: Inscription
+        widget: object
+        fields:
+          - name: statut
+            label: État des inscriptions
+            widget: select
+            default: prochainement
+            options:
+              - { label: Prochainement, value: prochainement }
+              - { label: Ouvertes, value: ouverte }
+              - { label: Complet, value: complet }
+              - { label: Terminé, value: terminee }
+          - { name: helloassoUrl, label: Lien HelloAsso (billetterie), widget: string, required: false, hint: "Adresse publique du formulaire, commençant par https://www.helloasso.com/associations/…" }
+      - { name: photo, label: Photo, widget: image, required: false }
+      - { name: photoAlt, label: Description de la photo (accessibilité), widget: string, required: false }
+      - { name: publie, label: Publiée sur le site, widget: boolean, default: false }
+      - { name: body, label: Description détaillée, widget: markdown, required: false }
+
+  # ------------------------------------------------------------------ ACTUALITÉS
+  - name: actualites
+    label: Actualités
+    label_singular: actualité
+    icon: newspaper
+    folder: src/content/actualites
+    create: true
+    slug: "{{year}}-{{month}}-{{titre}}"
+    identifier_field: titre
+    summary: "{{date | date('D MMM YYYY')}} — {{titre}}{{publie | ternary('', ' (brouillon)')}}"
+    sortable_fields: [date, titre]
+    preview_path: "actualites/{{slug}}"
+    fields:
+      - { name: titre, label: Titre, widget: string }
+      - { name: date, label: Date, widget: datetime, type: date, format: "YYYY-MM-DD" }
+      - { name: resume, label: Résumé (280 caractères max.), widget: text, maxlength: 280 }
+      - { name: photo, label: Photo, widget: image, required: false }
+      - { name: photoAlt, label: Description de la photo (accessibilité), widget: string, required: false }
+      - name: visibilite
+        label: Visibilité
+        widget: select
+        default: public
+        hint: Les options « adhérents » et « licenciés » seront utilisables avec l'espace membres.
+        options:
+          - { label: Tout public, value: public }
+          - { label: "Adhérents (espace membres, à venir)", value: adherents }
+          - { label: "Licenciés (espace membres, à venir)", value: licencies }
+      - { name: publie, label: Publiée sur le site, widget: boolean, default: false }
+      - { name: body, label: Texte, widget: markdown }
+
+  # ------------------------------------------------------------------ PARTENAIRES
+  - name: partenaires
+    label: Partenaires
+    label_singular: partenaire
+    description: Un partenaire n'apparaît sur le site qu'avec son accord explicite (case « Accord du partenaire »).
+    icon: handshake
+    folder: src/content/partenaires
+    create: true
+    slug: "{{nom}}"
+    identifier_field: nom
+    summary: "{{nom}}{{valide | ternary(' ✓', ' (non publié)')}}"
+    fields:
+      - { name: nom, label: Nom, widget: string }
+      - name: categorie
+        label: Catégorie
+        widget: select
+        options:
+          - { label: Collectivité, value: collectivite }
+          - { label: Structure de santé, value: sante }
+          - { label: Établissement médico-social, value: medico-social }
+          - { label: Association, value: association }
+          - { label: Entreprise, value: entreprise }
+          - { label: Institution / financeur, value: institution }
+      - { name: logo, label: Logo, widget: image, required: false }
+      - { name: url, label: Site internet, widget: string, required: false }
+      - { name: valide, label: Accord du partenaire pour figurer sur le site, widget: boolean, default: false }
+      - { name: body, label: Notes internes (non affichées), widget: text, required: false }
+
+  # ------------------------------------------------------------------ DOCUMENTS
+  - name: documents
+    label: Documents associatifs
+    label_singular: document
+    icon: description
+    folder: src/content/documents
+    create: true
+    slug: "{{titre}}"
+    identifier_field: titre
+    sortable_fields: [ordre, titre]
+    fields:
+      - { name: titre, label: Titre, widget: string }
+      - { name: fichier, label: Fichier (PDF), widget: file, media_folder: /public/documents, public_folder: /documents, accept: application/pdf }
+      - { name: description, label: Description, widget: string, required: false, hint: "Ex. : Statuts adoptés le 30 janvier 2026 (PDF, 200 Ko)" }
+      - name: visibilite
+        label: Visibilité
+        widget: select
+        default: public
+        options:
+          - { label: Tout public, value: public }
+          - { label: "Adhérents (espace membres, à venir)", value: adherents }
+          - { label: "Licenciés (espace membres, à venir)", value: licencies }
+      - { name: ordre, label: Ordre d'affichage, widget: number, value_type: int, default: 0 }
+
+singletons:
+  - name: accueil
+    label: Textes de l'accueil
+    icon: home
+    file: src/data/reglages/accueil.json
+    fields:
+      - { name: heroTitre, label: Grand titre (début), widget: string }
+      - { name: heroTitreAccent, label: "Grand titre (fin, en italique vert)", widget: string }
+      - { name: heroSignature, label: Signature, widget: string }
+      - { name: heroSousSignature, label: Sous-signature, widget: string }
+      - { name: heroTexte, label: Texte de présentation, widget: text }
+      - { name: pourquoiTitre, label: "« Pourquoi ÉQUO ? » — titre", widget: string }
+      - { name: pourquoi, label: "« Pourquoi ÉQUO ? » — phrases", widget: list, field: { name: phrase, label: Phrase, widget: text } }
+      - { name: pourquoiConclusion, label: "« Pourquoi ÉQUO ? » — conclusion", widget: string }
+      - { name: citation, label: Citation, widget: text }
+      - { name: ctaTitre, label: Appel final (début), widget: string }
+      - { name: ctaTitreAccent, label: "Appel final (fin, en italique vert)", widget: string }
+
+  - name: photos
+    label: Photos du site
+    icon: photo_library
+    file: src/data/reglages/photos.json
+    fields:
+      - { name: accueil, label: Accueil (grande photo), widget: object, hint: "Tant qu'un emplacement est vide, une illustration aux couleurs d'ÉQUO s'affiche.", fields: [{ name: image, label: Photo, widget: image, required: false }, { name: alt, label: Description, widget: string, required: false }] }
+      - { name: mouvement, label: Mouvement et APA, widget: object, fields: [{ name: image, label: Photo, widget: image, required: false }, { name: alt, label: Description, widget: string, required: false }] }
+      - { name: emotions, label: Régulation émotionnelle, widget: object, fields: [{ name: image, label: Photo, widget: image, required: false }, { name: alt, label: Description, widget: string, required: false }] }
+      - { name: education, label: Éducation et accompagnement, widget: object, fields: [{ name: image, label: Photo, widget: image, required: false }, { name: alt, label: Description, widget: string, required: false }] }
+      - { name: partenaires, label: Page Partenaires, widget: object, fields: [{ name: image, label: Photo, widget: image, required: false }, { name: alt, label: Description, widget: string, required: false }] }
+
+  - name: helloasso
+    label: Liens HelloAsso
+    icon: payments
+    file: src/data/reglages/helloasso.json
+    fields:
+      - { name: adhesion, label: Adhésion, widget: object, hint: "Lien : adresse publique du formulaire (https://www.helloasso.com/associations/…). Lien du widget : même adresse suivie de /widget. Laisser vide = bouton « Prochainement ».", fields: [{ name: label, label: Texte du bouton, widget: string }, { name: url, label: Lien, widget: string, required: false }, { name: widgetUrl, label: Lien du widget, widget: string, required: false }] }
+      - { name: licence, label: Pratique sport-santé, widget: object, fields: [{ name: label, label: Texte du bouton, widget: string }, { name: url, label: Lien, widget: string, required: false }, { name: widgetUrl, label: Lien du widget, widget: string, required: false }] }
+      - { name: donPonctuel, label: Don, widget: object, fields: [{ name: label, label: Texte du bouton, widget: string }, { name: url, label: Lien, widget: string, required: false }, { name: widgetUrl, label: Lien du widget, widget: string, required: false }] }
+      - { name: donMensuel, label: Don mensuel, widget: object, fields: [{ name: label, label: Texte du bouton, widget: string }, { name: url, label: Lien, widget: string, required: false }, { name: widgetUrl, label: Lien du widget, widget: string, required: false }] }
+      - { name: campagne, label: Campagne de financement, widget: object, fields: [{ name: label, label: Texte du bouton, widget: string }, { name: url, label: Lien, widget: string, required: false }, { name: widgetUrl, label: Lien du widget, widget: string, required: false }] }
+      - { name: evenements, label: Billetterie générale, widget: object, fields: [{ name: label, label: Texte du bouton, widget: string }, { name: url, label: Lien, widget: string, required: false }, { name: widgetUrl, label: Lien du widget, widget: string, required: false }] }
+
+  - name: tarifs
+    label: Tarifs
+    icon: euro
+    file: src/data/reglages/tarifs.json
+    fields:
+      - name: adhesion
+        label: Adhésion
+        widget: object
+        fields:
+          - { name: montant, label: Montant annuel (€), widget: number, value_type: int }
+          - { name: valide, label: Montant validé par l'Assemblée générale, widget: boolean }
+      - name: licence
+        label: Pratique régulière sport-santé
+        widget: object
+        fields:
+          - { name: montantMin, label: Montant annuel minimum (€), widget: number, value_type: int }
+          - { name: valide, label: Tarif validé (sinon il n'est pas affiché), widget: boolean }
+
+  - name: bureau
+    label: Bureau
+    icon: groups
+    file: src/data/reglages/bureau.json
+    fields:
+      - name: membres
+        label: Membres
+        label_singular: membre
+        hint: Ne renseigner un nom ou une photo qu'avec l'accord de la personne.
+        widget: list
+        summary: "{{role}} — {{nom}}"
+        fields:
+          - { name: role, label: Fonction, widget: string }
+          - { name: nom, label: Prénom et nom, widget: string, required: false }
+          - { name: presentation, label: Courte présentation, widget: text, required: false }
+          - { name: photo, label: Photo, widget: image, required: false }
+
+  - name: general
+    label: Coordonnées & options
+    icon: settings
+    file: src/data/reglages/general.json
+    fields:
+      - { name: email, label: E-mail de contact, widget: string }
+      - { name: localite, label: Commune, widget: string }
+      - { name: region, label: Département, widget: string }
+      - { name: codePostal, label: Code postal, widget: string }
+      - { name: adresse, label: Adresse du siège (mentions légales), widget: string }
+      - { name: rna, label: Numéro RNA, widget: string }
+      - name: reseaux
+        label: Réseaux sociaux (laisser vide si pas de compte)
+        widget: object
+        fields:
+          - { name: facebook, label: Facebook, widget: string, required: false }
+          - { name: instagram, label: Instagram, widget: string, required: false }
+          - { name: linkedin, label: LinkedIn, widget: string, required: false }
+      - name: options
+        label: Options
+        widget: object
+        fields:
+          - { name: reperesPhotos, label: "Afficher les repères « Photo à venir »", widget: boolean }
+          - { name: affiliationFederale, label: Affiliation fédérale effective, widget: boolean }
+          - { name: recusFiscaux, label: "Reçus fiscaux : éligibilité confirmée", widget: boolean, hint: "À cocher uniquement après confirmation officielle." }
+
+  - name: formulaires
+    label: Envoi des formulaires
+    icon: mail
+    file: src/data/reglages/formulaires.json
+    fields:
+      - name: service
+        label: Service
+        widget: select
+        hint: Service utilisé pour recevoir par e-mail les messages des formulaires contact et partenariat.
+        options:
+          - { label: "Aucun (ouvre la messagerie du visiteur)", value: aucun }
+          - { label: Web3Forms, value: web3forms }
+          - { label: Formspree, value: formspree }
+      - { name: web3formsKey, label: Clé Web3Forms, widget: string, required: false }
+      - { name: formspreeId, label: Identifiant Formspree, widget: string, required: false }

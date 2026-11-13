@@ -1,0 +1,35 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { u } from '@/lib/url';
+
+export async function getStaticPaths() {
+  const actualites = await getCollection('actualites', (a) => a.data.publie && a.data.visibilite === 'public');
+  return actualites.map((a) => ({ params: { id: a.id }, props: { actu: a } }));
+}
+const { actu } = Astro.props as { actu: CollectionEntry<'actualites'> };
+const { Content } = await render(actu);
+const fmt = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Paris' });
+---
+
+<BaseLayout title={actu.data.titre} description={actu.data.resume} image={actu.data.photo}>
+  <article class="container-equo max-w-3xl py-14 sm:py-20">
+    <a href={u('/actualites')} class="lien-fleche text-sm"><span aria-hidden="true">←</span> Toutes les actualités</a>
+    <time datetime={actu.data.date.toISOString()} class="mt-8 block text-sm font-bold text-or-texte">{fmt.format(actu.data.date)}</time>
+    <h1 class="mt-2 text-4xl leading-tight font-medium sm:text-5xl">{actu.data.titre}</h1>
+    <p class="mt-5 text-lg text-anthracite/85">{actu.data.resume}</p>
+    {actu.data.photo && <img src={u(actu.data.photo)} alt={actu.data.photoAlt ?? ''} class="mt-10 w-full rounded-[var(--radius-carte)] object-cover" />}
+    <div class="prose-actu mt-10"><Content /></div>
+  </article>
+</BaseLayout>
+
+<style>
+  .prose-actu :global(h2) { font-size: 1.6rem; margin: 2.2rem 0 .8rem; }
+  .prose-actu :global(h3) { font-size: 1.25rem; margin: 1.8rem 0 .6rem; }
+  .prose-actu :global(p), .prose-actu :global(li) { line-height: 1.8; color: rgb(40 51 46 / .88); }
+  .prose-actu :global(p + p) { margin-top: 1rem; }
+  .prose-actu :global(ul) { list-style: disc; padding-left: 1.2rem; margin-top: .6rem; }
+  .prose-actu :global(ol) { list-style: decimal; padding-left: 1.2rem; margin-top: .6rem; }
+  .prose-actu :global(a) { color: var(--color-foret); font-weight: 700; text-decoration: underline; }
+  .prose-actu :global(img) { border-radius: 1rem; margin: 1.5rem 0; }
+</style>
