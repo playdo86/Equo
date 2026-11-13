@@ -84,7 +84,12 @@ export const helloasso: Record<HelloAssoKey, HelloAssoLink> = {
     url: 'https://www.helloasso.com/associations/association-equo/formulaires/1',
     widgetUrl: 'https://www.helloasso.com/associations/association-equo/formulaires/1/widget',
   },
-  donMensuel: { label: 'Faire un don mensuel', url: null, widgetUrl: null },
+  // Même formulaire que le don ponctuel : le choix « mensuel » se fait dans le formulaire HelloAsso.
+  donMensuel: {
+    label: 'Faire un don mensuel',
+    url: 'https://www.helloasso.com/associations/association-equo/formulaires/1',
+    widgetUrl: 'https://www.helloasso.com/associations/association-equo/formulaires/1/widget',
+  },
   campagne: { label: 'Soutenir la campagne en cours', url: null, widgetUrl: null },
   evenements: { label: "S'inscrire à un atelier", url: null, widgetUrl: null },
 };
