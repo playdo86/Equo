@@ -129,7 +129,7 @@ export const bureau: { role: string; nom: string | null; presentation?: string }
 /* ------------------------------------------------------------------ */
 
 export const tarifs = {
-  adhesion: { montant: 25, periode: 'an', statut: 'envisage' as 'envisage' | 'valide' },
+  adhesion: { montant: 25, periode: 'an', statut: 'valide' as 'envisage' | 'valide' },
   licence: { montantMin: 150, periode: 'an', statut: 'a-confirmer' as 'a-confirmer' | 'valide' },
 };
 

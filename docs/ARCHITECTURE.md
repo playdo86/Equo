@@ -196,7 +196,7 @@ En attendant, des compositions graphiques aux couleurs d'ÉQUO occupent ces empl
 - Numéro RNA (mentions légales)
 - Composition du bureau, et accord de chacun pour la publication des noms et photos
 - Photographies (ou budget pour un reportage)
-- Validation des tarifs (adhésion 25 €, pratique régulière ≥ 150 €)
+- Validation du tarif de la pratique régulière (adhésion 25 € validée)
 - Liens HelloAsso, une fois les formulaires créés
 - Comptes de réseaux sociaux
 - Versions PDF publiables des statuts et du projet associatif. *Remarque : la page de garde des statuts indique « MECRUREY » ; à corriger avant publication.*
