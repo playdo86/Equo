@@ -1,0 +1,38 @@
+---
+/** Champ de formulaire accessible : libellé, aide et message d'erreur reliés. */
+interface Props {
+  id: string;
+  label: string;
+  type?: 'text' | 'email' | 'tel' | 'textarea' | 'select';
+  name?: string;
+  required?: boolean;
+  autocomplete?: string;
+  aide?: string;
+  options?: readonly { value: string; label: string }[];
+  minlength?: number;
+  maxlength?: number;
+  class?: string;
+}
+const { id, label, type = 'text', name = id, required = false, autocomplete, aide, options = [], minlength, maxlength, class: className = '' } = Astro.props;
+const describedBy = [aide && `${id}-aide`, `${id}-erreur`].filter(Boolean).join(' ');
+const common = { id, name, required, 'aria-describedby': describedBy, 'data-champ': '', class: 'form-champ' };
+---
+
+<div class={className}>
+  <label for={id} class="form-label">
+    {label}
+    {required ? <span class="text-or-texte" aria-hidden="true"> *</span> : <span class="opt"> (facultatif)</span>}
+  </label>
+  {type === 'textarea' && <textarea {...common} minlength={minlength} maxlength={maxlength} rows="6" />}
+  {
+    type === 'select' && (
+      <select {...common}>
+        <option value="">Choisir…</option>
+        {options.map((o) => <option value={o.value}>{o.label}</option>)}
+      </select>
+    )
+  }
+  {type !== 'textarea' && type !== 'select' && <input {...common} type={type} autocomplete={autocomplete} maxlength={maxlength} />}
+  {aide && <p id={`${id}-aide`} class="form-aide">{aide}</p>}
+  <p id={`${id}-erreur`} class="form-erreur" hidden></p>
+</div>

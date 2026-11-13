@@ -17,7 +17,7 @@ export default defineConfig({
   build: { format: 'directory' },
   integrations: [
     sitemap({
-      filter: (page) => !page.includes('/espace-membres'),
+      filter: (page) => !page.includes('/espace-membres') && !page.includes('/merci'),
     }),
   ],
   vite: { plugins: [tailwindcss()] },

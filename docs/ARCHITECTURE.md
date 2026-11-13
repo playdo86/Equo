@@ -185,7 +185,7 @@ En attendant, des compositions graphiques aux couleurs d'ÉQUO occupent ces empl
 |---|---|---|
 | 1 | Architecture et UX | ✅ ce document |
 | 2 | Identité visuelle + accueil fonctionnel | ✅ |
-| 3 | Pages complètes, formulaires contact et partenariat | à faire |
+| 3 | Pages complètes, formulaires contact et partenariat | ✅ (envoi direct à activer : voir README) |
 | 4 | Branchement HelloAsso (liens officiels à fournir) | structure prête |
 | 5 | Administration (Sveltia/Decap CMS) | modèles de contenus prêts |
 | 6 | Bases de l'espace membres | réservé |

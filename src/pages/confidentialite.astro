@@ -1,6 +1,7 @@
 ---
 import Prose from '@/components/Prose.astro';
-import { site } from '@/config/site';
+import { site, forms } from '@/config/site';
+const service = forms.provider === 'web3forms' ? 'Web3Forms' : forms.provider === 'formspree' ? 'Formspree' : null;
 ---
 <Prose title="Politique de confidentialité" metaTitle="Politique de confidentialité" description="Comment l'association ÉQUO traite vos données personnelles.">
   <p>
@@ -11,10 +12,22 @@ import { site } from '@/config/site';
   <p>{site.legalName}, {site.contact.postalCode} {site.contact.locality} — <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>.</p>
   <h2>Données collectées</h2>
   <p>
-    À ce jour, ce site ne collecte aucune donnée personnelle via des formulaires. Lorsque le formulaire de contact sera
-    en service, il recueillera uniquement : nom, prénom, adresse e-mail, type de demande et message, dans le seul but de
-    répondre à votre demande (base légale : votre consentement). Aucune donnée de santé n'est demandée.
+    Les formulaires de contact et de demande de partenariat recueillent uniquement les informations nécessaires pour
+    vous répondre : nom, prénom, adresse e-mail, type de demande et message (et, pour les structures : nom, type et
+    territoire de la structure, fonction, téléphone facultatif). Base légale : votre consentement, recueilli par une case
+    à cocher. Aucune donnée de santé n'est demandée : merci de ne pas en transmettre.
   </p>
+  {service ? (
+    <p>
+      Les messages sont transmis à l'association par l'intermédiaire du service {service}, qui les achemine vers notre
+      adresse e-mail. Ils sont ensuite conservés dans la messagerie de l'association.
+    </p>
+  ) : (
+    <p>
+      Lorsque vous validez un formulaire, votre propre logiciel de messagerie s'ouvre avec votre message prêt à être envoyé :
+      aucune donnée n'est transmise par le site lui-même.
+    </p>
+  )}
   <h2>Paiements, adhésions et dons</h2>
   <p>
     Les paiements sont réalisés exclusivement sur la plateforme HelloAsso, qui agit sous sa propre responsabilité.

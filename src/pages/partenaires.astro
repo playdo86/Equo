@@ -1,7 +1,129 @@
 ---
-import P from '@/components/PageEnPreparation.astro';
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Icon from '@/components/Icon.astro';
+import Visual from '@/components/Visual.astro';
+import Formulaire from '@/components/forms/Formulaire.astro';
+import Champ from '@/components/forms/Champ.astro';
+
+const partenaires = await getCollection('partenaires', (p) => p.data.valide);
+
+const structures = [
+  { titre: 'Collectivités', texte: 'Communes, intercommunalités, contrats locaux de santé : des actions de prévention au plus près des habitants.' },
+  { titre: 'Structures de santé', texte: 'CPTS, MSP, professionnels de santé : des actions complémentaires des parcours de soins, dont l’ETP et l’activité physique sur prescription.' },
+  { titre: 'Établissements médico-sociaux', texte: 'Des activités adaptées aux capacités et aux rythmes des personnes accompagnées.' },
+  { titre: 'Associations', texte: 'Des actions croisées pour toucher de nouveaux publics et renforcer le lien social.' },
+  { titre: 'Entreprises et employeurs publics', texte: 'Qualité de vie au travail : mouvement, gestion du stress, prévention de l’épuisement.' },
+  { titre: 'Institutions et financeurs', texte: 'ARS, Conférence des financeurs, fondations : des projets évaluables, ancrés dans les territoires.' },
+];
+const methode = [
+  { titre: 'Diagnostic des besoins', texte: 'Comprendre votre contexte, vos publics et vos priorités.' },
+  { titre: 'Co-construction', texte: 'Concevoir ensemble un programme adapté, réaliste et cohérent avec l’existant.' },
+  { titre: 'Animation', texte: 'Mettre en œuvre les actions sur le terrain, avec des intervenants qualifiés.' },
+  { titre: 'Évaluation', texte: 'Mesurer les effets à partir de retours qualitatifs et quantitatifs.' },
+  { titre: 'Capitalisation', texte: 'Partager les enseignements et ajuster les actions dans la durée.' },
+];
+const typesStructure = [
+  { value: 'collectivite', label: 'Collectivité / intercommunalité' },
+  { value: 'sante', label: 'Structure de santé (CPTS, MSP…)' },
+  { value: 'medico-social', label: 'Établissement médico-social' },
+  { value: 'association', label: 'Association' },
+  { value: 'entreprise', label: 'Entreprise / employeur public' },
+  { value: 'institution', label: 'Institution / financeur' },
+  { value: 'autre', label: 'Autre' },
+];
+const libelles = {
+  structure: 'Structure', type_structure: 'Type de structure', prenom: 'Prénom', nom: 'Nom', fonction: 'Fonction',
+  email: 'E-mail', telephone: 'Téléphone', territoire: 'Territoire', message: 'Projet ou besoin',
+};
 ---
-<P eyebrow="Partenaires" title="Construisons des actions de prévention adaptées à votre territoire" metaTitle="Partenaires"
-  description="Collectivités, structures de santé, établissements médico-sociaux, associations, entreprises : co-construisez des actions de prévention avec ÉQUO."
-  lead="ÉQUO agit en complémentarité avec les acteurs des territoires, du diagnostic des besoins à l'évaluation des actions."
-  rubriques={['Diagnostic des besoins', 'Co-construction des programmes', 'Animation des actions', 'Évaluation', 'Capitalisation des expériences', 'Formulaire de demande de partenariat']} />
+
+<BaseLayout
+  title="Partenaires"
+  description="Collectivités, CPTS, MSP, établissements médico-sociaux, associations, entreprises : co-construisez des actions de prévention adaptées à votre territoire avec ÉQUO."
+>
+  <PageHero
+    eyebrow="Partenaires"
+    title="Construisons des actions de prévention <em class='italic text-lagon'>adaptées à votre territoire</em>"
+    lead="ÉQUO agit en complémentarité avec les acteurs des territoires. Nous concevons avec vous des dispositifs de prévention concrets, cohérents et ancrés localement, du diagnostic à l’évaluation."
+  >
+    <a href="#demande" class="reveal mt-8 inline-flex items-center gap-2 rounded-full bg-foret px-7 py-3.5 font-extrabold text-creme shadow-douce hover:bg-foret-sombre" style="--delai:240ms">
+      Proposer un partenariat <Icon name="fleche" class="h-4 w-4" />
+    </a>
+    <Visual slot="aside" motif="territoire" attendu="Réunion de travail entre professionnels autour d’une carte du territoire" ratio="4 / 3" class="shadow-relief" />
+  </PageHero>
+
+  <section class="py-20 sm:py-24" aria-labelledby="avec-qui">
+    <div class="container-equo">
+      <h2 id="avec-qui" class="reveal max-w-2xl text-3xl leading-tight font-medium sm:text-4xl">Avec qui nous travaillons</h2>
+      <ul class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {structures.map((s, i) => (
+          <li class="reveal rounded-[var(--radius-carte)] bg-creme p-6 shadow-douce ring-1 ring-sable" style={`--delai:${(i % 3) * 80}ms`}>
+            <h3 class="text-xl font-medium">{s.titre}</h3>
+            <p class="mt-2 text-[0.95rem] leading-relaxed text-anthracite/80">{s.texte}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="bg-foret-sombre py-20 text-creme sm:py-24" aria-labelledby="methode">
+    <div class="container-equo">
+      <p class="eyebrow reveal !text-sauge"><span>Méthode</span></p>
+      <h2 id="methode" class="reveal mt-4 max-w-2xl text-3xl leading-tight font-medium text-creme sm:text-4xl">Une démarche en cinq temps</h2>
+      <ol class="mt-12 grid gap-8 md:grid-cols-5 md:gap-5">
+        {methode.map((m, i) => (
+          <li class="reveal relative" style={`--delai:${i * 80}ms`}>
+            <span class="grid h-11 w-11 place-items-center rounded-full bg-or font-extrabold text-foret-sombre">{i + 1}</span>
+            <h3 class="mt-4 text-lg font-medium text-creme">{m.titre}</h3>
+            <p class="mt-2 text-[0.95rem] leading-relaxed text-creme/80">{m.texte}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  {
+    partenaires.length > 0 && (
+      <section class="py-20" aria-labelledby="ils-nous-font-confiance">
+        <div class="container-equo">
+          <h2 id="ils-nous-font-confiance" class="text-3xl font-medium">Ils travaillent avec ÉQUO</h2>
+          <ul class="mt-10 flex flex-wrap items-center gap-8">
+            {partenaires.map((p) => (
+              <li class="font-titre text-lg text-foret-sombre">{p.data.url ? <a href={p.data.url} target="_blank" rel="noopener noreferrer">{p.data.nom}</a> : p.data.nom}</li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <section id="demande" class="scroll-mt-20 py-20 sm:py-24" aria-labelledby="demande-titre">
+    <div class="container-equo grid gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-4">
+        <h2 id="demande-titre" class="text-3xl leading-tight font-medium sm:text-4xl">Demande de partenariat</h2>
+        <p class="mt-5 leading-relaxed text-anthracite/85">
+          Décrivez-nous votre structure et votre projet en quelques lignes. Nous revenons vers vous pour organiser un
+          premier échange.
+        </p>
+        <p class="mt-5 rounded-2xl bg-sable p-4 text-sm text-anthracite/85">
+          Merci de ne transmettre aucune information de santé concernant des personnes dans ce formulaire.
+        </p>
+      </div>
+      <div class="rounded-[var(--radius-carte)] bg-creme p-6 shadow-relief ring-1 ring-sable sm:p-9 lg:col-span-8">
+        <Formulaire id="form-partenariat" sujet="Demande de partenariat" libelles={libelles} bouton="Envoyer la demande">
+          <Champ id="structure" label="Nom de la structure" required autocomplete="organization" maxlength={150} />
+          <Champ id="type_structure" label="Type de structure" type="select" options={typesStructure} required />
+          <Champ id="prenom" label="Prénom" required autocomplete="given-name" maxlength={80} />
+          <Champ id="nom" label="Nom" required autocomplete="family-name" maxlength={80} />
+          <Champ id="fonction" label="Fonction" autocomplete="organization-title" maxlength={120} />
+          <Champ id="territoire" label="Territoire concerné" aide="Commune, intercommunalité, département…" maxlength={150} />
+          <Champ id="email" label="E-mail professionnel" type="email" required autocomplete="email" maxlength={150} />
+          <Champ id="telephone" label="Téléphone" type="tel" autocomplete="tel" maxlength={30} />
+          <Champ id="message" label="Votre projet ou votre besoin" type="textarea" required minlength={20} maxlength={4000} class="sm:col-span-2" aide="Publics concernés, objectifs, calendrier envisagé…" />
+        </Formulaire>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

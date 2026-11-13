@@ -1,0 +1,64 @@
+---
+/**
+ * Bouton de paiement HelloAsso.
+ * - Lien renseigné : ouvre le formulaire officiel HelloAsso.
+ * - Widget renseigné et `embed` : intègre le formulaire dans la page.
+ * - Rien de renseigné : état « Prochainement disponible » (aucun faux lien).
+ */
+import { helloasso, type HelloAssoKey } from '@/config/site';
+import { u } from '@/lib/url';
+
+interface Props {
+  cle: HelloAssoKey;
+  label?: string;
+  embed?: boolean;
+  variant?: 'primaire' | 'clair';
+  class?: string;
+}
+const { cle, label, embed = false, variant = 'primaire', class: className = '' } = Astro.props;
+const lien = helloasso[cle];
+const texte = label ?? lien.label;
+const styles = {
+  primaire: 'bg-foret text-creme shadow-douce hover:bg-foret-sombre hover:shadow-relief',
+  clair: 'bg-creme text-foret-sombre shadow-douce hover:bg-white',
+};
+---
+
+{
+  embed && lien.widgetUrl ? (
+    <iframe
+      src={lien.widgetUrl}
+      title={`${texte} — formulaire HelloAsso`}
+      class="h-[750px] w-full rounded-[var(--radius-carte)] border-0 bg-white"
+      loading="lazy"
+    />
+  ) : lien.url ? (
+    <a
+      href={lien.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      class:list={[
+        'inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 font-extrabold transition hover:-translate-y-px',
+        styles[variant],
+        className,
+      ]}
+    >
+      {texte}
+      <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></svg>
+      <span class="sr-only">(paiement sécurisé HelloAsso, nouvel onglet)</span>
+    </a>
+  ) : (
+    <div class:list={['flex flex-col items-start gap-2', className]}>
+      <span
+        class="inline-flex cursor-not-allowed items-center gap-2 rounded-full bg-sable px-7 py-3.5 font-extrabold text-gris ring-1 ring-inset ring-anthracite/10"
+        aria-disabled="true"
+      >
+        {texte}
+        <span class="rounded-full bg-creme px-2.5 py-0.5 text-xs font-extrabold text-or-texte">Prochainement</span>
+      </span>
+      <a href={u('/contact')} class:list={['text-sm font-bold underline underline-offset-4', variant === 'clair' ? 'text-creme' : 'text-foret']}>
+        Être prévenu·e de l'ouverture
+      </a>
+    </div>
+  )
+}

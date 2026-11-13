@@ -1,0 +1,19 @@
+---
+/** Page de retour après un paiement HelloAsso (URL de retour à configurer dans HelloAsso). */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Button from '@/components/Button.astro';
+---
+<BaseLayout title="Merci" description="Merci pour votre soutien à l'association ÉQUO." noindex>
+  <section class="container-equo py-24 text-center sm:py-32">
+    <p class="eyebrow justify-center"><span>Merci</span></p>
+    <h1 class="mx-auto mt-4 max-w-2xl text-4xl font-medium sm:text-5xl">Merci pour votre soutien à ÉQUO</h1>
+    <p class="mx-auto mt-5 max-w-xl text-lg text-anthracite/80">
+      Si votre paiement a été validé, HelloAsso vous a envoyé une confirmation par e-mail. En cas de question, n’hésitez
+      pas à nous écrire.
+    </p>
+    <div class="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
+      <Button href="/" size="lg">Retour à l’accueil</Button>
+      <Button href="/agenda" size="lg" variant="secondaire">Voir l’agenda</Button>
+    </div>
+  </section>
+</BaseLayout>

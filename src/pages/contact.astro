@@ -1,14 +1,66 @@
 ---
-import P from '@/components/PageEnPreparation.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
 import Icon from '@/components/Icon.astro';
-import { site } from '@/config/site';
+import Formulaire from '@/components/forms/Formulaire.astro';
+import Champ from '@/components/forms/Champ.astro';
+import { site, typesDemande } from '@/config/site';
+import { u } from '@/lib/url';
+
+const libelles = { prenom: 'Prénom', nom: 'Nom', email: 'E-mail', type: 'Type de demande', message: 'Message' };
 ---
-<P eyebrow="Contact" title="Écrire à l'association" metaTitle="Contact"
-  description="Contacter l'association ÉQUO, à Mercurey (Saône-et-Loire) : participation, adhésion, partenariat, intervention, don."
-  lead="Une question sur une activité, une adhésion, un partenariat ou une intervention ? Écrivez-nous, nous vous répondrons dans les meilleurs délais."
-  rubriques={['Formulaire de contact sécurisé (anti-spam)', 'Choix du type de demande', 'Consentement à l’utilisation des données pour répondre']}>
-  <ul class="mt-8 space-y-3 text-lg">
-    <li class="flex items-center gap-3"><Icon name="mail" class="h-5 w-5 text-or-texte" /><a class="font-extrabold text-foret underline underline-offset-4" href={`mailto:${site.contact.email}`}>{site.contact.email}</a></li>
-    <li class="flex items-center gap-3"><Icon name="lieu" class="h-5 w-5 text-or-texte" />{site.contact.locality} — {site.contact.region}</li>
-  </ul>
-</P>
+
+<BaseLayout
+  title="Contact"
+  description="Contacter l'association ÉQUO à Mercurey (Saône-et-Loire) : participer à une activité, adhérer, proposer un partenariat, organiser une intervention, faire un don."
+>
+  <PageHero
+    eyebrow="Contact"
+    title="Écrire à l’association"
+    lead="Une question sur une activité, une adhésion, un partenariat ou une intervention ? Écrivez-nous, nous vous répondrons dans les meilleurs délais."
+  />
+
+  <section class="pb-24" aria-label="Formulaire et coordonnées">
+    <div class="container-equo grid gap-10 lg:grid-cols-12">
+      <div class="rounded-[var(--radius-carte)] bg-creme p-6 shadow-relief ring-1 ring-sable sm:p-9 lg:col-span-8">
+        <Formulaire id="form-contact" sujet="Message depuis le formulaire de contact" libelles={libelles} bouton="Envoyer le message">
+          <Champ id="prenom" label="Prénom" required autocomplete="given-name" maxlength={80} />
+          <Champ id="nom" label="Nom" required autocomplete="family-name" maxlength={80} />
+          <Champ id="email" label="E-mail" type="email" required autocomplete="email" maxlength={150} />
+          <Champ id="type" label="Type de demande" type="select" options={typesDemande} required />
+          <Champ
+            id="message"
+            label="Message"
+            type="textarea"
+            required
+            minlength={10}
+            maxlength={4000}
+            class="sm:col-span-2"
+            aide="Merci de ne pas indiquer d’informations sur votre santé : nous en parlerons, si besoin, de vive voix."
+          />
+        </Formulaire>
+      </div>
+
+      <aside class="space-y-5 lg:col-span-4" aria-label="Coordonnées">
+        <div class="rounded-[var(--radius-carte)] bg-sauge-clair p-7">
+          <h2 class="text-xl font-medium">Coordonnées</h2>
+          <ul class="mt-5 space-y-4">
+            <li class="flex items-start gap-3">
+              <Icon name="mail" class="mt-0.5 h-5 w-5 shrink-0 text-foret" />
+              <a href={`mailto:${site.contact.email}`} class="break-all font-extrabold text-foret underline underline-offset-4">{site.contact.email}</a>
+            </li>
+            <li class="flex items-start gap-3">
+              <Icon name="lieu" class="mt-0.5 h-5 w-5 shrink-0 text-foret" />
+              <span>{site.contact.locality}<br />{site.contact.region}</span>
+            </li>
+          </ul>
+        </div>
+        <div class="rounded-[var(--radius-carte)] bg-sable-clair p-7 text-[0.95rem] text-anthracite/85">
+          <h2 class="text-xl font-medium">Vous êtes une structure ?</h2>
+          <p class="mt-3">Pour un projet de partenariat, le formulaire dédié nous permet de mieux préparer notre premier échange.</p>
+          <a href={u('/partenaires#demande')} class="lien-fleche mt-4">Formulaire partenaires <Icon name="fleche" class="h-4 w-4" /></a>
+        </div>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>

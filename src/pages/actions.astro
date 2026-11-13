@@ -1,7 +1,84 @@
 ---
-import P from '@/components/PageEnPreparation.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import Button from '@/components/Button.astro';
+import Icon from '@/components/Icon.astro';
+import Visual from '@/components/Visual.astro';
+import { domaines } from '@/data/domaines';
 ---
-<P eyebrow="Nos actions" title="Des mises en pratique concrètes, accessibles et progressives" metaTitle="Nos actions"
-  description="Mouvement et activité physique adaptée, régulation émotionnelle et mieux-être, éducation et accompagnement : les actions de prévention d'ÉQUO."
-  lead="Les actions d'ÉQUO s'articulent autour de trois champs complémentaires, pensés pour tous les âges de la vie et une attention particulière aux périodes de transition."
-  rubriques={['Mouvement et activité physique adaptée', 'Régulation émotionnelle et mieux-être', 'Éducation et accompagnement', 'Fiches détaillées des programmes proposés']} />
+
+<BaseLayout
+  title="Nos actions"
+  description="Mouvement et activité physique adaptée, régulation émotionnelle et mieux-être, éducation et accompagnement : les trois champs d'action de prévention d'ÉQUO."
+>
+  <PageHero
+    eyebrow="Nos actions"
+    title="Des mises en pratique concrètes, accessibles et progressives"
+    lead="Les actions d’ÉQUO s’articulent autour de trois champs complémentaires. Elles s’adressent à tous les âges de la vie, avec une attention particulière aux périodes de transition."
+  >
+    <nav aria-label="Domaines d'action" class="reveal mt-8 flex flex-wrap gap-2" style="--delai:240ms">
+      {domaines.map((d) => (
+        <a href={`#${d.id}`} class="inline-flex items-center gap-2 rounded-full bg-creme px-4 py-2 text-sm font-bold text-foret ring-1 ring-sable hover:ring-sauge">
+          <Icon name={d.icone} class="h-4 w-4" />{d.titre}
+        </a>
+      ))}
+    </nav>
+  </PageHero>
+
+  {domaines.map((d, i) => (
+    <section id={d.id} class:list={['scroll-mt-20 py-20 sm:py-24', i % 2 === 1 && 'bg-sable-clair']} aria-labelledby={`${d.id}-titre`}>
+      <div class="container-equo grid items-start gap-12 lg:grid-cols-12">
+        <div class:list={['reveal lg:col-span-5', i % 2 === 1 && 'lg:order-2 lg:col-start-8']}>
+          <Visual motif={d.motif} attendu={d.photo} ratio="4 / 5" class="shadow-relief" />
+        </div>
+        <div class:list={['lg:col-span-6', i % 2 === 1 ? 'lg:order-1 lg:col-start-1' : 'lg:col-start-7']}>
+          <div class="reveal flex items-center gap-3">
+            <span class="grid h-11 w-11 place-items-center rounded-full bg-sauge-clair text-foret"><Icon name={d.icone} class="h-5 w-5" /></span>
+            <span class="font-titre text-or-texte">Domaine {i + 1}</span>
+          </div>
+          <h2 id={`${d.id}-titre`} class="reveal mt-4 text-3xl leading-tight font-medium sm:text-4xl">{d.titre}</h2>
+          <p class="reveal mt-5 text-lg leading-relaxed text-anthracite/85">{d.objectif}</p>
+
+          <h3 class="reveal mt-8 font-texte text-sm font-extrabold uppercase tracking-[0.12em] text-lagon">Exemples d’actions</h3>
+          <ul class="reveal mt-4 grid gap-2.5 sm:grid-cols-2">
+            {d.actions.map((a) => (
+              <li class="flex gap-3 rounded-xl bg-creme px-4 py-3 text-[0.95rem] text-anthracite shadow-douce">
+                <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-or" aria-hidden="true" />{a}
+              </li>
+            ))}
+          </ul>
+
+          <p class="reveal mt-6 text-[0.95rem] text-gris"><strong class="text-anthracite">Pour qui :</strong> {d.publics}</p>
+          <p class="reveal mt-3 leading-relaxed text-anthracite/80">{d.complement}</p>
+
+          <div class="reveal mt-8 flex flex-wrap gap-3">
+            <Button href={`/contact?type=participer`}>Participer</Button>
+            <Button href={`/contact?type=intervention`} variant="secondaire">Organiser une intervention</Button>
+          </div>
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <section class="py-16" aria-labelledby="programmes-titre">
+    <div class="container-equo">
+      <div class="reveal flex flex-col gap-5 rounded-[var(--radius-carte)] border border-dashed border-sauge p-7 sm:flex-row sm:items-center sm:justify-between sm:p-9">
+        <div class="max-w-2xl">
+          <h2 id="programmes-titre" class="text-2xl font-medium">Programmes en préparation</h2>
+          <p class="mt-2 text-anthracite/80">
+            Les fiches détaillées des programmes proposés (contenus, durée, publics, lieux) seront publiées ici au fur et à
+            mesure de leur ouverture. Les dates et créneaux sont annoncés dans l’agenda.
+          </p>
+        </div>
+        <Button href="/agenda" variant="secondaire">Voir l’agenda</Button>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    title="Vous représentez une structure ou une collectivité ?"
+    text="Ces actions peuvent être adaptées à votre territoire et à vos publics."
+    primary={{ label: 'Construire un partenariat', href: '/partenaires' }}
+  />
+</BaseLayout>

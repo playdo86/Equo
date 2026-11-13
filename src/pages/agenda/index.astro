@@ -1,0 +1,90 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Button from '@/components/Button.astro';
+import ActiviteCarte from '@/components/ActiviteCarte.astro';
+import { activitesPubliees, prochaineDate, libelleDomaine } from '@/lib/activites';
+
+const activites = await activitesPubliees();
+const regulieres = activites.filter((a) => a.data.type === 'reguliere');
+const datees = activites
+  .filter((a) => a.data.type !== 'reguliere')
+  .sort((a, b) => (prochaineDate(a)?.getTime() ?? Infinity) - (prochaineDate(b)?.getTime() ?? Infinity));
+---
+
+<BaseLayout
+  title="Activités & agenda"
+  description="Ateliers, activités régulières, stages et événements de l'association ÉQUO en Saône-et-Loire : dates, lieux, publics et inscriptions."
+>
+  <PageHero
+    eyebrow="Activités & agenda"
+    title="Activités et agenda"
+    lead="Ateliers ponctuels, séances régulières, stages et événements : retrouvez ici les actions ouvertes à tous, avec leurs lieux, horaires, publics et modalités d’inscription."
+  />
+
+  {
+    activites.length === 0 ? (
+      <section class="container-equo pb-24">
+        <div class="reveal grid gap-8 rounded-[var(--radius-carte)] bg-sauge-clair p-8 sm:p-12 lg:grid-cols-12 lg:items-center">
+          <div class="lg:col-span-8">
+            <h2 class="text-2xl font-medium sm:text-3xl">Les premières activités sont en cours de programmation</h2>
+            <p class="mt-4 max-w-2xl leading-relaxed text-anthracite/85">
+              Les créneaux, lieux et modalités d’inscription seront publiés ici dès qu’ils seront confirmés. Vous souhaitez
+              être informé·e de l’ouverture, ou vous avez une attente particulière ? Écrivez-nous : vos retours nous aident à
+              construire une programmation adaptée.
+            </p>
+          </div>
+          <div class="flex flex-col gap-3 lg:col-span-4 lg:items-end">
+            <Button href="/contact?type=participer" size="lg">Être informé·e</Button>
+            <Button href="/actions" variant="secondaire">Découvrir nos actions</Button>
+          </div>
+        </div>
+      </section>
+    ) : (
+      <>
+        <div class="container-equo">
+          <div role="group" aria-label="Filtrer par domaine" class="flex flex-wrap gap-2" id="filtres">
+            <button type="button" data-filtre="tous" aria-pressed="true" class="filtre">Toutes</button>
+            {Object.entries(libelleDomaine).map(([k, v]) => (
+              <button type="button" data-filtre={k} aria-pressed="false" class="filtre">{v}</button>
+            ))}
+          </div>
+        </div>
+        {datees.length > 0 && (
+          <section class="container-equo py-12" aria-labelledby="a-venir">
+            <h2 id="a-venir" class="text-2xl font-medium sm:text-3xl">Ateliers, stages et événements à venir</h2>
+            <ul class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {datees.map((a) => <li data-carte data-domaine={a.data.domaine}><ActiviteCarte activite={a} /></li>)}
+            </ul>
+          </section>
+        )}
+        {regulieres.length > 0 && (
+          <section class="container-equo pb-24 pt-6" aria-labelledby="regulieres">
+            <h2 id="regulieres" class="text-2xl font-medium sm:text-3xl">Activités régulières</h2>
+            <ul class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {regulieres.map((a) => <li data-carte data-domaine={a.data.domaine}><ActiviteCarte activite={a} /></li>)}
+            </ul>
+          </section>
+        )}
+      </>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .filtre { border-radius: 999px; padding: .5rem 1rem; font-weight: 800; font-size: .9rem; color: var(--color-foret); box-shadow: inset 0 0 0 1.5px var(--color-sable); }
+  .filtre[aria-pressed='true'] { background: var(--color-foret); color: var(--color-creme); box-shadow: none; }
+</style>
+
+<script>
+  const boutons = document.querySelectorAll<HTMLButtonElement>('[data-filtre]');
+  boutons.forEach((b) =>
+    b.addEventListener('click', () => {
+      const f = b.dataset.filtre;
+      boutons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      document.querySelectorAll<HTMLElement>('[data-carte]').forEach((c) => {
+        c.hidden = f !== 'tous' && c.dataset.domaine !== f;
+      });
+    }),
+  );
+</script>

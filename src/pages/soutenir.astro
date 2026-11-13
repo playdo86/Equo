@@ -1,7 +1,98 @@
 ---
-import P from '@/components/PageEnPreparation.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import HelloAssoButton from '@/components/HelloAssoButton.astro';
+import Button from '@/components/Button.astro';
+import Icon from '@/components/Icon.astro';
+import { site, helloasso } from '@/config/site';
+
+const utilisations = [
+  'Rendre des ateliers accessibles à des personnes aux ressources limitées',
+  'Développer des actions de prévention dans des territoires peu couverts',
+  'Concevoir des ressources pédagogiques en libre accès',
+  'Évaluer les actions pour en améliorer la qualité',
+];
 ---
-<P eyebrow="Soutenir ÉQUO" title="Ensemble, rendons la prévention accessible" metaTitle="Soutenir ÉQUO"
-  description="Don ponctuel, don mensuel, mécénat ou adhésion : soutenez les actions de prévention de l'association ÉQUO."
-  lead="Votre soutien contribue au développement d'actions de prévention concrètes, accessibles et adaptées aux besoins des personnes et des territoires."
-  rubriques={['Faire un don ponctuel (HelloAsso)', 'Faire un don mensuel', 'Devenir mécène ou partenaire', "Adhérer à l'association"]} />
+
+<BaseLayout
+  title="Soutenir ÉQUO"
+  description="Don ponctuel, don mensuel, mécénat ou adhésion : soutenez les actions de prévention concrètes et accessibles de l'association ÉQUO."
+>
+  <PageHero
+    eyebrow="Soutenir ÉQUO"
+    title="Ensemble, rendons la prévention <em class='italic text-lagon'>accessible</em>"
+    lead="Votre soutien contribue au développement d’actions de prévention concrètes, accessibles et adaptées aux besoins des personnes et des territoires."
+  >
+    <div class="reveal mt-9" style="--delai:240ms">
+      <HelloAssoButton cle="donPonctuel" label="Faire un don avec HelloAsso" />
+    </div>
+  </PageHero>
+
+  <section class="pb-20 pt-6" aria-labelledby="facons">
+    <div class="container-equo">
+      <h2 id="facons" class="reveal text-3xl font-medium sm:text-4xl">Plusieurs façons de nous soutenir</h2>
+      <div class="mt-10 grid gap-6 md:grid-cols-2">
+        <article class="reveal flex flex-col rounded-[var(--radius-carte)] bg-creme p-7 shadow-douce ring-1 ring-sable sm:p-9">
+          <Icon name="coeur" class="h-8 w-8 text-or-texte" />
+          <h3 class="mt-4 text-2xl font-medium">Faire un don ponctuel</h3>
+          <p class="mt-3 text-anthracite/80">Un geste simple, du montant de votre choix, pour soutenir l’ensemble de nos actions.</p>
+          <div class="mt-auto pt-6"><HelloAssoButton cle="donPonctuel" label="Faire un don" /></div>
+        </article>
+        <article class="reveal flex flex-col rounded-[var(--radius-carte)] bg-creme p-7 shadow-douce ring-1 ring-sable sm:p-9" style="--delai:80ms">
+          <Icon name="souffle" class="h-8 w-8 text-or-texte" />
+          <h3 class="mt-4 text-2xl font-medium">Faire un don mensuel</h3>
+          <p class="mt-3 text-anthracite/80">Un soutien régulier nous aide à prévoir et à inscrire nos actions dans la durée.</p>
+          <div class="mt-auto pt-6"><HelloAssoButton cle="donMensuel" /></div>
+        </article>
+        <article class="reveal flex flex-col rounded-[var(--radius-carte)] bg-sauge-clair p-7 sm:p-9">
+          <Icon name="structure" class="h-8 w-8 text-foret" />
+          <h3 class="mt-4 text-2xl font-medium">Devenir mécène ou partenaire</h3>
+          <p class="mt-3 text-anthracite/80">Entreprises, fondations, institutions : soutenez un programme ou un territoire en particulier.</p>
+          <div class="mt-auto pt-6"><Button href="/partenaires#demande" variant="secondaire">Prendre contact</Button></div>
+        </article>
+        <article class="reveal flex flex-col rounded-[var(--radius-carte)] bg-sable p-7 sm:p-9" style="--delai:80ms">
+          <Icon name="personne" class="h-8 w-8 text-foret" />
+          <h3 class="mt-4 text-2xl font-medium">Adhérer à l’association</h3>
+          <p class="mt-3 text-anthracite/80">Devenez membre, soutenez le projet et participez à la vie associative.</p>
+          <div class="mt-auto pt-6"><Button href="/rejoindre#adhesion" variant="secondaire">Découvrir l’adhésion</Button></div>
+        </article>
+      </div>
+      {helloasso.campagne.url && (
+        <div class="mt-6 rounded-[var(--radius-carte)] bg-foret p-7 text-creme sm:p-9">
+          <h3 class="text-2xl font-medium text-creme">Campagne en cours</h3>
+          <div class="mt-5"><HelloAssoButton cle="campagne" variant="clair" /></div>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section class="bg-sable-clair py-20 sm:py-24" aria-labelledby="a-quoi">
+    <div class="container-equo grid gap-10 lg:grid-cols-12">
+      <div class="lg:col-span-5">
+        <h2 id="a-quoi" class="reveal text-3xl leading-tight font-medium sm:text-4xl">À quoi servent les dons ?</h2>
+        <p class="reveal mt-5 leading-relaxed text-anthracite/85">
+          ÉQUO repose sur un modèle économique mixte : cotisations, subventions, conventions et dons. L’objectif n’est pas
+          la lucrativité, mais la pérennité des actions et leur qualité.
+        </p>
+      </div>
+      <ul class="grid gap-4 lg:col-span-7">
+        {utilisations.map((t, i) => (
+          <li class="reveal flex gap-4 rounded-2xl bg-creme p-5" style={`--delai:${i * 60}ms`}>
+            <Icon name="fleche" class="mt-1 h-4 w-4 shrink-0 text-or-texte" /><span>{t}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="py-16" aria-label="Informations">
+    <div class="container-equo max-w-3xl space-y-4 text-center text-[0.95rem] text-gris">
+      <p>Les dons sont réalisés sur la plateforme sécurisée HelloAsso. ÉQUO ne collecte ni ne conserve aucune donnée bancaire.</p>
+      {site.features.taxReceiptsEligible ? (
+        <p>ÉQUO est habilitée à délivrer des reçus fiscaux : votre don peut ouvrir droit à une réduction d’impôt dans les conditions prévues par la loi.</p>
+      ) : (
+        <p>ÉQUO ne délivre pas de reçu fiscal à ce jour.</p>
+      )}
+    </div>
+  </section>
+</BaseLayout>

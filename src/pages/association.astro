@@ -1,7 +1,205 @@
 ---
-import P from '@/components/PageEnPreparation.astro';
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import Icon from '@/components/Icon.astro';
+import { site, bureau } from '@/config/site';
+import { valeurs, missions, dimensions, vision, apports } from '@/data/association';
+import { u } from '@/lib/url';
+
+const documents = (await getCollection('documents', (d) => d.data.visibilite === 'public')).sort(
+  (a, b) => a.data.ordre - b.data.ordre,
+);
 ---
-<P eyebrow="L'association" title="ÉQUO, comme équilibre. ÉQUO, comme écho." metaTitle="L'association"
-  description="Histoire, projet associatif, valeurs et missions de l'association de prévention ÉQUO, à Mercurey (Saône-et-Loire)."
-  lead="Une association loi 1901 créée en 2026 à Mercurey, qui considère la santé et le bien-être comme des équilibres dynamiques, qui se construisent et s'ajustent tout au long de la vie."
-  rubriques={["L'histoire et la signification du nom", 'Le projet associatif', 'La vision de la santé positive', 'Les valeurs fondatrices', 'Les missions', "L'équipe et le bureau", 'Les documents associatifs à télécharger']} />
+
+<BaseLayout
+  title="L'association"
+  description="ÉQUO, association loi 1901 créée en 2026 à Mercurey : histoire du nom, projet associatif, vision de la santé positive, valeurs, missions et documents."
+>
+  <PageHero
+    eyebrow="L'association"
+    title="Une association de prévention fondée sur l’action et l’expertise"
+    lead={`ÉQUO est une association loi 1901 créée en ${site.founded} à Mercurey, en Saône-et-Loire. Elle agit autour d’une idée centrale : le bien-être et la santé reposent sur des équilibres dynamiques, personnels et fragiles, qui se construisent dans la durée.`}
+  >
+    <nav aria-label="Sommaire de la page" class="reveal mt-8 flex flex-wrap gap-2" style="--delai:240ms">
+      {[['#nom', 'Le nom'], ['#vision', 'Vision'], ['#valeurs', 'Valeurs'], ['#missions', 'Missions'], ['#equipe', 'Équipe'], ['#documents', 'Documents']].map(([h, l]) => (
+        <a href={h} class="rounded-full bg-creme px-4 py-2 text-sm font-bold text-foret ring-1 ring-sable hover:ring-sauge">{l}</a>
+      ))}
+    </nav>
+  </PageHero>
+
+  <!-- Le nom -->
+  <section id="nom" class="scroll-mt-24 py-20 sm:py-24" aria-labelledby="nom-titre">
+    <div class="container-equo">
+      <h2 id="nom-titre" class="reveal max-w-2xl text-3xl font-medium sm:text-4xl">Un nom, deux sens</h2>
+      <div class="mt-12 grid gap-6 lg:grid-cols-2">
+        <article class="reveal rounded-[var(--radius-carte)] bg-sauge-clair p-8 sm:p-10">
+          <p class="font-titre text-5xl text-lagon italic">équilibre</p>
+          <h3 class="mt-5 text-2xl font-medium">ÉQUO, comme équilibre</h3>
+          <p class="mt-4 leading-relaxed text-anthracite/85">
+            Non pas un état figé ou idéal, mais un processus vivant, fait d’ajustements permanents. La santé n’est jamais
+            acquise : c’est un équilibre qui se transforme au fil des âges, des contextes et des événements de vie. Il naît d’un cercle vertueux entre :
+          </p>
+          <ul class="mt-4 space-y-1.5">
+            {dimensions.map((d) => (
+              <li class="flex gap-2.5 text-anthracite/85"><span class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-foret" aria-hidden="true" />{d}</li>
+            ))}
+          </ul>
+        </article>
+        <article class="reveal rounded-[var(--radius-carte)] bg-sable p-8 sm:p-10" style="--delai:110ms">
+          <p class="font-titre text-5xl text-or-texte italic">écho</p>
+          <h3 class="mt-5 text-2xl font-medium">ÉQUO, comme écho</h3>
+          <p class="mt-4 leading-relaxed text-anthracite/85">
+            Il n’existe pas de solution unique qui conviendrait à tous. Chaque personne a son histoire, son corps, son rythme
+            de vie, ses contraintes et ses ressources. Nous souhaitons que les pratiques proposées fassent écho à la
+            personne, à ce qu’elle vit et à ce dont elle a réellement besoin.
+          </p>
+          <p class="mt-4 leading-relaxed text-anthracite/85">
+            Plutôt que d’imposer un modèle, ÉQUO crée les conditions pour que chacun puisse expérimenter, ressentir et
+            identifier ce qui lui correspond.
+          </p>
+        </article>
+      </div>
+      <figure class="reveal mx-auto mt-16 max-w-4xl text-center">
+        <blockquote class="font-titre text-2xl leading-snug font-light text-foret-sombre italic sm:text-[2.1rem]">
+          « Ce qui compte n’est pas seulement la pratique en elle-même, mais la résonance qu’elle crée dans le quotidien. »
+        </blockquote>
+        <figcaption class="mt-4 text-sm font-bold text-gris">C’est cette résonance qui rend possible une appropriation durable.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Projet & vision -->
+  <section id="vision" class="scroll-mt-24 bg-sable-clair py-20 sm:py-24" aria-labelledby="vision-titre">
+    <div class="container-equo grid gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-5">
+        <p class="eyebrow reveal"><span>Projet associatif</span></p>
+        <h2 id="vision-titre" class="reveal mt-4 text-3xl leading-tight font-medium sm:text-4xl">Rendre accessibles des équilibres possibles</h2>
+        <p class="reveal mt-5 leading-relaxed text-anthracite/85">
+          Le bien-être physique, mental et social ne repose pas sur des normes idéales ou des prescriptions descendantes,
+          mais sur la capacité des personnes à comprendre leurs fonctionnements, à expérimenter et à ajuster leurs pratiques au quotidien.
+        </p>
+        <p class="reveal mt-4 leading-relaxed text-anthracite/85">
+          ÉQUO s’adresse à tous les âges, des enfants aux seniors, et porte une attention particulière aux <strong>périodes de transition de vie</strong> :
+          entrée dans l’adolescence, parentalité, retraite, changements hormonaux. Dans ce cadre, l’association accorde une attention particulière
+          à la santé des femmes, dont les parcours comportent plusieurs étapes déterminantes pour le bien-être et la santé mentale.
+        </p>
+      </div>
+      <div class="grid gap-6 lg:col-span-6 lg:col-start-7">
+        <div class="reveal rounded-[var(--radius-carte)] bg-creme p-7 shadow-douce">
+          <h3 class="text-xl font-medium">Notre vision : des territoires où…</h3>
+          <ul class="mt-4 space-y-3">
+            {vision.map((v) => (
+              <li class="flex gap-3 text-anthracite/85"><Icon name="fleche" class="mt-1 h-4 w-4 shrink-0 text-or-texte" />{v}</li>
+            ))}
+          </ul>
+        </div>
+        <div class="reveal rounded-[var(--radius-carte)] bg-creme p-7 shadow-douce" style="--delai:100ms">
+          <h3 class="text-xl font-medium">Ce que nous souhaitons apporter</h3>
+          <ul class="mt-4 space-y-3">
+            {apports.map((v) => (
+              <li class="flex gap-3 text-anthracite/85"><span class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-sauge" aria-hidden="true" />{v}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Valeurs -->
+  <section id="valeurs" class="scroll-mt-24 py-20 sm:py-24" aria-labelledby="valeurs-titre">
+    <div class="container-equo">
+      <p class="eyebrow reveal"><span>Valeurs fondatrices</span></p>
+      <h2 id="valeurs-titre" class="reveal mt-4 max-w-2xl text-3xl leading-tight font-medium sm:text-4xl">Partagées par le bureau et l’ensemble des intervenants</h2>
+      <dl class="mt-12 divide-y divide-sable border-y border-sable">
+        {valeurs.map((v, i) => (
+          <div class="reveal grid gap-2 py-6 md:grid-cols-12 md:gap-8" style={`--delai:${i * 60}ms`}>
+            <dt class="font-titre text-xl text-foret-sombre md:col-span-4">{v.titre}</dt>
+            <dd class="leading-relaxed text-anthracite/85 md:col-span-8">{v.texte}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <!-- Missions -->
+  <section id="missions" class="scroll-mt-24 bg-foret-sombre py-20 text-creme sm:py-24" aria-labelledby="missions-titre">
+    <div class="container-equo">
+      <p class="eyebrow reveal !text-sauge"><span>Missions</span></p>
+      <h2 id="missions-titre" class="reveal mt-4 max-w-2xl text-3xl leading-tight font-medium text-creme sm:text-4xl">Des missions claires, opérationnelles et évaluables</h2>
+      <ol class="mt-12 grid gap-x-10 gap-y-8 md:grid-cols-2">
+        {missions.map((m, i) => (
+          <li class="reveal flex gap-5" style={`--delai:${i * 70}ms`}>
+            <span class="font-titre text-3xl text-or">{i + 1}</span>
+            <p class="pt-1.5 leading-relaxed text-creme/90">{m}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- Équipe -->
+  <section id="equipe" class="scroll-mt-24 py-20 sm:py-24" aria-labelledby="equipe-titre">
+    <div class="container-equo grid gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-5">
+        <p class="eyebrow reveal"><span>Équipe</span></p>
+        <h2 id="equipe-titre" class="reveal mt-4 text-3xl leading-tight font-medium sm:text-4xl">Le bureau</h2>
+        <p class="reveal mt-5 leading-relaxed text-anthracite/85">
+          L’association est dirigée par un bureau bénévole élu par l’Assemblée générale. Ses membres peuvent, selon leurs
+          compétences, contribuer à l’animation des actions, dans l’intérêt exclusif de l’association et dans le respect des
+          principes de transparence et de non-lucrativité.
+        </p>
+      </div>
+      <ul class="grid gap-5 sm:grid-cols-3 lg:col-span-7">
+        {bureau.map((m, i) => (
+          <li class="reveal rounded-[var(--radius-carte)] bg-sable-clair p-6 text-center" style={`--delai:${i * 80}ms`}>
+            <span class="mx-auto grid h-20 w-20 place-items-center rounded-full bg-creme text-sauge shadow-douce" aria-hidden="true">
+              <Icon name="personne" class="h-9 w-9" />
+            </span>
+            <p class="mt-4 font-titre text-lg text-foret-sombre">{m.role}</p>
+            <p class="mt-1 text-sm text-gris">{m.nom ?? 'Présentation à venir'}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Documents -->
+  <section id="documents" class="scroll-mt-24 pb-24" aria-labelledby="documents-titre">
+    <div class="container-equo">
+      <div class="rounded-[var(--radius-carte)] border border-sable bg-creme p-8 sm:p-10">
+        <h2 id="documents-titre" class="text-2xl font-medium sm:text-3xl">Documents associatifs</h2>
+        {
+          documents.length > 0 ? (
+            <ul class="mt-6 grid gap-4 md:grid-cols-2">
+              {documents.map((d) => (
+                <li>
+                  <a href={u(`/documents/${d.data.fichier}`)} class="group flex items-center gap-4 rounded-2xl bg-sable-clair p-5 transition hover:bg-sauge-clair" download>
+                    <span class="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-foret font-extrabold text-creme text-xs">PDF</span>
+                    <span>
+                      <span class="block font-extrabold text-foret-sombre group-hover:underline">{d.data.titre}</span>
+                      {d.data.description && <span class="block text-sm text-gris">{d.data.description}</span>}
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class="mt-4 text-anthracite/80">Les documents seront bientôt disponibles au téléchargement.</p>
+          )
+        }
+        <p class="mt-6 text-sm text-gris">
+          Les statuts de l’association sont disponibles sur demande à <a class="font-bold text-foret underline" href={`mailto:${site.contact.email}`}>{site.contact.email}</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    title="Envie de rejoindre l’aventure ?"
+    text="Adhérez pour soutenir le projet, ou écrivez-nous pour imaginer une action ensemble."
+    primary={{ label: 'Rejoindre ÉQUO', href: '/rejoindre' }}
+    secondary={{ label: 'Nous contacter', href: '/contact' }}
+  />
+</BaseLayout>

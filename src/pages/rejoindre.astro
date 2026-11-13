@@ -1,7 +1,142 @@
 ---
-import P from '@/components/PageEnPreparation.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import HelloAssoButton from '@/components/HelloAssoButton.astro';
+import Button from '@/components/Button.astro';
+import Icon from '@/components/Icon.astro';
+import { site, tarifs } from '@/config/site';
+
+const avantagesAdhesion = [
+  'Devenir membre de l’association',
+  'Soutenir la prévention locale',
+  'Participer aux événements et ateliers',
+  'Accéder à certaines ressources pratiques (mouvement, respiration, émotions)',
+  'Bénéficier de tarifs préférentiels lorsqu’ils sont proposés',
+];
+const avantagesPratique = [
+  'L’accès aux créneaux sport-santé ÉQUO',
+  'Des séances encadrées par un·e professionnel·le qualifié·e',
+  'Des groupes à taille humaine',
+  'Une pratique adaptée, progressive et respectueuse du corps',
+  'Une couverture d’assurance pour la pratique',
+  'Tous les avantages de l’adhésion',
+];
+const etapesInscription = [
+  { titre: 'Choisir sa formule', texte: 'Selon les créneaux proposés dans l’agenda.' },
+  { titre: 'Remplir le formulaire', texte: 'Inscription et paiement sécurisés sur HelloAsso.' },
+  { titre: 'Fournir les documents', texte: 'La liste sera communiquée à l’ouverture des inscriptions.' },
+  { titre: 'Commencer à son rythme', texte: 'Un premier échange permet d’adapter la pratique.' },
+];
+const adhesionValidee = tarifs.adhesion.statut === 'valide';
+const licenceValidee = tarifs.licence.statut === 'valide';
 ---
-<P eyebrow="Rejoindre ÉQUO" title="Deux façons de rejoindre ÉQUO" metaTitle="Rejoindre ÉQUO"
-  description="Adhésion associative ou pratique sport-santé régulière : rejoignez l'association ÉQUO à Mercurey."
-  lead="Adhérer pour soutenir le projet et participer à la vie associative, ou s'engager dans une pratique sport-santé encadrée et régulière."
-  rubriques={['Adhésion associative (cotisation annuelle envisagée : 25 €)', 'Pratique régulière sport-santé (formule et tarif à confirmer)', "Conditions d'inscription et documents", 'Assurance et licence, lorsque l’affiliation sera effective']} />
+
+<BaseLayout
+  title="Rejoindre ÉQUO"
+  description="Adhésion associative ou pratique sport-santé régulière : deux façons de rejoindre l'association ÉQUO à Mercurey (Saône-et-Loire)."
+>
+  <PageHero
+    eyebrow="Rejoindre ÉQUO"
+    title="Deux façons de <em class='italic text-lagon'>rejoindre ÉQUO</em>"
+    lead="Ici, pas de performance ni de pression : on avance à son rythme, avec des outils concrets et dans un cadre sécurisant. Choisissez la formule qui correspond à vos envies."
+  />
+
+  <section class="pb-20" aria-label="Formules">
+    <div class="container-equo grid gap-6 lg:grid-cols-2">
+      <!-- Adhésion -->
+      <article id="adhesion" class="reveal flex scroll-mt-24 flex-col rounded-[var(--radius-carte)] bg-creme p-8 shadow-relief ring-1 ring-sable sm:p-10" aria-labelledby="adhesion-titre">
+        <span class="grid h-14 w-14 place-items-center rounded-full bg-sauge-clair text-foret"><Icon name="coeur" class="h-7 w-7" /></span>
+        <p class="mt-6 text-xs font-extrabold uppercase tracking-[0.14em] text-lagon">Membre</p>
+        <h2 id="adhesion-titre" class="mt-2 text-3xl font-medium">Adhésion associative</h2>
+        <p class="mt-3 leading-relaxed text-anthracite/85">
+          Pour celles et ceux qui souhaitent soutenir le projet, participer à la vie associative et prendre part aux actions
+          ponctuelles, sans forcément suivre une pratique régulière.
+        </p>
+        <p class="mt-6 flex items-baseline gap-2">
+          <span class="font-titre text-5xl text-foret-sombre">{tarifs.adhesion.montant} €</span>
+          <span class="font-bold text-gris">/ an</span>
+        </p>
+        {!adhesionValidee && <p class="mt-1 text-sm text-gris">Montant proposé, soumis à validation par l’Assemblée générale.</p>}
+        <ul class="mt-6 space-y-3">
+          {avantagesAdhesion.map((a) => (
+            <li class="flex gap-3"><Icon name="fleche" class="mt-1 h-4 w-4 shrink-0 text-or-texte" />{a}</li>
+          ))}
+        </ul>
+        <div class="mt-auto pt-8"><HelloAssoButton cle="adhesion" label="Adhérer à ÉQUO" /></div>
+      </article>
+
+      <!-- Pratique régulière -->
+      <article id="pratique" class="reveal flex scroll-mt-24 flex-col rounded-[var(--radius-carte)] bg-foret p-8 text-creme shadow-relief sm:p-10" style="--delai:110ms" aria-labelledby="pratique-titre">
+        <span class="grid h-14 w-14 place-items-center rounded-full bg-creme/10 text-or ring-1 ring-creme/20"><Icon name="mouvement" class="h-7 w-7" /></span>
+        <p class="mt-6 text-xs font-extrabold uppercase tracking-[0.14em] text-sauge">Sport-santé</p>
+        <h2 id="pratique-titre" class="mt-2 text-3xl font-medium text-creme">Pratique régulière</h2>
+        <p class="mt-3 leading-relaxed text-creme/85">
+          Pour celles et ceux qui souhaitent reprendre une activité physique en douceur, bouger dans un cadre sécurisant et
+          bienveillant, et être accompagnés de manière progressive et adaptée.
+        </p>
+        <p class="mt-6 font-titre text-2xl text-creme">
+          {licenceValidee ? `À partir de ${tarifs.licence.montantMin} € / an` : 'Formules et tarifs communiqués à l’ouverture'}
+        </p>
+        <ul class="mt-6 space-y-3 text-creme/90">
+          {avantagesPratique.map((a) => (
+            <li class="flex gap-3"><Icon name="fleche" class="mt-1 h-4 w-4 shrink-0 text-or" />{a}</li>
+          ))}
+        </ul>
+        <div class="mt-auto pt-8"><HelloAssoButton cle="licence" variant="clair" /></div>
+      </article>
+    </div>
+    <p class="container-equo mt-6 text-center text-sm text-gris">
+      Les activités proposées relèvent de la prévention et du bien-être. Elles ne se substituent pas à un suivi médical,
+      paramédical ou thérapeutique.
+    </p>
+  </section>
+
+  <section class="bg-sable-clair py-20 sm:py-24" aria-labelledby="inscription-titre">
+    <div class="container-equo">
+      <p class="eyebrow reveal"><span>Pratique régulière</span></p>
+      <h2 id="inscription-titre" class="reveal mt-4 max-w-2xl text-3xl leading-tight font-medium sm:text-4xl">Comment s’inscrire</h2>
+      <ol class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {etapesInscription.map((e, i) => (
+          <li class="reveal rounded-[var(--radius-carte)] bg-creme p-6" style={`--delai:${i * 80}ms`}>
+            <span class="grid h-10 w-10 place-items-center rounded-full bg-foret font-extrabold text-creme">{i + 1}</span>
+            <h3 class="mt-4 text-lg font-medium">{e.titre}</h3>
+            <p class="mt-2 text-[0.95rem] text-anthracite/80">{e.texte}</p>
+          </li>
+        ))}
+      </ol>
+
+      <div class="mt-12 grid gap-6 lg:grid-cols-2">
+        <div class="reveal rounded-[var(--radius-carte)] bg-creme p-7">
+          <h3 class="text-xl font-medium">Planning des séances</h3>
+          <p class="mt-3 text-anthracite/80">Les créneaux sont en cours de programmation et seront publiés dans l’agenda.</p>
+          <Button href="/agenda" variant="secondaire" class="mt-5">Consulter l’agenda</Button>
+        </div>
+        <div class="reveal rounded-[var(--radius-carte)] bg-creme p-7" style="--delai:80ms">
+          <h3 class="text-xl font-medium">Assurance et licence</h3>
+          <p class="mt-3 text-anthracite/80">
+            La pratique régulière inclut une couverture d’assurance. ÉQUO étudie une affiliation à une fédération
+            sport-santé : les informations sur la licence fédérale seront précisées ici lorsqu’elle sera effective.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-20 sm:py-24" aria-labelledby="pourquoi-titre">
+    <div class="container-equo grid gap-10 lg:grid-cols-12 lg:items-center">
+      <div class="lg:col-span-5">
+        <h2 id="pourquoi-titre" class="reveal text-3xl leading-tight font-medium sm:text-4xl">Pourquoi rejoindre ÉQUO&nbsp;?</h2>
+      </div>
+      <ul class="grid gap-4 sm:grid-cols-3 lg:col-span-7">
+        {['Chaque petit mouvement compte.', 'Le corps et les émotions sont liés.', 'Prendre soin de soi aide aussi à prendre soin des autres.'].map((t, i) => (
+          <li class="reveal rounded-[var(--radius-carte)] bg-sauge-clair p-6 font-titre text-lg leading-snug text-foret-sombre" style={`--delai:${i * 80}ms`}>{t}</li>
+        ))}
+      </ul>
+    </div>
+    <div class="container-equo mt-12 text-center">
+      <p class="text-anthracite/80">Une question avant de vous lancer ?</p>
+      <Button href="/contact?type=adherer" variant="secondaire" class="mt-4">Nous écrire</Button>
+      <p class="mt-3 text-sm text-gris">{site.contact.email}</p>
+    </div>
+  </section>
+</BaseLayout>

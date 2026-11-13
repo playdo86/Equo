@@ -1,0 +1,27 @@
+---
+import { u } from '@/lib/url';
+import Icon from './Icon.astro';
+import { libelleType, libelleDomaine, libelleInscription, prochaineDate, formatCreneau, type Activite } from '@/lib/activites';
+
+interface Props { activite: Activite }
+const { activite: a } = Astro.props;
+const prochaine = prochaineDate(a);
+const date = prochaine ? a.data.dates.find((d) => d.debut.getTime() === prochaine.getTime()) : undefined;
+---
+
+<article class="group relative flex h-full flex-col rounded-[var(--radius-carte)] bg-creme p-6 shadow-douce ring-1 ring-sable transition hover:shadow-relief" data-domaine={a.data.domaine} data-type={a.data.type}>
+  <div class="flex flex-wrap gap-2 text-xs font-extrabold">
+    <span class="rounded-full bg-sauge-clair px-3 py-1 text-foret">{libelleDomaine[a.data.domaine]}</span>
+    <span class="rounded-full bg-sable px-3 py-1 text-anthracite">{libelleType[a.data.type]}</span>
+  </div>
+  <h3 class="mt-4 text-xl leading-snug font-medium">
+    <a href={u(`/agenda/${a.id}`)} class="after:absolute after:inset-0">{a.data.titre}</a>
+  </h3>
+  <p class="mt-2 text-[0.95rem] text-anthracite/80">{a.data.resume}</p>
+  <ul class="mt-4 space-y-1.5 text-sm text-gris">
+    {(date || a.data.recurrence) && <li class="flex gap-2"><Icon name="fleche" class="mt-0.5 h-4 w-4 text-or-texte" />{date ? formatCreneau(date.debut, date.fin) : a.data.recurrence}</li>}
+    {a.data.lieu && <li class="flex gap-2"><Icon name="lieu" class="mt-0.5 h-4 w-4 text-or-texte" />{a.data.lieu}</li>}
+    <li class="flex gap-2"><Icon name="personne" class="mt-0.5 h-4 w-4 text-or-texte" />{a.data.public}</li>
+  </ul>
+  <p class="mt-auto pt-5 text-sm font-extrabold text-foret">{libelleInscription[a.data.inscription.statut]} →</p>
+</article>

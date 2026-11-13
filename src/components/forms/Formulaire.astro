@@ -1,0 +1,70 @@
+---
+/**
+ * Enveloppe commune des formulaires : anti-spam, consentement RGPD,
+ * zone de statut annoncée aux lecteurs d'écran, bouton d'envoi.
+ */
+import { forms, site } from '@/config/site';
+import { u } from '@/lib/url';
+
+interface Props {
+  id: string;
+  sujet: string;
+  libelles: Record<string, string>;
+  bouton: string;
+}
+const { id, sujet, libelles, bouton } = Astro.props;
+const config = { provider: forms.provider, web3formsKey: forms.web3formsKey, formspreeId: forms.formspreeId, email: site.contact.email };
+---
+
+<form id={id} data-formulaire data-sujet={sujet} data-libelles={JSON.stringify(libelles)} class="grid gap-5 sm:grid-cols-2" method="post">
+  <slot />
+
+  <div class="form-piege" aria-hidden="true">
+    <label for={`${id}-botcheck`}>Ne pas remplir ce champ</label>
+    <input id={`${id}-botcheck`} type="text" name="botcheck" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <div class="sm:col-span-2">
+    <div class="flex items-start gap-3">
+      <input
+        id={`${id}-consentement`}
+        name="consentement"
+        type="checkbox"
+        required
+        data-champ
+        aria-describedby={`${id}-consentement-erreur`}
+        class="mt-1 h-5 w-5 shrink-0 rounded accent-foret"
+      />
+      <label for={`${id}-consentement`} class="text-[0.95rem] leading-relaxed text-anthracite/85">
+        J’accepte que les informations saisies soient utilisées par l’association ÉQUO uniquement pour répondre à ma demande.
+        <a href={u('/confidentialite')} class="font-bold text-foret underline underline-offset-4">En savoir plus</a>
+        <span class="text-or-texte" aria-hidden="true"> *</span>
+      </label>
+    </div>
+    <p id={`${id}-consentement-erreur`} class="form-erreur" hidden></p>
+  </div>
+
+  <div class="flex flex-col gap-4 sm:col-span-2 sm:flex-row sm:items-center sm:justify-between">
+    <p class="text-sm text-gris"><span class="text-or-texte">*</span> Champs obligatoires</p>
+    <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-full bg-foret px-7 py-3.5 font-extrabold text-creme shadow-douce transition hover:-translate-y-px hover:bg-foret-sombre disabled:opacity-60">
+      {bouton}
+      <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+    </button>
+  </div>
+
+  <div data-statut tabindex="-1" role="status" aria-live="polite" hidden class="statut rounded-2xl p-5 sm:col-span-2"></div>
+</form>
+
+<script is:inline type="application/json" id={`${id}-config`} set:html={JSON.stringify(config)} />
+
+<script>
+  import { initFormulaires } from '@/scripts/formulaires';
+  const el = document.querySelector<HTMLScriptElement>('script[id$="-config"]');
+  if (el) initFormulaires(JSON.parse(el.textContent || '{}'));
+</script>
+
+<style>
+  .statut[data-type='ok'] { background: var(--color-sauge-clair); color: var(--color-foret-sombre); }
+  .statut[data-type='info'] { background: var(--color-sable); color: var(--color-anthracite); }
+  .statut[data-type='erreur'] { background: #f7e3dd; color: #7c2a1d; }
+</style>

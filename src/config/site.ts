@@ -80,6 +80,45 @@ export const helloasso: Record<HelloAssoKey, HelloAssoLink> = {
 };
 
 /* ------------------------------------------------------------------ */
+/* Formulaires (contact, partenariat)                                  */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Le site est statique : l'envoi des formulaires passe par un service
+ * externe gratuit. Tant qu'aucun service n'est configuré, le formulaire
+ * prépare un e-mail dans la messagerie du visiteur (aucun envoi simulé).
+ *
+ * Web3Forms : créer une clé gratuite sur https://web3forms.com avec
+ * l'adresse contact.equo@gmail.com, puis renseigner `web3formsKey`.
+ * (Cette clé est publique par conception : elle peut figurer ici.)
+ */
+export const forms = {
+  provider: null as null | 'web3forms' | 'formspree',
+  web3formsKey: null as string | null,
+  /** Identifiant Formspree (ex. « xyzabcd »), si ce service est préféré. */
+  formspreeId: null as string | null,
+};
+
+export const typesDemande = [
+  { value: 'participer', label: 'Participer à une activité' },
+  { value: 'adherer', label: 'Adhérer' },
+  { value: 'partenariat', label: 'Proposer un partenariat' },
+  { value: 'intervention', label: 'Organiser une intervention' },
+  { value: 'don', label: 'Faire un don' },
+  { value: 'autre', label: 'Autre' },
+] as const;
+
+/* ------------------------------------------------------------------ */
+/* Bureau : renseigner les noms uniquement avec l'accord des personnes. */
+/* ------------------------------------------------------------------ */
+
+export const bureau: { role: string; nom: string | null; presentation?: string }[] = [
+  { role: 'Présidente', nom: null },
+  { role: 'Trésorière', nom: null },
+  { role: 'Secrétaire', nom: null },
+];
+
+/* ------------------------------------------------------------------ */
 /* Tarifs : affichés avec leur statut de validation.                   */
 /* ------------------------------------------------------------------ */
 

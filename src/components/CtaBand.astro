@@ -1,0 +1,29 @@
+---
+import Button from './Button.astro';
+
+interface Props {
+  title: string;
+  text?: string;
+  primary: { label: string; href: string };
+  secondary?: { label: string; href: string };
+}
+const { title, text, primary, secondary } = Astro.props;
+---
+
+<section class="relative overflow-hidden bg-foret py-16 text-creme sm:py-20">
+  <svg class="pointer-events-none absolute -bottom-20 -left-16 h-72 w-72 opacity-10" viewBox="0 0 200 200" aria-hidden="true">
+    <circle cx="100" cy="100" r="45" fill="none" stroke="#FAF9F6" stroke-width="3" />
+    <circle cx="100" cy="100" r="75" fill="none" stroke="#FAF9F6" stroke-width="3" />
+    <circle cx="100" cy="100" r="98" fill="none" stroke="#FAF9F6" stroke-width="3" />
+  </svg>
+  <div class="container-equo relative flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+    <div class="max-w-2xl">
+      <h2 class="reveal text-3xl leading-tight font-medium text-creme sm:text-4xl">{title}</h2>
+      {text && <p class="reveal mt-4 text-lg text-creme/85" style="--delai:80ms">{text}</p>}
+    </div>
+    <div class="reveal flex shrink-0 flex-col gap-3 sm:flex-row" style="--delai:140ms">
+      <Button href={primary.href} variant="clair" size="lg">{primary.label}</Button>
+      {secondary && <Button href={secondary.href} variant="fantome" size="lg">{secondary.label}</Button>}
+    </div>
+  </div>
+</section>

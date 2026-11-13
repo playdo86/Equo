@@ -26,3 +26,44 @@ Au déploiement, définir `SITE_URL` (adresse du site) et, si le site est dans u
 | Photos | Passer `src={import}` au composant `Visual` |
 
 L'interface d'administration (étape 5) permettra de modifier ces contenus sans toucher au code.
+
+## Activer l'envoi des formulaires
+
+Le site étant statique, les formulaires (contact, partenariat) passent par un service gratuit.
+Sans configuration, ils ouvrent la messagerie du visiteur avec le message prérempli.
+
+1. Aller sur https://web3forms.com, saisir `contact.equo@gmail.com` : une clé est envoyée par e-mail.
+2. Dans `src/config/site.ts` → `forms`, mettre `provider: 'web3forms'` et coller la clé dans `web3formsKey`.
+
+La politique de confidentialité s'adapte automatiquement.
+
+## Publier une activité dans l'agenda
+
+Créer un fichier `src/content/activites/nom-de-l-activite.md` :
+
+```markdown
+---
+titre: Atelier sport-santé — Remise en mouvement
+domaine: mouvement            # mouvement | emotions | education
+type: atelier                 # reguliere | atelier | stage | evenement
+resume: Une séance douce pour reprendre confiance dans son corps.
+public: Adultes et seniors peu ou pas actifs
+lieu: Salle des fêtes, Mercurey
+intervenant: Nom de l'intervenant·e
+dates:
+  - debut: 2027-01-12T10:00:00+01:00
+    fin: 2027-01-12T11:30:00+01:00
+# recurrence: Tous les mardis, 10 h – 11 h 30 (pour une activité régulière)
+places: 12
+tarif: 10 € (8 € pour les adhérents)
+conditions: Tenue confortable. Aucun niveau requis.
+inscription:
+  statut: ouverte             # prochainement | ouverte | complet | terminee
+  helloassoUrl: https://www.helloasso.com/associations/...
+publie: true
+---
+
+Description détaillée de l'activité (texte libre).
+```
+
+La fiche `/agenda/nom-de-l-activite` est créée automatiquement. L'interface d'administration (étape 5) remplacera cette manipulation.
