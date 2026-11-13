@@ -13,9 +13,11 @@ interface Props {
   label?: string;
   embed?: boolean;
   variant?: 'primaire' | 'clair';
+  /** Ancre d'un formulaire intégré dans la même page (HelloAssoWidget) : le bouton y mène au lieu d'ouvrir HelloAsso. */
+  ancre?: string;
   class?: string;
 }
-const { cle, label, embed = false, variant = 'primaire', class: className = '' } = Astro.props;
+const { cle, label, embed = false, variant = 'primaire', ancre, class: className = '' } = Astro.props;
 const lien = helloasso[cle];
 const texte = label ?? lien.label;
 const styles = {
@@ -32,6 +34,18 @@ const styles = {
       class="h-[750px] w-full rounded-[var(--radius-carte)] border-0 bg-white"
       loading="lazy"
     />
+  ) : ancre && lien.widgetUrl ? (
+    <a
+      href={`#${ancre}`}
+      class:list={[
+        'inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 font-extrabold transition hover:-translate-y-px',
+        styles[variant],
+        className,
+      ]}
+    >
+      {texte}
+      <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" /></svg>
+    </a>
   ) : lien.url ? (
     <a
       href={lien.url}

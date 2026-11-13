@@ -2,6 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PageHero from '@/components/PageHero.astro';
 import HelloAssoButton from '@/components/HelloAssoButton.astro';
+import HelloAssoWidget from '@/components/HelloAssoWidget.astro';
 import Button from '@/components/Button.astro';
 import Icon from '@/components/Icon.astro';
 import { site, tarifs } from '@/config/site';
@@ -62,7 +63,7 @@ const licenceValidee = tarifs.licence.statut === 'valide';
             <li class="flex gap-3"><Icon name="fleche" class="mt-1 h-4 w-4 shrink-0 text-or-texte" />{a}</li>
           ))}
         </ul>
-        <div class="mt-auto pt-8"><HelloAssoButton cle="adhesion" label="Adhérer à ÉQUO" /></div>
+        <div class="mt-auto pt-8"><HelloAssoButton cle="adhesion" label="Adhérer à ÉQUO" ancre="adherer-en-ligne" /></div>
       </article>
 
       <!-- Pratique régulière -->
@@ -84,6 +85,9 @@ const licenceValidee = tarifs.licence.statut === 'valide';
         </ul>
         <div class="mt-auto pt-8"><HelloAssoButton cle="licence" variant="clair" /></div>
       </article>
+    </div>
+    <div class="container-equo mt-8">
+      <HelloAssoWidget cle="adhesion" titre="Adhérer en ligne" id="adherer-en-ligne" />
     </div>
     <p class="container-equo mt-6 text-center text-sm text-gris">
       Les activités proposées relèvent de la prévention et du bien-être. Elles ne se substituent pas à un suivi médical,

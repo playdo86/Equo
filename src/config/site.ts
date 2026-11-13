@@ -73,7 +73,11 @@ export interface HelloAssoLink {
 }
 
 export const helloasso: Record<HelloAssoKey, HelloAssoLink> = {
-  adhesion: { label: 'Adhérer à ÉQUO', url: null, widgetUrl: null },
+  adhesion: {
+    label: 'Adhérer à ÉQUO',
+    url: 'https://www.helloasso.com/associations/association-equo/adhesions/adhesion-associative-equo',
+    widgetUrl: 'https://www.helloasso.com/associations/association-equo/adhesions/adhesion-associative-equo/widget',
+  },
   licence: { label: "S'inscrire à la pratique sport-santé", url: null, widgetUrl: null },
   donPonctuel: { label: 'Faire un don avec HelloAsso', url: null, widgetUrl: null },
   donMensuel: { label: 'Faire un don mensuel', url: null, widgetUrl: null },
