@@ -1,0 +1,29 @@
+---
+interface Props {
+  href: string;
+  variant?: 'primaire' | 'secondaire' | 'clair' | 'fantome';
+  size?: 'md' | 'lg';
+  external?: boolean;
+  class?: string;
+}
+const { href, variant = 'primaire', size = 'md', external = false, class: className = '' } = Astro.props;
+
+const base =
+  'group inline-flex items-center justify-center gap-2 rounded-full font-extrabold transition-[background-color,color,box-shadow,transform] duration-200 ease-out hover:-translate-y-px active:translate-y-0';
+const sizes = { md: 'px-5 py-2.5 text-[0.95rem]', lg: 'px-7 py-3.5 text-base' };
+const variants = {
+  primaire: 'bg-foret text-creme shadow-douce hover:bg-foret-sombre hover:shadow-relief',
+  secondaire: 'bg-transparent text-foret ring-2 ring-inset ring-foret/25 hover:ring-foret hover:bg-white/60',
+  clair: 'bg-creme text-foret-sombre shadow-douce hover:bg-white',
+  fantome: 'bg-transparent text-creme ring-2 ring-inset ring-creme/40 hover:ring-creme hover:bg-white/10',
+};
+---
+
+<a
+  href={href}
+  class:list={[base, sizes[size], variants[variant], className]}
+  {...external ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
+>
+  <slot />
+  {external && <span class="sr-only">(ouvre un nouvel onglet)</span>}
+</a>

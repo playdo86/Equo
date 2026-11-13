@@ -1,0 +1,14 @@
+---
+import P from '@/components/PageEnPreparation.astro';
+import Icon from '@/components/Icon.astro';
+import { site } from '@/config/site';
+---
+<P eyebrow="Contact" title="Écrire à l'association" metaTitle="Contact"
+  description="Contacter l'association ÉQUO, à Mercurey (Saône-et-Loire) : participation, adhésion, partenariat, intervention, don."
+  lead="Une question sur une activité, une adhésion, un partenariat ou une intervention ? Écrivez-nous, nous vous répondrons dans les meilleurs délais."
+  rubriques={['Formulaire de contact sécurisé (anti-spam)', 'Choix du type de demande', 'Consentement à l’utilisation des données pour répondre']}>
+  <ul class="mt-8 space-y-3 text-lg">
+    <li class="flex items-center gap-3"><Icon name="mail" class="h-5 w-5 text-or-texte" /><a class="font-extrabold text-foret underline underline-offset-4" href={`mailto:${site.contact.email}`}>{site.contact.email}</a></li>
+    <li class="flex items-center gap-3"><Icon name="lieu" class="h-5 w-5 text-or-texte" />{site.contact.locality} — {site.contact.region}</li>
+  </ul>
+</P>

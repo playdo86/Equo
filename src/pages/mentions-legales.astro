@@ -1,0 +1,28 @@
+---
+import Prose from '@/components/Prose.astro';
+import { site } from '@/config/site';
+const c = site.contact;
+---
+<Prose title="Mentions légales" metaTitle="Mentions légales" description="Mentions légales du site de l'association ÉQUO.">
+  <h2>Éditeur du site</h2>
+  <p>
+    {site.legalName}, association régie par la loi du 1<sup>er</sup> juillet 1901.<br />
+    Siège social : {c.streetAddress}, {c.postalCode} {c.locality}.<br />
+    Numéro RNA : <span class="a-completer">à compléter</span><br />
+    Contact : <a href={`mailto:${c.email}`}>{c.email}</a>
+  </p>
+  <h2>Direction de la publication</h2>
+  <p>La Présidente de l'association.</p>
+  <h2>Hébergement</h2>
+  <p><span class="a-completer">Nom, adresse et contact de l'hébergeur à compléter lors de la mise en ligne.</span></p>
+  <h2>Propriété intellectuelle</h2>
+  <p>
+    Les textes, le logo et les éléments graphiques de ce site sont la propriété de l'association ÉQUO, sauf mention
+    contraire. Toute reproduction sans autorisation préalable est interdite.
+  </p>
+  <h2>Nature des informations</h2>
+  <p>
+    Les activités proposées par ÉQUO relèvent de la prévention et du bien-être. Elles ne se substituent pas à un suivi
+    médical, paramédical ou thérapeutique.
+  </p>
+</Prose>

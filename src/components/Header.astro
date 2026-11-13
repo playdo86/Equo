@@ -1,0 +1,112 @@
+---
+import Logo from './Logo.astro';
+import Button from './Button.astro';
+import Icon from './Icon.astro';
+import { mainNav } from '@/config/site';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isCurrent = (href: string) => path === href || path.startsWith(href + '/');
+---
+
+<header id="site-header" class="sticky top-0 z-40 border-b border-transparent bg-creme/90 backdrop-blur-md transition-[border-color,box-shadow] duration-300">
+  <div class="container-equo flex h-[4.5rem] items-center justify-between gap-6">
+    <a href="/" class="shrink-0 rounded-lg" aria-label="ÉQUO — retour à l'accueil">
+      <Logo />
+    </a>
+
+    <nav aria-label="Navigation principale" class="hidden xl:block">
+      <ul class="flex items-center gap-1">
+        {
+          mainNav.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                aria-current={isCurrent(item.href) ? 'page' : undefined}
+                class="nav-lien relative rounded-full px-3.5 py-2 text-[0.95rem] font-bold text-anthracite/85 transition-colors hover:text-foret"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="hidden items-center gap-2 xl:flex">
+      <a href="/contact" class="rounded-full px-3.5 py-2 text-[0.95rem] font-bold text-anthracite/85 hover:text-foret" aria-current={isCurrent('/contact') ? 'page' : undefined}>Contact</a>
+      <Button href="/rejoindre">Rejoindre ÉQUO</Button>
+    </div>
+
+    <button
+      id="menu-bouton"
+      type="button"
+      class="inline-flex h-11 items-center gap-2 rounded-full px-4 font-extrabold text-foret ring-2 ring-inset ring-foret/20 xl:hidden"
+      aria-expanded="false"
+      aria-controls="menu-mobile"
+    >
+      <Icon name="menu" class="h-5 w-5" />
+      <span>Menu</span>
+    </button>
+  </div>
+
+  <div id="menu-mobile" class="hidden max-h-[calc(100dvh-4.5rem)] overflow-y-auto border-t border-sable bg-creme xl:hidden">
+    <nav aria-label="Navigation mobile" class="container-equo py-4">
+      <ul class="flex flex-col">
+        {
+          [{ label: 'Accueil', href: '/' }, ...mainNav, { label: 'Contact', href: '/contact' }].map((item) => (
+            <li>
+              <a
+                href={item.href}
+                aria-current={(item.href === '/' ? path === '/' : isCurrent(item.href)) ? 'page' : undefined}
+                class="flex items-center justify-between border-b border-sable/80 py-3.5 text-lg font-bold text-anthracite aria-[current=page]:text-foret"
+              >
+                {item.label}
+                <Icon name="fleche" class="h-4 w-4 text-or-texte" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="mt-5 flex flex-col gap-3 pb-2 sm:flex-row">
+        <Button href="/rejoindre" size="lg">Rejoindre ÉQUO</Button>
+        <Button href="/soutenir" size="lg" variant="secondaire">Faire un don</Button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .nav-lien[aria-current='page'] { color: var(--color-foret); }
+  .nav-lien[aria-current='page']::after {
+    content: ''; position: absolute; left: 50%; bottom: 0.15rem; width: 5px; height: 5px;
+    border-radius: 999px; background: var(--color-or); transform: translateX(-50%);
+  }
+  :global(#site-header.is-scrolled) { border-color: var(--color-sable); box-shadow: 0 6px 20px -16px rgb(40 51 46 / .35); }
+</style>
+
+<script>
+  const header = document.getElementById('site-header');
+  const bouton = document.getElementById('menu-bouton');
+  const menu = document.getElementById('menu-mobile');
+
+  const setOpen = (open: boolean) => {
+    if (!bouton || !menu) return;
+    bouton.setAttribute('aria-expanded', String(open));
+    menu.classList.toggle('hidden', !open);
+    const label = bouton.querySelector('span');
+    if (label) label.textContent = open ? 'Fermer' : 'Menu';
+  };
+
+  bouton?.addEventListener('click', () => setOpen(bouton.getAttribute('aria-expanded') !== 'true'));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && bouton?.getAttribute('aria-expanded') === 'true') {
+      setOpen(false);
+      bouton.focus();
+    }
+  });
+  window.matchMedia('(min-width: 1280px)').addEventListener('change', (e) => e.matches && setOpen(false));
+
+  const onScroll = () => header?.classList.toggle('is-scrolled', window.scrollY > 8);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+</script>

@@ -1,0 +1,79 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { site, footerNav, legalNav } from '@/config/site';
+
+const socials = Object.entries(site.social).filter(([, url]) => !!url) as [string, string][];
+const socialLabels: Record<string, string> = { facebook: 'Facebook', instagram: 'Instagram', linkedin: 'LinkedIn' };
+const annee = new Date().getFullYear();
+---
+
+<footer class="relative mt-auto overflow-hidden bg-foret-sombre text-creme/85">
+  <svg class="pointer-events-none absolute -right-24 -top-24 h-80 w-80 opacity-[0.07]" viewBox="0 0 200 200" aria-hidden="true">
+    <circle cx="100" cy="100" r="40" fill="none" stroke="#FAF9F6" stroke-width="2" />
+    <circle cx="100" cy="100" r="70" fill="none" stroke="#FAF9F6" stroke-width="2" />
+    <circle cx="100" cy="100" r="98" fill="none" stroke="#FAF9F6" stroke-width="2" />
+  </svg>
+
+  <div class="container-equo relative grid gap-12 py-16 md:grid-cols-12 md:gap-8 lg:py-20">
+    <div class="md:col-span-5">
+      <Logo tone="clair" />
+      <p class="mt-5 text-sm font-extrabold uppercase tracking-[0.14em] text-sauge">{site.name} — {site.descriptor}</p>
+      <p class="mt-3 font-titre text-2xl italic text-creme sm:text-[1.7rem]">« {site.tagline}. »</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="/rejoindre" class="inline-flex items-center gap-2 rounded-full bg-creme px-5 py-2.5 text-[0.95rem] font-extrabold text-foret-sombre transition hover:bg-white">
+          Adhérer
+        </a>
+        <a href="/soutenir" class="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[0.95rem] font-extrabold text-creme ring-2 ring-inset ring-creme/35 transition hover:ring-creme">
+          <Icon name="coeur" class="h-4 w-4 text-or" /> Faire un don
+        </a>
+      </div>
+    </div>
+
+    <nav aria-label="Plan du site" class="md:col-span-3">
+      <h2 class="font-texte text-xs font-extrabold uppercase tracking-[0.14em] text-sauge">Navigation</h2>
+      <ul class="mt-4 grid grid-cols-2 gap-x-4 gap-y-2.5 text-[0.95rem] md:grid-cols-1">
+        {footerNav.map((item) => (
+          <li><a href={item.href} class="hover:text-creme hover:underline underline-offset-4">{item.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="md:col-span-4">
+      <h2 class="font-texte text-xs font-extrabold uppercase tracking-[0.14em] text-sauge">Contact</h2>
+      <ul class="mt-4 space-y-3 text-[0.95rem]">
+        <li class="flex items-start gap-3">
+          <Icon name="mail" class="mt-0.5 h-5 w-5 shrink-0 text-or" />
+          <a href={`mailto:${site.contact.email}`} class="break-all hover:text-creme hover:underline underline-offset-4">{site.contact.email}</a>
+        </li>
+        <li class="flex items-start gap-3">
+          <Icon name="lieu" class="mt-0.5 h-5 w-5 shrink-0 text-or" />
+          <span>{site.contact.locality} — {site.contact.region}</span>
+        </li>
+      </ul>
+      <a href="/contact" class="mt-6 inline-flex items-center gap-2 font-extrabold text-creme underline-offset-4 hover:underline">
+        Écrire à l'association <Icon name="fleche" class="h-4 w-4" />
+      </a>
+      {
+        socials.length > 0 && (
+          <ul class="mt-6 flex gap-3">
+            {socials.map(([k, url]) => (
+              <li><a href={url} target="_blank" rel="noopener noreferrer" class="hover:text-creme hover:underline">{socialLabels[k]}<span class="sr-only"> (nouvel onglet)</span></a></li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </div>
+
+  <div class="relative border-t border-creme/10">
+    <div class="container-equo flex flex-col gap-3 py-6 text-sm text-creme/70 sm:flex-row sm:items-center sm:justify-between">
+      <p>© {annee} {site.legalName} · Association loi 1901</p>
+      <ul class="flex flex-wrap gap-x-5 gap-y-2">
+        {legalNav.map((item) => (
+          <li><a href={item.href} class="hover:text-creme hover:underline underline-offset-4">{item.label}</a></li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</footer>

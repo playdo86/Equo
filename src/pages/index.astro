@@ -1,0 +1,277 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Button from '@/components/Button.astro';
+import Icon from '@/components/Icon.astro';
+import Visual from '@/components/Visual.astro';
+import { site } from '@/config/site';
+import { domaines } from '@/data/domaines';
+
+const pourquoi = [
+  'Parce que beaucoup veulent aller mieux, sans toujours savoir par où commencer.',
+  'Parce que les solutions proposées ne correspondent pas toujours aux réalités du quotidien.',
+  'Parce que la santé se construit progressivement, à travers des expériences, des ajustements et des choix personnels.',
+];
+
+const principes = [
+  {
+    icone: 'global',
+    titre: 'Une approche globale',
+    texte: 'Corps, émotions, modes de vie et environnement : nous considérons la santé comme un ensemble d’équilibres liés entre eux.',
+  },
+  {
+    icone: 'experience',
+    titre: 'Une approche par l’expérience',
+    texte: 'Expérimenter avant d’adopter. Chacun ressent, ajuste et identifie ce qui lui correspond, sans modèle imposé.',
+  },
+  {
+    icone: 'reel',
+    titre: 'Une action ancrée dans le réel',
+    texte: 'Des solutions pensées pour la vie quotidienne, ses contraintes et ses ressources, au plus près des territoires.',
+  },
+] as const;
+---
+
+<BaseLayout description="ÉQUO, association de prévention et sport-santé à Mercurey (Saône-et-Loire) : mouvement, régulation émotionnelle et modes de vie, à son rythme.">
+  <!-- =========================================================== HERO -->
+  <section class="relative overflow-hidden" aria-labelledby="hero-titre">
+    <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-full bg-gradient-to-b from-sable-clair to-creme"></div>
+    <div class="container-equo grid items-center gap-12 pb-20 pt-10 sm:pt-14 lg:grid-cols-12 lg:gap-10 lg:pb-28 lg:pt-20">
+      <div class="lg:col-span-6 xl:col-span-6">
+        <p class="eyebrow reveal"><span>Association de prévention<span class="hidden sm:inline">&nbsp;· {site.contact.region}</span></span></p>
+        <h1 id="hero-titre" class="reveal mt-5 text-[2.6rem] leading-[1.05] font-medium sm:text-6xl lg:text-[4.1rem]" style="--delai:80ms">
+          Construire les équilibres <em class="font-normal italic text-lagon">du quotidien</em>
+        </h1>
+        <p class="reveal mt-6 font-titre text-xl text-foret sm:text-2xl" style="--delai:160ms">
+          <span class="signature">Bouger.</span> <span class="signature">Respirer.</span> <span class="signature">Ajuster.</span>
+          <span class="mt-1 block text-lg italic text-gris sm:text-xl">Prendre soin de soi, à son rythme.</span>
+        </p>
+        <p class="reveal mt-6 max-w-xl text-lg leading-relaxed text-anthracite/85" style="--delai:240ms">
+          {site.description}
+        </p>
+        <div class="reveal mt-9 flex flex-col gap-3 sm:flex-row" style="--delai:320ms">
+          <Button href="/actions" size="lg">
+            Découvrir nos actions
+            <Icon name="fleche" class="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+          </Button>
+          <Button href="/rejoindre" size="lg" variant="secondaire">Rejoindre ÉQUO</Button>
+        </div>
+      </div>
+
+      <div class="relative lg:col-span-6">
+        <div class="reveal relative mx-auto max-w-xl lg:ml-auto" style="--delai:200ms">
+          <div class="absolute -left-6 -top-6 hidden h-40 w-40 rounded-full bg-sauge-clair sm:block" aria-hidden="true"></div>
+          <Visual
+            motif="hero"
+            ratio="5 / 6"
+            priority
+            hint="haut"
+            attendu="Personnes d’âges différents qui marchent ensemble en extérieur, lumière naturelle"
+            class="shadow-relief relative"
+          />
+          <div class="absolute -bottom-6 left-4 right-4 rounded-2xl bg-creme/95 p-4 shadow-relief backdrop-blur sm:-left-10 sm:right-auto sm:max-w-xs sm:p-5">
+            <p class="text-xs font-extrabold uppercase tracking-[0.14em] text-or-texte">ÉQUO, comme</p>
+            <p class="mt-1.5 font-titre text-lg leading-snug text-foret-sombre">
+              <strong class="font-semibold">équilibre</strong>, un processus vivant —
+              et <strong class="font-semibold">écho</strong>, des pratiques qui résonnent avec chacun.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================== POURQUOI ÉQUO -->
+  <section class="py-20 sm:py-28" aria-labelledby="pourquoi-titre">
+    <div class="container-equo grid gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-4">
+        <p class="eyebrow reveal">Pourquoi ÉQUO&nbsp;?</p>
+        <h2 id="pourquoi-titre" class="reveal mt-4 text-3xl leading-tight font-medium sm:text-4xl" style="--delai:80ms">
+          Parce qu’aller mieux ne devrait pas être un parcours d’obstacles.
+        </h2>
+      </div>
+      <div class="lg:col-span-7 lg:col-start-6">
+        <ul class="space-y-7">
+          {
+            pourquoi.map((phrase, i) => (
+              <li class="reveal flex gap-5" style={`--delai:${i * 90}ms`}>
+                <span class="mt-3 h-px w-8 shrink-0 bg-or" aria-hidden="true" />
+                <p class="font-titre text-xl leading-relaxed text-anthracite sm:text-2xl">{phrase}</p>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="reveal mt-10 border-l-4 border-sauge pl-6 text-xl font-extrabold text-foret sm:text-2xl" style="--delai:300ms">
+          ÉQUO est né pour rendre ces équilibres accessibles.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================ TROIS DOMAINES -->
+  <section class="bg-sable-clair py-20 sm:py-28" aria-labelledby="domaines-titre">
+    <div class="container-equo">
+      <div class="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+        <div class="max-w-2xl">
+          <p class="eyebrow reveal">Ce que nous faisons</p>
+          <h2 id="domaines-titre" class="reveal mt-4 text-3xl leading-tight font-medium sm:text-[2.6rem]" style="--delai:80ms">
+            Trois domaines d’action, une même attention à la personne
+          </h2>
+        </div>
+        <a href="/actions" class="lien-fleche reveal shrink-0" style="--delai:160ms">
+          Toutes nos actions <Icon name="fleche" class="h-4 w-4" />
+        </a>
+      </div>
+
+      <ul class="mt-12 grid gap-6 md:grid-cols-3">
+        {
+          domaines.map((d, i) => (
+            <li class="reveal" style={`--delai:${i * 110}ms`}>
+              <article class="carte group relative flex h-full flex-col overflow-hidden rounded-[var(--radius-carte)] bg-creme shadow-douce transition-shadow duration-300 hover:shadow-relief">
+                <Visual motif={d.motif} attendu={d.photo} ratio="16 / 10" class="rounded-none" />
+                <div class="flex flex-1 flex-col p-6 sm:p-7">
+                  <div class="flex items-center gap-3">
+                    <span class="grid h-10 w-10 place-items-center rounded-full bg-sauge-clair text-foret">
+                      <Icon name={d.icone} class="h-5 w-5" />
+                    </span>
+                    <span class="font-titre text-sm text-or-texte">{d.numero}</span>
+                  </div>
+                  <h3 class="mt-4 text-2xl leading-snug font-medium">
+                    <a href={`/actions#${d.id}`} class="after:absolute after:inset-0 focus-visible:outline-none">
+                      {d.titre}
+                    </a>
+                  </h3>
+                  <p class="mt-3 text-anthracite/80">{d.accroche}</p>
+                  <ul class="mt-5 space-y-1.5 text-[0.95rem] text-gris">
+                    {d.exemples.map((ex) => (
+                      <li class="flex gap-2.5">
+                        <span class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-sauge" aria-hidden="true" />
+                        {ex}
+                      </li>
+                    ))}
+                  </ul>
+                  <span class="lien-fleche mt-auto pt-6" aria-hidden="true">
+                    En savoir plus <Icon name="fleche" class="h-4 w-4" />
+                  </span>
+                </div>
+              </article>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================================ APPROCHE DIFFÉRENTE -->
+  <section class="py-20 sm:py-28" aria-labelledby="approche-titre">
+    <div class="container-equo">
+      <div class="mx-auto max-w-3xl text-center">
+        <p class="eyebrow reveal justify-center">Notre approche</p>
+        <h2 id="approche-titre" class="reveal mt-4 text-3xl leading-tight font-medium sm:text-[2.6rem]" style="--delai:80ms">
+          Une approche différente de la prévention
+        </h2>
+        <p class="reveal mt-5 text-lg text-anthracite/80" style="--delai:160ms">
+          Ni salle de sport, ni cabinet médical : un espace pour expérimenter, comprendre et ajuster, avec l’appui
+          d’expertises pluridisciplinaires et de données probantes.
+        </p>
+      </div>
+
+      <ol class="mt-14 grid gap-10 md:grid-cols-3 md:gap-8">
+        {
+          principes.map((p, i) => (
+            <li class="reveal relative pt-8" style={`--delai:${i * 110}ms`}>
+              <span class="absolute left-0 top-0 h-px w-full bg-sable" aria-hidden="true" />
+              <span class="absolute left-0 top-0 h-[3px] w-14 rounded-full bg-or" aria-hidden="true" />
+              <span class="grid h-12 w-12 place-items-center rounded-2xl bg-foret text-creme">
+                <Icon name={p.icone} class="h-6 w-6" />
+              </span>
+              <h3 class="mt-5 text-2xl font-medium">{p.titre}</h3>
+              <p class="mt-3 leading-relaxed text-anthracite/80">{p.texte}</p>
+            </li>
+          ))
+        }
+      </ol>
+
+      <figure class="reveal mx-auto mt-20 max-w-4xl text-center">
+        <svg viewBox="0 0 40 30" class="mx-auto h-7 w-9 text-or" aria-hidden="true"><path fill="currentColor" d="M0 30V17C0 7 5 1.5 15 0l1.5 3.5C11 5 8.5 8.5 8.3 14H16v16H0Zm24 0V17C24 7 29 1.5 39 0l1 3.5C35 5 32.5 8.5 32.3 14H40v16H24Z" opacity=".7"/></svg>
+        <blockquote class="mt-5 font-titre text-2xl leading-snug font-light text-foret-sombre italic sm:text-[2.1rem]">
+          Ce qui compte n’est pas seulement la pratique en elle-même, mais la résonance qu’elle crée dans le quotidien.
+        </blockquote>
+        <figcaption class="mt-6">
+          <a href="/approche" class="lien-fleche">Découvrir notre approche <Icon name="fleche" class="h-4 w-4" /></a>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ================================================ DEUX FAÇONS -->
+  <section class="pb-20 sm:pb-28" aria-labelledby="engager-titre">
+    <div class="container-equo">
+      <div class="max-w-2xl">
+        <p class="eyebrow reveal">S’engager</p>
+        <h2 id="engager-titre" class="reveal mt-4 text-3xl leading-tight font-medium sm:text-[2.6rem]" style="--delai:80ms">
+          Deux façons de s’engager avec ÉQUO
+        </h2>
+      </div>
+
+      <div class="mt-12 grid gap-6 lg:grid-cols-2">
+        <article class="reveal relative flex flex-col overflow-hidden rounded-[var(--radius-carte)] bg-sauge-clair p-8 sm:p-10">
+          <span class="grid h-14 w-14 place-items-center rounded-full bg-creme text-foret shadow-douce">
+            <Icon name="personne" class="h-7 w-7" />
+          </span>
+          <p class="mt-6 text-xs font-extrabold uppercase tracking-[0.14em] text-lagon">Particuliers</p>
+          <h3 class="mt-2 text-[1.75rem] leading-snug font-medium">Je souhaite participer aux activités</h3>
+          <p class="mt-4 max-w-md leading-relaxed text-anthracite/80">
+            Reprendre une activité physique en douceur, participer à des ateliers, traverser une période de transition
+            ou simplement soutenir le projet : adhésion associative ou pratique sport-santé régulière.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <Button href="/rejoindre">Rejoindre ÉQUO</Button>
+            <Button href="/agenda" variant="secondaire">Voir l’agenda</Button>
+          </div>
+        </article>
+
+        <article class="reveal relative flex flex-col overflow-hidden rounded-[var(--radius-carte)] bg-foret p-8 text-creme sm:p-10" style="--delai:110ms">
+          <svg class="pointer-events-none absolute -bottom-16 -right-16 h-64 w-64 opacity-10" viewBox="0 0 200 200" aria-hidden="true">
+            <circle cx="100" cy="100" r="45" fill="none" stroke="#FAF9F6" stroke-width="3" />
+            <circle cx="100" cy="100" r="75" fill="none" stroke="#FAF9F6" stroke-width="3" />
+            <circle cx="100" cy="100" r="98" fill="none" stroke="#FAF9F6" stroke-width="3" />
+          </svg>
+          <span class="grid h-14 w-14 place-items-center rounded-full bg-creme/10 text-or ring-1 ring-creme/20">
+            <Icon name="structure" class="h-7 w-7" />
+          </span>
+          <p class="mt-6 text-xs font-extrabold uppercase tracking-[0.14em] text-sauge">Partenaires</p>
+          <h3 class="mt-2 text-[1.75rem] leading-snug font-medium text-creme">Je représente une structure ou une collectivité</h3>
+          <p class="mt-4 max-w-md leading-relaxed text-creme/85">
+            Collectivités, CPTS, MSP, établissements médico-sociaux, associations, entreprises : construisons ensemble des
+            actions de prévention adaptées à votre territoire, du diagnostic à l’évaluation.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <Button href="/partenaires" variant="clair">Construire un partenariat</Button>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================== APPEL À L'ACTION -->
+  <section class="relative overflow-hidden bg-sable py-20 sm:py-24" aria-labelledby="cta-titre">
+    <svg class="pointer-events-none absolute inset-x-0 bottom-0 h-24 w-full text-sable-clair" viewBox="0 0 1440 100" preserveAspectRatio="none" aria-hidden="true">
+      <path fill="currentColor" d="M0 60 C 240 20, 480 20, 720 50 S 1200 90, 1440 40 V100 H0Z" />
+    </svg>
+    <div class="container-equo relative text-center">
+      <h2 id="cta-titre" class="reveal mx-auto max-w-3xl text-3xl leading-tight font-medium sm:text-5xl">
+        Et si nous construisions ensemble <em class="italic text-lagon">de nouveaux équilibres</em>&nbsp;?
+      </h2>
+      <div class="reveal mt-10 flex flex-col justify-center gap-3 sm:flex-row" style="--delai:120ms">
+        <Button href="/rejoindre" size="lg">Rejoindre ÉQUO</Button>
+        <Button href="/partenaires" size="lg" variant="secondaire">Construire un partenariat</Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .signature { white-space: nowrap; }
+  .signature + .signature { margin-left: 0.15em; }
+  .carte:focus-within { box-shadow: var(--shadow-relief); outline: 3px solid var(--color-or-texte); outline-offset: 3px; }
+</style>

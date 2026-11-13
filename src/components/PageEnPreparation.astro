@@ -1,0 +1,46 @@
+---
+/**
+ * Gabarit provisoire des pages développées à l'étape 3.
+ * Il affiche l'intention de la page et les rubriques prévues,
+ * sans inventer de contenu (activités, partenaires, témoignages…).
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Button from './Button.astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  metaTitle: string;
+  description: string;
+  lead: string;
+  rubriques: string[];
+}
+const { eyebrow, title, metaTitle, description, lead, rubriques } = Astro.props;
+---
+
+<BaseLayout title={metaTitle} description={description}>
+  <section class="bg-gradient-to-b from-sable-clair to-creme">
+    <div class="container-equo py-16 sm:py-24">
+      <p class="eyebrow">{eyebrow}</p>
+      <h1 class="mt-4 max-w-3xl text-4xl leading-tight font-medium sm:text-5xl">{title}</h1>
+      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-anthracite/85">{lead}</p>
+      <slot />
+    </div>
+  </section>
+  <section class="container-equo pb-24">
+    <div class="rounded-[var(--radius-carte)] border border-dashed border-sauge bg-creme p-7 sm:p-10">
+      <p class="text-sm font-extrabold uppercase tracking-[0.14em] text-or-texte">Page en cours de construction</p>
+      <p class="mt-2 text-anthracite/80">Cette page sera enrichie prochainement. Elle présentera :</p>
+      <ul class="mt-5 grid gap-x-8 gap-y-2.5 sm:grid-cols-2">
+        {rubriques.map((r) => (
+          <li class="flex gap-2.5"><span class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-sauge" aria-hidden="true" />{r}</li>
+        ))}
+      </ul>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <Button href="/contact">Nous écrire</Button>
+        <a href="/" class="lien-fleche self-center px-2">Retour à l'accueil <Icon name="fleche" class="h-4 w-4" /></a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,128 @@
+---
+/** Pictogrammes au trait, cohérents avec le dessin du logo. */
+interface Props {
+  name:
+    | 'fleche'
+    | 'mouvement'
+    | 'souffle'
+    | 'education'
+    | 'global'
+    | 'experience'
+    | 'reel'
+    | 'personne'
+    | 'structure'
+    | 'mail'
+    | 'lieu'
+    | 'menu'
+    | 'fermer'
+    | 'coeur';
+  class?: string;
+}
+const { name, class: className = 'h-5 w-5' } = Astro.props;
+---
+
+<svg
+  viewBox="0 0 24 24"
+  class={className}
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.8"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+>
+  {name === 'fleche' && <path d="M5 12h14M13 6l6 6-6 6" />}
+  {
+    name === 'mouvement' && (
+      <>
+        <circle cx="14" cy="4.5" r="1.8" />
+        <path d="M9 21l2.5-6.5L14 16v5M8 11.5l3-3.5 3.5 1.5 2.5 3M11 8l1 6.5" />
+      </>
+    )
+  }
+  {
+    name === 'souffle' && (
+      <>
+        <path d="M3 9h11a3 3 0 1 0-3-3" />
+        <path d="M3 13h15a3 3 0 1 1-3 3" />
+        <path d="M3 17h7" />
+      </>
+    )
+  }
+  {
+    name === 'education' && (
+      <>
+        <path d="M12 21v-9" />
+        <path d="M12 12c0-4 3-6 7-6 0 4-3 6-7 6Z" />
+        <path d="M12 15c0-3-2.5-5-6-5 0 3 2.5 5 6 5Z" />
+      </>
+    )
+  }
+  {
+    name === 'global' && (
+      <>
+        <circle cx="9" cy="10" r="5" />
+        <circle cx="15" cy="10" r="5" />
+        <circle cx="12" cy="15" r="5" />
+      </>
+    )
+  }
+  {
+    name === 'experience' && (
+      <>
+        <path d="M7 11V6.5a1.5 1.5 0 0 1 3 0V11" />
+        <path d="M10 10V5a1.5 1.5 0 0 1 3 0v5" />
+        <path d="M13 10V6.5a1.5 1.5 0 0 1 3 0V13" />
+        <path d="M16 11a1.5 1.5 0 0 1 3 0v3a7 7 0 0 1-7 7h-1a6 6 0 0 1-5-2.7L4 15.5a1.6 1.6 0 0 1 2.6-1.8L7 14" />
+      </>
+    )
+  }
+  {
+    name === 'reel' && (
+      <>
+        <path d="M3 20h18" />
+        <path d="M5 20V10l4-3 4 3v10" />
+        <path d="M13 20v-6l4-3 3 2.2V20" />
+        <path d="M8 20v-4h2v4" />
+      </>
+    )
+  }
+  {
+    name === 'personne' && (
+      <>
+        <circle cx="12" cy="8" r="3.5" />
+        <path d="M5 20c.8-3.8 3.6-6 7-6s6.2 2.2 7 6" />
+      </>
+    )
+  }
+  {
+    name === 'structure' && (
+      <>
+        <circle cx="6" cy="7" r="2.5" />
+        <circle cx="18" cy="7" r="2.5" />
+        <circle cx="12" cy="17" r="2.5" />
+        <path d="M8 8.5l2.8 6.3M16 8.5l-2.8 6.3M8.5 7h7" />
+      </>
+    )
+  }
+  {
+    name === 'mail' && (
+      <>
+        <rect x="3" y="5" width="18" height="14" rx="2.5" />
+        <path d="M4 7l8 6 8-6" />
+      </>
+    )
+  }
+  {
+    name === 'lieu' && (
+      <>
+        <path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21Z" />
+        <circle cx="12" cy="9.5" r="2.5" />
+      </>
+    )
+  }
+  {name === 'menu' && <path d="M4 7h16M4 12h16M4 17h10" />}
+  {name === 'fermer' && <path d="M6 6l12 12M18 6L6 18" />}
+  {name === 'coeur' && <path d="M12 20s-7.5-4.4-7.5-10A4.3 4.3 0 0 1 12 7.4 4.3 4.3 0 0 1 19.5 10c0 5.6-7.5 10-7.5 10Z" />}
+</svg>

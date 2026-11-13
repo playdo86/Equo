@@ -1,0 +1,88 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/fraunces';
+@import '@fontsource-variable/nunito';
+
+/* ------------------------------------------------------------------
+   ÉQUO — jetons de design
+   Palette dérivée du brief et ajustée au logo (vert lagon + doré).
+   ------------------------------------------------------------------ */
+@theme {
+  --color-creme: #faf9f6;
+  --color-sable: #ede7dc;
+  --color-sable-clair: #f4f0e8;
+  --color-sauge: #8daa9d;
+  --color-sauge-clair: #dfe8e3;
+  --color-lagon: #5c9187;      /* vert du logo */
+  --color-foret: #315d50;      /* vert profond : titres, boutons */
+  --color-foret-sombre: #23463c;
+  --color-or: #c9a96e;         /* doré doux : décoratif uniquement */
+  --color-or-texte: #8a6a2f;   /* doré lisible sur fond clair (AA) */
+  --color-soleil: #e2cf6e;     /* point jaune du logo */
+  --color-anthracite: #28332e;
+  --color-gris: #55605a;       /* texte secondaire (AA sur crème) */
+
+  --font-titre: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
+  --font-texte: 'Nunito Variable', 'Segoe UI', system-ui, sans-serif;
+
+  --radius-carte: 1.25rem;
+  --shadow-douce: 0 1px 2px rgb(40 51 46 / 0.04), 0 8px 24px -8px rgb(40 51 46 / 0.10);
+  --shadow-relief: 0 2px 4px rgb(40 51 46 / 0.05), 0 18px 40px -12px rgb(40 51 46 / 0.18);
+}
+
+@layer base {
+  html {
+    background: var(--color-creme);
+    color: var(--color-anthracite);
+    font-family: var(--font-texte);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+  body { background: var(--color-creme); }
+  h1, h2, h3, .font-titre {
+    font-family: var(--font-titre);
+    font-optical-sizing: auto;
+    font-variation-settings: 'SOFT' 50, 'WONK' 0;
+    letter-spacing: -0.01em;
+    color: var(--color-foret-sombre);
+  }
+  ::selection { background: var(--color-sauge-clair); color: var(--color-foret-sombre); }
+
+  /* Focus clavier très visible, partout */
+  :focus-visible {
+    outline: 3px solid var(--color-or-texte);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+}
+
+@layer components {
+  .container-equo { width: 100%; max-width: 76rem; margin-inline: auto; padding-inline: 1rem; }
+  @media (min-width: 640px) { .container-equo { padding-inline: 1.5rem; } }
+  @media (min-width: 1024px) { .container-equo { padding-inline: 2rem; } }
+
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: .6rem;
+    font-size: .78rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--color-lagon);
+  }
+  .eyebrow::before { content: ''; width: 1.75rem; height: 2px; background: var(--color-or); border-radius: 2px; }
+
+  .lien-fleche { display: inline-flex; align-items: center; gap: .4rem; font-weight: 800; color: var(--color-foret); text-underline-offset: 4px; }
+  .lien-fleche:hover { text-decoration: underline; }
+  .lien-fleche svg { transition: transform .25s ease; }
+  .lien-fleche:hover svg { transform: translateX(3px); }
+}
+
+/* ------------------------------------------------------------------
+   Apparition douce au défilement (désactivée si mouvement réduit
+   ou si JavaScript est indisponible).
+   ------------------------------------------------------------------ */
+.js .reveal { opacity: 0; transform: translateY(18px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); transition-delay: var(--delai, 0ms); }
+.js .reveal.is-visible { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .js .reveal { opacity: 1; transform: none; transition: none; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
