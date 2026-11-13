@@ -8,13 +8,16 @@ const c = site.contact;
   <p>
     {site.legalName}, association régie par la loi du 1<sup>er</sup> juillet 1901.<br />
     Siège social : {c.streetAddress}, {c.postalCode} {c.locality}.<br />
-    Numéro RNA : <span class="a-completer">à compléter</span><br />
+    Numéro RNA : {site.rna}<br />
     Contact : <a href={`mailto:${c.email}`}>{c.email}</a>
   </p>
   <h2>Direction de la publication</h2>
   <p>La Présidente de l'association.</p>
   <h2>Hébergement</h2>
-  <p><span class="a-completer">Nom, adresse et contact de l'hébergeur à compléter lors de la mise en ligne.</span></p>
+  <p>
+    GitHub Pages — GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis.<br />
+    <a href="https://github.com" rel="noopener noreferrer">github.com</a>
+  </p>
   <h2>Propriété intellectuelle</h2>
   <p>
     Les textes, le logo et les éléments graphiques de ce site sont la propriété de l'association ÉQUO, sauf mention

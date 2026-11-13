@@ -19,6 +19,8 @@ export const site = {
   description:
     "ÉQUO est une association de prévention qui propose des actions concrètes, accessibles et progressives pour permettre à chacun de construire ses propres équilibres autour du mouvement, des émotions et des modes de vie.",
   founded: 2026,
+  /** Numéro au Répertoire national des associations. */
+  rna: 'W712009450',
   locale: 'fr_FR',
 
   contact: {
