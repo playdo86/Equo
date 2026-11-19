@@ -12,6 +12,7 @@ import { u } from '@/lib/url';
 const documents = (await getCollection('documents', (d) => d.data.visibilite === 'public')).sort(
   (a, b) => a.data.ordre - b.data.ordre,
 );
+const echapper = (t: string) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const presidente = bureau.find((m) => /présidente|président/i.test(m.role));
 const etapes = ['Expérimenter', 'Ressentir', 'Ajuster', 'Choisir', 'S’approprier'];
 const sommaire = [
@@ -30,7 +31,7 @@ const sommaire = [
 >
   <PageHero
     eyebrow="Qui sommes-nous"
-    title="Une association de prévention, <em class='italic text-lagon'>portée par des personnes</em>"
+    title={`${echapper(equipe.pageTitre)} <em class='italic text-lagon'>${echapper(equipe.pageTitreAccent)}</em>`}
     lead={`ÉQUO est une association loi 1901 créée en ${site.founded} à Mercurey, en Saône-et-Loire. Elle agit autour d’une idée centrale : le bien-être et la santé reposent sur des équilibres dynamiques, personnels et fragiles, qui se construisent dans la durée.`}
   >
     <nav aria-label="Sommaire de la page" class="reveal mt-8 flex flex-wrap gap-2" style="--delai:240ms">

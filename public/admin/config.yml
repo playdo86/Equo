@@ -253,7 +253,9 @@ singletons:
     icon: groups
     file: src/data/reglages/bureau.json
     fields:
-      - { name: titre, label: Titre de la section, widget: string, default: Le bureau }
+      - { name: pageTitre, label: "Titre de la page Qui sommes-nous (début)", widget: string }
+      - { name: pageTitreAccent, label: "Titre de la page (fin, en italique vert)", widget: string }
+      - { name: titre, label: Titre de la section équipe, widget: string, default: Le bureau }
       - { name: texte, label: Texte, widget: text, hint: "Laisser une ligne vide pour commencer un nouveau paragraphe." }
       - name: membres
         label: Membres

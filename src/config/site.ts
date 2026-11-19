@@ -152,6 +152,8 @@ export const bureau: Membre[] = bureauData.membres.map((m) => ({
 
 /** Texte et photos de la section « Équipe » (page L'association). */
 export const equipe = {
+  pageTitre: ou(bureauData.pageTitre) ?? 'Une équipe engagée,',
+  pageTitreAccent: ou(bureauData.pageTitreAccent) ?? 'des expertises au service du quotidien',
   titre: ou(bureauData.titre) ?? 'Le bureau',
   paragraphes: (bureauData.texte ?? '').split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean),
   /** « Mot de la Présidente » : affiché seulement s'il est rempli. */
