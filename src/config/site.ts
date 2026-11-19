@@ -195,6 +195,7 @@ export const mainNav: NavItem[] = [
   { label: 'Qui sommes-nous', href: '/qui-sommes-nous' },
   { label: 'Nos actions', href: '/actions' },
   { label: 'Agenda', href: '/agenda' },
+  { label: 'Ressources', href: '/ressources' },
   { label: 'Partenaires', href: '/partenaires' },
   { label: 'Soutenir', href: '/soutenir' },
 ];

@@ -1,0 +1,69 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import Button from '@/components/Button.astro';
+import Icon from '@/components/Icon.astro';
+import { ressources, nomsDomaines } from '@/data/ressources';
+import { u } from '@/lib/url';
+---
+
+<BaseLayout
+  title="Ressources"
+  description="Des outils et supports en libre accès proposés par ÉQUO pour prendre soin de ses équilibres au quotidien : mouvement, émotions, modes de vie."
+>
+  <PageHero
+    eyebrow="Ressources"
+    title="Des outils pour prendre soin de soi, à son rythme"
+    lead="En libre accès, sans inscription. Ces ressources prolongent nos ateliers : vous pouvez les utiliser seul, en famille ou en groupe."
+  />
+
+  <section class="py-16 sm:py-20" aria-labelledby="liste-titre">
+    <div class="container-equo">
+      <h2 id="liste-titre" class="sr-only">Toutes les ressources</h2>
+      <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {ressources.map((r) => (
+          <li class="reveal">
+            <a
+              href={u(r.href)}
+              class="group flex h-full flex-col overflow-hidden rounded-[var(--radius-carte)] bg-white shadow-douce ring-1 ring-sable transition-[box-shadow,transform] duration-300 hover:-translate-y-1 hover:shadow-relief"
+            >
+              <div class="grid aspect-[16/10] place-items-center bg-sable-clair">
+                <img src={u(r.image)} alt="" width="120" height="120" class="h-28 w-28 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6" loading="lazy" />
+              </div>
+              <div class="flex flex-1 flex-col gap-3 p-6">
+                <div class="flex flex-wrap gap-2 text-xs font-extrabold uppercase tracking-[0.1em]">
+                  <span class="rounded-full bg-sauge-clair px-2.5 py-1 text-foret">{r.type}</span>
+                  <span class="rounded-full bg-sable px-2.5 py-1 text-or-texte">{nomsDomaines[r.domaine]}</span>
+                </div>
+                <h3 class="text-2xl font-medium">{r.titre}</h3>
+                <p class="font-bold text-anthracite">{r.accroche}</p>
+                <p class="text-[0.95rem] leading-relaxed text-anthracite/80">{r.description}</p>
+                <p class="mt-auto pt-2 text-sm text-gris">{r.public} · {r.duree}</p>
+                <span class="lien-fleche">Découvrir<Icon name="fleche" class="h-4 w-4" /></span>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <div class="reveal mt-12 flex flex-col gap-5 rounded-[var(--radius-carte)] border border-dashed border-sauge p-7 sm:flex-row sm:items-center sm:justify-between sm:p-9">
+        <div class="max-w-2xl">
+          <h2 class="text-2xl font-medium">D’autres ressources en préparation</h2>
+          <p class="mt-2 text-anthracite/80">
+            Fiches pratiques, exercices de respiration, supports pour les ateliers : de nouvelles ressources seront
+            publiées ici au fil des mois.
+          </p>
+        </div>
+        <Button href="/actions" variant="secondaire">Voir nos actions</Button>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    title="Envie d’aller plus loin, en groupe ?"
+    text="Nos ateliers offrent un espace bienveillant pour explorer ces sujets avec d’autres."
+    primary={{ label: 'Voir l’agenda', href: '/agenda' }}
+    secondary={{ label: 'Nous écrire', href: '/contact' }}
+  />
+</BaseLayout>
