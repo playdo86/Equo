@@ -62,7 +62,15 @@ const sommaire = [
                 <svg viewBox="0 0 40 30" class="h-8 w-10 text-or" aria-hidden="true"><path fill="currentColor" d="M0 30V17C0 7 5 1.5 15 0l1.5 3.5C11 5 8.5 8.5 8.3 14H16v16H0Zm24 0V17C24 7 29 1.5 39 0l1 3.5C35 5 32.5 8.5 32.3 14H40v16H24Z" /></svg>
                 <h3 class="mt-4 text-2xl font-medium sm:text-3xl">{equipe.mot.titre}</h3>
                 {presidente?.photo && (
-                  <img src={u(presidente.photo)} alt={presidente.nom ? `Portrait de ${presidente.nom}` : 'Portrait de la Présidente'} loading="lazy" class="mt-6 h-28 w-28 rounded-full object-cover shadow-douce ring-4 ring-creme" />
+                  <span class="mt-6 block h-28 w-28 overflow-hidden rounded-full shadow-douce ring-4 ring-creme">
+                    <img
+                      src={u(presidente.photo)}
+                      alt={presidente.nom ? `Portrait de ${presidente.nom}` : 'Portrait de la Présidente'}
+                      loading="lazy"
+                      class="h-full w-full object-cover"
+                      style={`object-position:${presidente.cadrage.x}% ${presidente.cadrage.y}%;transform-origin:${presidente.cadrage.x}% ${presidente.cadrage.y}%;transform:scale(${presidente.cadrage.zoom})`}
+                    />
+                  </span>
                 )}
                 {equipe.mot.signature && <figcaption class="mt-5 font-extrabold text-foret">{equipe.mot.signature}</figcaption>}
               </div>

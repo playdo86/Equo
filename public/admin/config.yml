@@ -268,6 +268,15 @@ singletons:
           - { name: phrase, label: Phrase personnelle, widget: string, required: false, hint: "Ex. : Ce qui m'anime dans ÉQUO…" }
           - { name: presentation, label: Courte présentation, widget: text, required: false }
           - { name: photo, label: Portrait, widget: image, required: false }
+          - name: cadrage
+            label: Cadrage du portrait dans le cercle
+            widget: object
+            collapsed: true
+            hint: "Pour centrer le visage. Repérez où se trouve le visage sur la photo : de gauche (0) à droite (100), et de haut (0) en bas (100). Zoom : 1 = photo entière, 2 = deux fois plus près."
+            fields:
+              - { name: x, label: "Visage : position horizontale (0 = gauche, 100 = droite)", widget: number, value_type: int, min: 0, max: 100, default: 50 }
+              - { name: y, label: "Visage : position verticale (0 = haut, 100 = bas)", widget: number, value_type: int, min: 0, max: 100, default: 30 }
+              - { name: zoom, label: "Zoom (1 à 4)", widget: number, value_type: float, min: 1, max: 4, step: 0.1, default: 1.5 }
       - name: mot
         label: Mot de la Présidente
         widget: object

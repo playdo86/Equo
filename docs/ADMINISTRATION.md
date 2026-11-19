@@ -63,6 +63,16 @@ Pour donner l'accès à un autre membre du bureau : invitez son compte GitHub da
 
 ---
 
+### Cadrer un portrait
+
+Dans **Équipe → Membres → (une personne) → Cadrage du portrait** :
+- **Position horizontale** et **verticale** : l'endroit où se trouve le visage sur la photo d'origine,
+  de 0 à 100 (0 = bord gauche ou haut, 100 = bord droit ou bas). Pour une photo en buste, le visage se
+  trouve souvent vers 20 à 30 en vertical.
+- **Zoom** : 1 = photo entière ; 1,5 convient bien à une photo en buste.
+
+Enregistrez, attendez 1 à 2 minutes, puis rechargez la page (Ctrl + F5) pour voir le résultat.
+
 ## 4. Bonnes pratiques
 
 - **Photos** : lumière naturelle, vraies situations, personnes ayant donné leur accord

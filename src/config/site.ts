@@ -129,7 +129,12 @@ export interface Membre {
   phrase: string | null;
   presentation: string | null;
   photo: string | null;
+  /** Cadrage du portrait dans le cercle : point du visage (en %) et zoom. */
+  cadrage: { x: number; y: number; zoom: number };
 }
+
+const borne = (v: unknown, min: number, max: number, defaut: number) =>
+  typeof v === 'number' && Number.isFinite(v) ? Math.min(max, Math.max(min, v)) : defaut;
 
 export const bureau: Membre[] = bureauData.membres.map((m) => ({
   role: m.role,
@@ -138,6 +143,11 @@ export const bureau: Membre[] = bureauData.membres.map((m) => ({
   phrase: ou(m.phrase),
   presentation: ou(m.presentation),
   photo: ou(m.photo),
+  cadrage: {
+    x: borne(m.cadrage?.x, 0, 100, 50),
+    y: borne(m.cadrage?.y, 0, 100, 30),
+    zoom: borne(m.cadrage?.zoom, 1, 4, 1.5),
+  },
 }));
 
 /** Texte et photos de la section « Équipe » (page L'association). */

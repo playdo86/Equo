@@ -29,12 +29,17 @@ const paragraphes = (m.presentation ?? '')
 const longue = paragraphes.join(' ').length > 280;
 const [premier, ...suite] = paragraphes;
 const phrase = m.phrase ? m.phrase.replace(/'/g, '’') : null;
+// Le point du visage sert à la fois de position et de centre du zoom : il reste au même endroit dans le cercle.
+const { x, y, zoom } = m.cadrage;
+const styleCadrage = `object-position:${x}% ${y}%;transform-origin:${x}% ${y}%;transform:scale(${zoom})`;
 ---
 
 <div class:list={['flex flex-col items-center text-center', variante === 'complet' && 'h-full rounded-[var(--radius-carte)] bg-creme p-6 shadow-douce ring-1 ring-sable sm:p-7']}>
   {
     m.photo ? (
-      <img src={u(m.photo)} alt={m.nom ? `Portrait de ${m.nom}` : m.role} loading="lazy" class:list={['rounded-full object-cover shadow-douce ring-4 ring-creme', taille]} />
+      <span class:list={['block overflow-hidden rounded-full bg-sable shadow-douce ring-4 ring-creme', taille]}>
+        <img src={u(m.photo)} alt={m.nom ? `Portrait de ${m.nom}` : m.role} loading="lazy" class="h-full w-full object-cover" style={styleCadrage} />
+      </span>
     ) : (
       <span class:list={['grid place-items-center rounded-full bg-sauge-clair font-titre text-foret shadow-douce ring-4 ring-creme', taille]} aria-hidden="true">
         {initiales ?? (
