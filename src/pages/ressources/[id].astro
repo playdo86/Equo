@@ -1,0 +1,57 @@
+---
+/** Page d'une ressource publique (les ressources adhérents s'ouvrent dans l'espace adhérents). */
+import { render } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import Icon from '@/components/Icon.astro';
+import { u } from '@/lib/url';
+import { toutesLesRessources, infosFichier, lireFichier, tailleLisible, nomsTypes, nomsDomaines, type Ressource } from '@/lib/ressources';
+
+export async function getStaticPaths() {
+  // Une ressource avec un « lien » renvoie vers sa propre page (ex. Émoforme) : pas de page générée ici.
+  return (await toutesLesRessources())
+    .filter((r) => r.data.visibilite === 'public' && !r.data.lien)
+    .map((r) => ({ params: { id: r.id }, props: { r } }));
+}
+
+const { r } = Astro.props as { r: Ressource };
+const d = r.data;
+const { Content } = await render(r);
+let fichier: { url: string; nom: string; mime: string; taille: string } | null = null;
+if (d.fichier) {
+  const { nom, mime } = infosFichier(d.fichier);
+  fichier = { url: u(`/ressources/fichiers/${nom}`), nom, mime, taille: tailleLisible((await lireFichier(d.fichier)).length) };
+}
+---
+
+<BaseLayout title={d.titre} description={d.accroche}>
+  <article class="container-equo max-w-3xl py-14 sm:py-20">
+    <a href={u('/ressources')} class="lien-fleche text-sm"><Icon name="fleche" class="h-4 w-4 rotate-180" />Toutes les ressources</a>
+    <div class="mt-8 flex flex-wrap gap-2 text-xs font-extrabold uppercase tracking-[0.1em]">
+      <span class="rounded-full bg-sauge-clair px-2.5 py-1 text-foret">{nomsTypes[d.type]}</span>
+      <span class="rounded-full bg-sable px-2.5 py-1 text-or-texte">{nomsDomaines[d.domaine]}</span>
+    </div>
+    <h1 class="mt-4 text-4xl leading-tight font-medium sm:text-5xl">{d.titre}</h1>
+    <p class="mt-5 text-lg leading-relaxed text-anthracite/85 sm:text-xl">{d.accroche}</p>
+    {(d.public || d.duree) && <p class="mt-3 text-sm text-gris">{[d.public, d.duree].filter(Boolean).join(' · ')}</p>}
+
+    {fichier && (
+      <div class="mt-8 rounded-[var(--radius-carte)] bg-sable-clair p-5">
+        {fichier.mime.startsWith('audio/') && <audio controls src={fichier.url} class="w-full" preload="none" />}
+        {fichier.mime.startsWith('video/') && <video controls src={fichier.url} class="w-full rounded-xl" preload="none" />}
+        <a href={fichier.url} download class="mt-3 inline-flex items-center gap-2 rounded-full bg-foret px-5 py-2.5 font-extrabold text-creme hover:bg-foret-sombre">
+          Télécharger {fichier.nom} ({fichier.taille})
+        </a>
+      </div>
+    )}
+
+    <div class="texte-article mt-10"><Content /></div>
+  </article>
+
+  <CtaBand
+    title="Toutes nos ressources sont accessibles en adhérant"
+    text="Fiches, articles et exercices audio : l’adhésion ouvre l’accès à l’espace adhérents."
+    primary={{ label: 'Adhérer à ÉQUO', href: '/adherer' }}
+    secondary={{ label: 'Voir les ressources', href: '/ressources' }}
+  />
+</BaseLayout>

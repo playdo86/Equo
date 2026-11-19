@@ -7,6 +7,7 @@ import Icon from '@/components/Icon.astro';
 import Visual from '@/components/Visual.astro';
 import { domaines } from '@/data/domaines';
 import { photo } from '@/lib/photos';
+import { u } from '@/lib/url';
 ---
 
 <BaseLayout
@@ -57,6 +58,16 @@ import { photo } from '@/lib/photos';
             <Button href={`/contact?type=participer`}>Participer</Button>
             <Button href={`/contact?type=intervention`} variant="secondaire">Organiser une intervention</Button>
           </div>
+          {d.id === 'emotions' && (
+            <a href={u('/ressources/emoforme')} class="reveal mt-8 flex items-center gap-4 rounded-2xl bg-creme p-4 shadow-douce ring-1 ring-sable transition-shadow hover:shadow-relief">
+              <img src={u('/outils/emoforme/emoforme-symbole.svg')} alt="" width="56" height="56" class="h-14 w-14 shrink-0" />
+              <span class="flex flex-col">
+                <span class="text-xs font-extrabold uppercase tracking-[0.1em] text-lagon">Ressource en libre accès</span>
+                <span class="font-titre text-lg text-foret-sombre">Émoforme : donnez une forme à ce que vous ressentez</span>
+              </span>
+              <Icon name="fleche" class="ml-auto h-4 w-4 shrink-0 text-or-texte" />
+            </a>
+          )}
         </div>
       </div>
     </section>

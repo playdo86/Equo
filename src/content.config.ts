@@ -96,4 +96,32 @@ const documents = defineCollection({
   }),
 });
 
-export const collections = { activites, actualites, partenaires, documents };
+
+/**
+ * Ressources en libre accès ou réservées aux adhérents (articles, fiches, audios…).
+ * Le texte de l'article est le corps du fichier Markdown.
+ * Les fichiers joints sont déposés dans `src/prive/ressources/` (hors du dossier public) :
+ * ils sont publiés tels quels pour une ressource publique, chiffrés pour une ressource adhérents.
+ */
+const ressources = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/ressources' }),
+  schema: z.object({
+    titre: z.string(),
+    accroche: z.string().max(200),
+    type: z.enum(['article', 'fiche', 'audio', 'video', 'outil', 'document']),
+    domaine,
+    visibilite: z.enum(['public', 'adherents']).default('adherents'),
+    public: z.string().optional(),
+    duree: z.string().optional(),
+    /** Fichier joint (PDF, audio…), chemin enregistré par l'administration. */
+    fichier: cheminImage,
+    /** Lien vers une page du site (ex. « /ressources/emoforme ») ou un site externe. */
+    lien: cheminImage,
+    image: cheminImage,
+    date: z.coerce.date(),
+    ordre: z.number().default(0),
+    publie: z.boolean().default(false),
+  }),
+});
+
+export const collections = { activites, actualites, partenaires, documents, ressources };

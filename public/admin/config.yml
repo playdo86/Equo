@@ -189,6 +189,57 @@ collections:
           - { label: "Licenciés (espace membres, à venir)", value: licencies }
       - { name: ordre, label: Ordre d'affichage, widget: number, value_type: int, default: 0 }
 
+  # ------------------------------------------------------------------ RESSOURCES
+  - name: ressources
+    label: Ressources
+    label_singular: ressource
+    description: "Articles, fiches, audios… « Tout public » : visible par tous. « Adhérents » : chiffré, ouvert avec le code d'accès adhérent. Seules les ressources « Publiée » apparaissent sur le site."
+    icon: library_books
+    folder: src/content/ressources
+    create: true
+    slug: "{{titre}}"
+    identifier_field: titre
+    summary: "{{titre}} — {{visibilite}}{{publie | ternary(' ✓ publiée', ' (brouillon)')}}"
+    sortable_fields: [ordre, titre, date, visibilite]
+    media_folder: /src/prive/ressources
+    public_folder: /prive
+    fields:
+      - { name: titre, label: Titre, widget: string }
+      - { name: accroche, label: Accroche, widget: text, hint: "Une ou deux phrases visibles sur la carte, même pour les ressources adhérents (200 caractères maximum)." }
+      - name: visibilite
+        label: Qui peut y accéder ?
+        widget: select
+        default: adherents
+        options:
+          - { label: "Adhérents (avec le code d'accès)", value: adherents }
+          - { label: Tout public, value: public }
+      - name: type
+        label: Type
+        widget: select
+        options:
+          - { label: Article, value: article }
+          - { label: Fiche pratique, value: fiche }
+          - { label: Audio, value: audio }
+          - { label: Vidéo, value: video }
+          - { label: Document, value: document }
+          - { label: Outil interactif, value: outil }
+      - name: domaine
+        label: Domaine
+        widget: select
+        options:
+          - { label: Mouvement, value: mouvement }
+          - { label: Émotions et mieux-être, value: emotions }
+          - { label: Éducation et accompagnement, value: education }
+      - { name: public, label: Pour qui ?, widget: string, required: false, hint: "Ex. : Adultes et seniors" }
+      - { name: duree, label: Durée, widget: string, required: false, hint: "Ex. : 10 minutes" }
+      - { name: fichier, label: Fichier joint (PDF, audio, vidéo…), widget: file, required: false, hint: "Le fichier est publié tel quel pour une ressource tout public, et chiffré pour une ressource adhérents. 15 Mo maximum." }
+      - { name: lien, label: Lien, widget: string, required: false, hint: "Facultatif. Une page du site (ex. /ressources/emoforme) ou une adresse externe (https://…)." }
+      - { name: image, label: Illustration de la carte, widget: image, required: false, media_folder: /public/uploads, public_folder: /uploads }
+      - { name: date, label: Date, widget: datetime, time_format: false, date_format: "DD/MM/YYYY", format: "YYYY-MM-DD" }
+      - { name: ordre, label: Ordre d'affichage, widget: number, value_type: int, default: 0, hint: "Les plus petits nombres apparaissent en premier." }
+      - { name: publie, label: Publiée, widget: boolean, default: false }
+      - { name: body, label: Texte de l'article, widget: markdown, required: false, hint: "Facultatif pour un fichier ou un lien seul." }
+
 singletons:
   - name: accueil
     label: Textes de l'accueil

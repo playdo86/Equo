@@ -27,7 +27,8 @@ Les réglages modifiables sont dans `src/data/reglages/*.json`.
 | Tarifs | `src/data/reglages/tarifs.json` |
 | Couleurs, polices | `src/styles/global.css` (`@theme`) |
 | Les 3 domaines d'action | `src/data/domaines.ts` |
-| Activités, actualités, partenaires, documents | `src/content/*` (modèles dans `src/content.config.ts`) |
+| Activités, actualités, partenaires, documents, ressources | `src/content/*` (modèles dans `src/content.config.ts`) |
+| Code de l'espace adhérents | Secret GitHub `CODE_ADHERENTS` (voir docs/ADMINISTRATION.md) |
 | Photos | Passer `src={import}` au composant `Visual` |
 
 L'interface d'administration (étape 5) permettra de modifier ces contenus sans toucher au code.

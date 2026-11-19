@@ -23,6 +23,9 @@ jobs:
     env:
       SITE_URL: https://playdo86.github.io
       BASE_PATH: /Equo
+      # Code d'accès de l'espace adhérents (Settings → Secrets and variables → Actions).
+      # Sans ce secret, aucune ressource adhérents n'est publiée.
+      CODE_ADHERENTS: ${{ secrets.CODE_ADHERENTS }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

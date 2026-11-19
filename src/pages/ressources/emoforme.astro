@@ -1,0 +1,88 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import Icon from '@/components/Icon.astro';
+import { u } from '@/lib/url';
+
+const outil = u('/outils/emoforme/');
+const etapes = [
+  { titre: 'Prenez un moment', texte: 'Asseyez-vous confortablement et observez ce qui se passe en vous, sans chercher à le juger.' },
+  { titre: 'Façonnez votre forme', texte: 'Partez du cercle gris et transformez-le : forme, couleur, taille, texture, contour, mouvement, position.' },
+  { titre: 'Nommez votre émotion', texte: 'Donnez-lui un nom, avec vos mots, et indiquez à quel point vous la ressentez.' },
+];
+---
+
+<BaseLayout
+  title="Émoforme"
+  description="Émoforme : un outil libre et gratuit d'ÉQUO pour donner une forme, une couleur et un mouvement à ce que vous ressentez."
+  image="/outils/emoforme/emoforme-logo.png"
+>
+  <PageHero
+    eyebrow="Ressources · Émotions"
+    title="Émoforme"
+    lead="Donnez une forme à ce que vous ressentez. Un outil simple pour mettre une image sur une émotion, la regarder autrement et trouver les mots pour en parler."
+  />
+
+  <section class="py-12 sm:py-16" aria-labelledby="outil-titre">
+    <div class="container-equo grid items-start gap-10 lg:grid-cols-12">
+      <div class="lg:col-span-7">
+        <h2 id="outil-titre" class="sr-only">L’outil Émoforme</h2>
+        <iframe
+          id="emoforme"
+          src={`${outil}?integre`}
+          title="Émoforme : donnez une forme à ce que vous ressentez"
+          class="mx-auto block h-[1100px] w-full max-w-[600px] border-0"
+          loading="lazy"
+        ></iframe>
+        <p class="mt-4 text-center">
+          <a href={outil} class="lien-fleche">Ouvrir en plein écran<Icon name="fleche" class="h-4 w-4" /></a>
+        </p>
+      </div>
+
+      <aside class="flex flex-col gap-8 lg:sticky lg:top-24 lg:col-span-5">
+        <div class="reveal">
+          <h2 class="text-2xl font-medium">Comment ça marche</h2>
+          <ol class="mt-5 flex flex-col gap-4">
+            {etapes.map((e, i) => (
+              <li class="flex gap-4">
+                <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-sauge-clair font-titre text-foret">{i + 1}</span>
+                <div>
+                  <h3 class="font-texte text-base font-extrabold text-anthracite">{e.titre}</h3>
+                  <p class="mt-1 text-[0.95rem] leading-relaxed text-anthracite/80">{e.texte}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <div class="reveal rounded-[var(--radius-carte)] bg-sable-clair p-6">
+          <h2 class="text-xl font-medium">Bon à savoir</h2>
+          <ul class="mt-4 flex flex-col gap-3 text-[0.95rem] leading-relaxed text-anthracite/85">
+            <li class="flex gap-3"><span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-or" aria-hidden="true"></span>Il n’y a pas de bonne ou de mauvaise réponse : votre forme vous appartient.</li>
+            <li class="flex gap-3"><span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-or" aria-hidden="true"></span>Rien n’est envoyé : vos formes restent uniquement sur votre appareil.</li>
+            <li class="flex gap-3"><span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-or" aria-hidden="true"></span>Vous pouvez en créer plusieurs et les retrouver dans « Mes formes » pour voir comment vos émotions évoluent.</li>
+            <li class="flex gap-3"><span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-or" aria-hidden="true"></span>Émoforme est un outil d’exploration, pas un test ni un diagnostic. Si une émotion pèse lourd ou dure, parlez-en à un professionnel de santé.</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <CtaBand
+    title="Envie d’explorer vos émotions en groupe ?"
+    text="Nos ateliers autour des émotions, du stress et du sommeil offrent un espace collectif et bienveillant."
+    primary={{ label: 'Découvrir nos actions', href: '/actions#emotions' }}
+    secondary={{ label: 'Toutes les ressources', href: '/ressources' }}
+  />
+</BaseLayout>
+
+<script>
+  // Ajuste la hauteur du cadre à son contenu (message envoyé par l'outil).
+  const cadre = document.getElementById('emoforme') as HTMLIFrameElement | null;
+  window.addEventListener('message', (e) => {
+    if (!cadre || e.source !== cadre.contentWindow) return;
+    const d = e.data as { emoforme?: boolean; height?: number };
+    if (d && d.emoforme && typeof d.height === 'number') cadre.style.height = `${Math.max(600, d.height)}px`;
+  });
+</script>

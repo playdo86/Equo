@@ -111,3 +111,21 @@
   }
   .form-piege { position: absolute !important; left: -9999px !important; width: 1px; height: 1px; overflow: hidden; }
 }
+
+/* ------------------------------------------------------------------
+   Texte d'article (ressources) — mêmes règles que le composant Prose
+   ------------------------------------------------------------------ */
+@layer components {
+  .texte-article h2 { font-size: 1.5rem; margin-top: 2.25rem; margin-bottom: .75rem; }
+  .texte-article h3 { font-size: 1.2rem; margin-top: 1.75rem; margin-bottom: .5rem; }
+  .texte-article p, .texte-article li { line-height: 1.75; color: rgb(40 51 46 / .88); }
+  .texte-article p + p { margin-top: .9rem; }
+  .texte-article ul, .texte-article ol { margin-top: .5rem; padding-left: 1.3rem; }
+  .texte-article ul { list-style: disc; }
+  .texte-article ol { list-style: decimal; }
+  .texte-article li + li { margin-top: .3rem; }
+  .texte-article a { color: var(--color-foret); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+  .texte-article strong { color: var(--color-anthracite); }
+  .texte-article blockquote { margin-top: 1.25rem; border-left: 3px solid var(--color-or); padding: .25rem 0 .25rem 1rem; font-style: italic; }
+  .texte-article img { margin-top: 1.25rem; border-radius: var(--radius-carte); }
+}

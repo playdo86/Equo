@@ -82,3 +82,35 @@ Enregistrez, attendez 1 à 2 minutes, puis rechargez la page (Ctrl + F5) pour vo
 - **Reçus fiscaux** : ne cochez l'option qu'après confirmation officielle de l'éligibilité.
 - **Liens HelloAsso** : utilisez l'adresse publique (`https://www.helloasso.com/associations/…`),
   jamais celle de votre espace d'administration (`admin.helloasso.com`).
+
+---
+
+## Ressources et espace adhérents
+
+La rubrique **Ressources** de l'administration permet de publier des articles, fiches,
+audios ou documents sur la page `/ressources`.
+
+**Ajouter une ressource**
+1. *Ressources* → **Nouvelle ressource**.
+2. Choisissez **Qui peut y accéder ?** :
+   - **Tout public** : visible par tous ;
+   - **Adhérents** : le titre et l'accroche restent visibles (avec un cadenas), le contenu
+     et le fichier joint ne s'ouvrent qu'avec le code d'accès.
+3. Écrivez le texte dans *Texte de l'article* et/ou ajoutez un *Fichier joint* (PDF, MP3…).
+4. Cochez **Publiée**, puis enregistrez.
+
+**Le code d'accès adhérents**
+
+Le code n'est jamais écrit dans le site : il est rangé dans un « secret » GitHub.
+- **Le créer ou le changer** (par exemple à chaque saison) : sur GitHub, dépôt *Equo* →
+  *Settings* → *Secrets and variables* → *Actions* → secret **`CODE_ADHERENTS`**.
+  Puis *Actions* → *Mise en ligne (GitHub Pages)* → **Run workflow** pour republier.
+- **Le transmettre** : dans le message de confirmation de l'adhésion HelloAsso, ou dans
+  l'e-mail de bienvenue. Les majuscules et les espaces autour ne comptent pas.
+- Sans ce secret, la page affiche « L'espace adhérents ouvre prochainement » et aucun
+  contenu adhérents n'est publié.
+
+**Important : confidentialité du dépôt.** Les textes et fichiers sont chiffrés sur le site
+publié, mais ils sont enregistrés en clair dans le dépôt GitHub. Tant que le dépôt
+`playdo86/Equo` est **public**, toute personne qui le consulte peut les lire. Pour une
+vraie protection, le dépôt doit être **privé** (voir docs/ARCHITECTURE.md, section 6).

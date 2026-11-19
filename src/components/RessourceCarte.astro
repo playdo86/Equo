@@ -1,0 +1,52 @@
+---
+/**
+ * Carte d'une ressource.
+ * - publique : lien vers la ressource ;
+ * - adhérents : bouton verrouillé, ouvert par le script de la page une fois le code saisi.
+ */
+import Icon from './Icon.astro';
+import { u } from '@/lib/url';
+import { nomsTypes, nomsDomaines, type Ressource } from '@/lib/ressources';
+
+interface Props { r: Ressource }
+const { r } = Astro.props;
+const d = r.data;
+const adherents = d.visibilite === 'adherents';
+const externe = !!d.lien && /^https?:\/\//.test(d.lien);
+const href = d.lien ? (externe ? d.lien : u(d.lien)) : u(`/ressources/${r.id}`);
+const Tag = (adherents ? 'button' : 'a') as 'a';
+const attrs: Record<string, string> = adherents
+  ? { type: 'button', 'data-ressource': r.id, 'aria-disabled': 'true' }
+  : { href, ...(externe ? { target: '_blank', rel: 'noopener noreferrer' } : {}) };
+---
+
+<Tag
+  {...attrs}
+  class="carte-ressource group flex h-full w-full flex-col overflow-hidden rounded-[var(--radius-carte)] bg-white text-left shadow-douce ring-1 ring-sable transition-[box-shadow,transform] duration-300 hover:-translate-y-1 hover:shadow-relief aria-disabled:hover:translate-y-0 aria-disabled:hover:shadow-douce"
+>
+  <div class="relative grid aspect-[16/9] place-items-center bg-sable-clair">
+    {d.image
+      ? <img src={u(d.image)} alt="" width="112" height="112" class="h-24 w-24 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6" loading="lazy" />
+      : <Icon name={d.domaine === 'mouvement' ? 'mouvement' : d.domaine === 'emotions' ? 'souffle' : 'education'} class="h-14 w-14 text-sauge" />}
+    {adherents && (
+      <span class="etat-verrou absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-foret px-3 py-1 text-xs font-extrabold text-creme">
+        <Icon name="cadenas" class="h-3.5 w-3.5" />
+        <span>Adhérents</span>
+      </span>
+    )}
+  </div>
+  <div class="flex flex-1 flex-col gap-3 p-6">
+    <div class="flex flex-wrap gap-2 text-xs font-extrabold uppercase tracking-[0.1em]">
+      <span class="rounded-full bg-sauge-clair px-2.5 py-1 text-foret">{nomsTypes[d.type]}</span>
+      <span class="rounded-full bg-sable px-2.5 py-1 text-or-texte">{nomsDomaines[d.domaine]}</span>
+    </div>
+    <h3 class="text-2xl font-medium">{d.titre}</h3>
+    <p class="text-[0.95rem] leading-relaxed text-anthracite/85">{d.accroche}</p>
+    {(d.public || d.duree) && <p class="mt-auto pt-2 text-sm text-gris">{[d.public, d.duree].filter(Boolean).join(' · ')}</p>}
+    <span class="lien-fleche" class:list={[!(d.public || d.duree) && 'mt-auto']}>
+      <span class="libelle-action">{adherents ? 'Réservé aux adhérents' : 'Découvrir'}</span>
+      {adherents && <Icon name="cadenas" class="icone-verrou h-4 w-4" />}
+      <Icon name="fleche" class:list={['icone-ouvert h-4 w-4', adherents && 'hidden']} />
+    </span>
+  </div>
+</Tag>
