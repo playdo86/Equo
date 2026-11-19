@@ -267,7 +267,7 @@ singletons:
           - { name: metier, label: Métier ou expertise, widget: string, required: false, hint: "Une ligne. Ex. : Enseignante en activité physique adaptée" }
           - { name: phrase, label: Phrase personnelle, widget: string, required: false, hint: "Ex. : Ce qui m'anime dans ÉQUO…" }
           - { name: presentation, label: Courte présentation, widget: text, required: false }
-          - { name: photo, label: Portrait, widget: image, required: false }
+          - { name: photo, label: Portrait, widget: image, required: false, hint: "Idéalement une photo carrée, visage au centre (visage et épaules)." }
           - name: cadrage
             label: Cadrage du portrait dans le cercle
             widget: object

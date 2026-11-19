@@ -8,11 +8,11 @@
       "metier": "Docteure en Psychologie de la santé",
       "phrase": "",
       "presentation": "Docteure en psychologie et passionnée par les liens entre santé, comportements et qualité de vie, Anne évolue depuis plusieurs années dans le domaine de la promotion de la santé. Elle pilote des projets de prévention et de recherche, avec une conviction qui guide son parcours : les connaissances scientifiques prennent tout leur sens lorsqu'elles se traduisent en actions concrètes, accessibles et utiles au quotidien. Elle s'intéresse particulièrement à la santé mentale, au mouvement, aux émotions et à ces petits changements qui peuvent faire une différence dans nos vies.\n\nCurieuse, créative et un peu geek sur les bords, elle aime imaginer, expérimenter et donner vie à de nouvelles idées. L'innovation occupe une place importante dans son parcours, notamment lorsqu'il s'agit de croiser psychologie, nouvelles technologies et santé pour inventer d'autres façons d'accompagner les personnes. \n\nAvec ÉQUO, elle souhaite réunir des personnes et des compétences autour d'une vision commune : prendre soin de sa santé en cultivant le plaisir d'expérimenter, de partager et d'avancer ensemble.",
-      "photo": "/uploads/annebis.webp",
+      "photo": "/uploads/anne-theurel-portrait.webp",
       "cadrage": {
         "x": 50,
-        "y": 31,
-        "zoom": 1.45
+        "y": 50,
+        "zoom": 1
       }
     },
     {
@@ -21,11 +21,11 @@
       "metier": "Coordinatrice régionale- GRADeS",
       "phrase": "",
       "presentation": "",
-      "photo": "/uploads/berenice-bres.webp",
+      "photo": "/uploads/berenice-bres-portrait.webp",
       "cadrage": {
-        "x": 55,
-        "y": 41,
-        "zoom": 1.45
+        "x": 50,
+        "y": 50,
+        "zoom": 1
       }
     },
     {
@@ -34,11 +34,11 @@
       "metier": "Chargée de mission CPTS du Grand Lons",
       "phrase": "",
       "presentation": "Depuis 25 ans, Maggie fait de la santé communautaire. Bien avant que les consultants ne découvrent les vertus de l'intelligence collective et que LinkedIn ne transforme la coopération en hashtag.\n\nSon terrain de jeu ? Réunir autour d'une même table des professionnels, des institutions, des habitants et parfois quelques sceptiques convaincus que \"ça ne marchera jamais\". Son petit plaisir ? Leur montrer que si.\n\nDepuis un quart de siècle, Maggie construit donc des projets qui bousculent les approches descendantes, valorise les savoirs expérientiels, redonnent du pouvoir d'agir et démontrent qu'une autre façon de penser la santé est possible.\n\nParticulièrement engagée pour la santé des femmes, elle s'attache à rendre visibles les sujets longtemps relégués dans les angles morts des politiques de santé : santé menstruelle, santé sexuelle, santé mentale, douleurs minimisées, retards de diagnostics ou violences. Pour elle, promouvoir la santé des femmes n'est pas un sujet parmi tant d’autres : c'est tout simplement une exigence de santé publique !",
-      "photo": "/uploads/image0.webp",
+      "photo": "/uploads/maggie-chevassu-portrait.webp",
       "cadrage": {
-        "x": 51,
-        "y": 22,
-        "zoom": 1.15
+        "x": 50,
+        "y": 50,
+        "zoom": 1
       }
     }
   ],

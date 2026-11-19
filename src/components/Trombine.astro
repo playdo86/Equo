@@ -26,8 +26,6 @@ const paragraphes = (m.presentation ?? '')
   .split(/\n\s*\n/)
   .map((p) => p.trim().replace(/'/g, '’').replace(/\u0022([^\u0022]*)\u0022/g, '« $1 »'))
   .filter(Boolean);
-const longue = paragraphes.join(' ').length > 280;
-const [premier, ...suite] = paragraphes;
 const phrase = m.phrase ? m.phrase.replace(/'/g, '’') : null;
 // Le point du visage sert à la fois de position et de centre du zoom : il reste au même endroit dans le cercle.
 const { x, y, zoom } = m.cadrage;
@@ -56,21 +54,11 @@ const styleCadrage = `object-position:${x}% ${y}%;transform-origin:${x}% ${y}%;t
   {variante === 'complet' && m.metier && <p class="mt-1 text-sm text-gris">{m.metier}</p>}
   {variante === 'complet' && phrase && <p class="mt-4 font-titre text-[1.05rem] leading-snug text-anthracite italic">« {phrase} »</p>}
   {
-    variante === 'complet' && premier && (
+    variante === 'complet' && paragraphes.length > 0 && (
       <div class="mt-4 w-full border-t border-sable pt-4 text-left text-sm leading-relaxed text-anthracite/85">
-        <p>{premier}</p>
-        {suite.length > 0 && longue && (
-          <details class="group mt-3">
-            <summary class="cursor-pointer list-none font-extrabold text-foret underline underline-offset-4 group-open:hidden">Lire la suite</summary>
-            <div class="space-y-3">{suite.map((p) => <p>{p}</p>)}</div>
-          </details>
-        )}
-        {suite.length > 0 && !longue && <div class="mt-3 space-y-3">{suite.map((p) => <p>{p}</p>)}</div>}
+        <div class="space-y-3">{paragraphes.map((p) => <p>{p}</p>)}</div>
       </div>
     )
   }
 </div>
 
-<style>
-  summary::-webkit-details-marker { display: none; }
-</style>
