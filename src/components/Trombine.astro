@@ -21,6 +21,14 @@ const initiales = m.nom
       .toUpperCase()
   : null;
 const taille = variante === 'compact' ? 'h-24 w-24 text-2xl' : 'h-32 w-32 text-3xl';
+/** Présentation découpée en paragraphes (ligne vide = nouveau paragraphe), apostrophes typographiques. */
+const paragraphes = (m.presentation ?? '')
+  .split(/\n\s*\n/)
+  .map((p) => p.trim().replace(/'/g, '’').replace(/\u0022([^\u0022]*)\u0022/g, '« $1 »'))
+  .filter(Boolean);
+const longue = paragraphes.join(' ').length > 280;
+const [premier, ...suite] = paragraphes;
+const phrase = m.phrase ? m.phrase.replace(/'/g, '’') : null;
 ---
 
 <div class:list={['flex flex-col items-center text-center', variante === 'complet' && 'h-full rounded-[var(--radius-carte)] bg-creme p-6 shadow-douce ring-1 ring-sable sm:p-7']}>
@@ -41,6 +49,23 @@ const taille = variante === 'compact' ? 'h-24 w-24 text-2xl' : 'h-32 w-32 text-3
   <p class:list={['mt-4 font-titre text-foret-sombre', variante === 'compact' ? 'text-lg' : 'text-xl']}>{m.nom ?? m.role}</p>
   <p class="mt-0.5 text-sm font-bold text-lagon">{m.nom ? m.role : 'Présentation à venir'}</p>
   {variante === 'complet' && m.metier && <p class="mt-1 text-sm text-gris">{m.metier}</p>}
-  {variante === 'complet' && m.phrase && <p class="mt-4 font-titre text-[1.05rem] leading-snug text-anthracite italic">« {m.phrase} »</p>}
-  {variante === 'complet' && m.presentation && <p class="mt-3 text-sm leading-relaxed text-anthracite/80">{m.presentation}</p>}
+  {variante === 'complet' && phrase && <p class="mt-4 font-titre text-[1.05rem] leading-snug text-anthracite italic">« {phrase} »</p>}
+  {
+    variante === 'complet' && premier && (
+      <div class="mt-4 w-full border-t border-sable pt-4 text-left text-sm leading-relaxed text-anthracite/85">
+        <p>{premier}</p>
+        {suite.length > 0 && longue && (
+          <details class="group mt-3">
+            <summary class="cursor-pointer list-none font-extrabold text-foret underline underline-offset-4 group-open:hidden">Lire la suite</summary>
+            <div class="space-y-3">{suite.map((p) => <p>{p}</p>)}</div>
+          </details>
+        )}
+        {suite.length > 0 && !longue && <div class="mt-3 space-y-3">{suite.map((p) => <p>{p}</p>)}</div>}
+      </div>
+    )
+  }
 </div>
+
+<style>
+  summary::-webkit-details-marker { display: none; }
+</style>
