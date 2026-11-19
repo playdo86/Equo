@@ -129,6 +129,15 @@ export const bureau = bureauData.membres.map((m) => ({
   photo: ou(m.photo),
 }));
 
+/** Texte et photos de la section « Équipe » (page L'association). */
+export const equipe = {
+  titre: ou(bureauData.titre) ?? 'Le bureau',
+  paragraphes: (bureauData.texte ?? '').split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean),
+  photos: ((bureauData.photos ?? []) as { image?: string; alt?: string; legende?: string }[])
+    .map((p) => ({ image: ou(p.image), alt: ou(p.alt), legende: ou(p.legende) }))
+    .filter((p): p is { image: string; alt: string | null; legende: string | null } => !!p.image),
+};
+
 /* ------------------------------------------------------------------ */
 /* Tarifs                                                              */
 /* ------------------------------------------------------------------ */

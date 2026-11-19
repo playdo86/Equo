@@ -57,7 +57,7 @@ Pour donner l'accès à un autre membre du bureau : invitez son compte GitHub da
 | **Photos du site** | Remplacer les illustrations par de vraies photos (accueil, 3 domaines, partenaires). |
 | **Liens HelloAsso** | Coller l'adresse d'un formulaire HelloAsso. Vide = bouton « Prochainement ». |
 | **Tarifs** | Montants et validation (un tarif non validé n'est pas affiché). |
-| **Bureau** | Noms, présentations et photos, avec l'accord des personnes. |
+| **Équipe (page L'association)** | Titre et texte de la section, membres du bureau (nom, fonction, présentation, portrait) et photos d'équipe avec légendes. Toujours avec l'accord des personnes. |
 | **Coordonnées & options** | E-mail, adresse, RNA, réseaux sociaux, repères « Photo à venir », reçus fiscaux. |
 | **Envoi des formulaires** | Activer la réception des messages par e-mail (Web3Forms). |
 

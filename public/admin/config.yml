@@ -249,21 +249,34 @@ singletons:
           - { name: valide, label: Tarif validé (sinon il n'est pas affiché), widget: boolean }
 
   - name: bureau
-    label: Bureau
+    label: Équipe (page L'association)
     icon: groups
     file: src/data/reglages/bureau.json
     fields:
+      - { name: titre, label: Titre de la section, widget: string, default: Le bureau }
+      - { name: texte, label: Texte, widget: text, hint: "Laisser une ligne vide pour commencer un nouveau paragraphe." }
       - name: membres
         label: Membres
         label_singular: membre
-        hint: Ne renseigner un nom ou une photo qu'avec l'accord de la personne.
         widget: list
         summary: "{{role}} — {{nom}}"
+        hint: Ne renseigner un nom ou une photo qu'avec l'accord de la personne. L'ordre de la liste est l'ordre d'affichage.
         fields:
           - { name: role, label: Fonction, widget: string }
           - { name: nom, label: Prénom et nom, widget: string, required: false }
           - { name: presentation, label: Courte présentation, widget: text, required: false }
-          - { name: photo, label: Photo, widget: image, required: false }
+          - { name: photo, label: Photo (portrait), widget: image, required: false }
+      - name: photos
+        label: Photos de l'équipe
+        label_singular: photo
+        widget: list
+        required: false
+        summary: "{{legende}}"
+        hint: Photos de groupe, de réunions ou d'actions, affichées sous les membres. Avec l'accord des personnes photographiées.
+        fields:
+          - { name: image, label: Photo, widget: image }
+          - { name: alt, label: Description (accessibilité), widget: string, required: false, hint: "Ce que montre la photo, pour les personnes malvoyantes." }
+          - { name: legende, label: Légende affichée, widget: string, required: false }
 
   - name: general
     label: Coordonnées & options

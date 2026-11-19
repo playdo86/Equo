@@ -1,7 +1,25 @@
 {
+  "titre": "Le bureau",
+  "texte": "L’association est dirigée par un bureau bénévole élu par l’Assemblée générale. Ses membres peuvent, selon leurs compétences, contribuer à l’animation des actions, dans l’intérêt exclusif de l’association et dans le respect des principes de transparence et de non-lucrativité.",
   "membres": [
-    { "role": "Présidente", "nom": "", "presentation": "", "photo": "" },
-    { "role": "Trésorière", "nom": "", "presentation": "", "photo": "" },
-    { "role": "Secrétaire", "nom": "", "presentation": "", "photo": "" }
-  ]
+    {
+      "role": "Présidente",
+      "nom": "",
+      "presentation": "",
+      "photo": ""
+    },
+    {
+      "role": "Trésorière",
+      "nom": "",
+      "presentation": "",
+      "photo": ""
+    },
+    {
+      "role": "Secrétaire",
+      "nom": "",
+      "presentation": "",
+      "photo": ""
+    }
+  ],
+  "photos": []
 }
