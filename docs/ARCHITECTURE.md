@@ -30,6 +30,9 @@
 /actions                  Nos actions : 3 domaines (#mouvement, #emotions, #education)
   /actions/[programme]      Fiches programmes (au fil de l'eau)
 /agenda                   Activités & agenda : régulières, ateliers, stages, événements
+/ressources               Ressources : libre accès + espace adhérents (contenus chiffrés, code d'accès)
+  /ressources/emoforme      Outil Émoforme (servi depuis /outils/emoforme/)
+  /ressources/[ressource]   Ressource publique (article, fichier)
   /agenda/[activite]        Fiche activité (description, public, lieu, horaires, tarif, inscription)
 /adherer                  Adhésion associative + pratique sport-santé (ancienne adresse /rejoindre redirigée)
 /partenaires              Offre partenaires + formulaire de demande
@@ -132,6 +135,21 @@ Lien absent (`null`) → bouton désactivé « Prochainement disponible » + lie
 ---
 
 ## 6. Évolutivité : espace adhérents et licenciés
+
+**En place (novembre 2026) : ressources adhérents par code d'accès commun.**
+- Collection `ressources` (`src/content/ressources/`), champ `visibilite` : `public` ou `adherents`.
+- Fichiers joints dans `src/prive/ressources/` (hors du dossier public). Publiés tels quels
+  pour une ressource publique, chiffrés pour une ressource adhérents.
+- À la construction, `CODE_ADHERENTS` (secret GitHub) sert à chiffrer les contenus adhérents
+  (AES-GCM 256, clé dérivée par PBKDF2-SHA256, 310 000 itérations, sel renouvelé à chaque
+  publication). Le navigateur de l'adhérent déchiffre avec le même code (`src/lib/ressources.ts`,
+  `src/pages/ressources/index.astro`).
+- Limites : un code commun peut circuler (le changer à chaque saison) ; **le dépôt doit être
+  privé**, sinon les sources Markdown et les fichiers restent lisibles sur GitHub. GitHub Pages
+  depuis un dépôt privé demande un compte GitHub payant ; Netlify ou Cloudflare Pages
+  (gratuits) acceptent les dépôts privés (`netlify.toml` est prêt).
+
+**Étape suivante possible : comptes personnels.**
 
 Préparé, **non développé** :
 - Rôles prévus : `visiteur`, `adherent`, `licencie`, `admin`.

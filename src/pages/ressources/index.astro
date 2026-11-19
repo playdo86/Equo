@@ -4,59 +4,124 @@ import PageHero from '@/components/PageHero.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import Button from '@/components/Button.astro';
 import Icon from '@/components/Icon.astro';
-import { ressources, nomsDomaines } from '@/data/ressources';
+import RessourceCarte from '@/components/RessourceCarte.astro';
 import { u } from '@/lib/url';
+import {
+  toutesLesRessources, infosFichier, lireFichier, tailleLisible, nomsTypes,
+  chiffrerTexte, codeConfigure, selBase64, ITERATIONS,
+} from '@/lib/ressources';
+
+const toutes = await toutesLesRessources();
+const publiques = toutes.filter((r) => r.data.visibilite === 'public');
+const adherents = toutes.filter((r) => r.data.visibilite === 'adherents');
+
+// Contenus adhérents : un seul paquet chiffré, publié seulement si un code est configuré.
+let donnees: string | null = null;
+if (codeConfigure && adherents.length) {
+  const paquet = await Promise.all(
+    adherents.map(async (r) => {
+      let fichier = null;
+      if (r.data.fichier) {
+        const { nom, mime } = infosFichier(r.data.fichier);
+        const taille = (await lireFichier(r.data.fichier)).length;
+        fichier = { url: u(`/ressources/fichiers/${nom}.chiffre`), nom, mime, taille: tailleLisible(taille) };
+      }
+      return { id: r.id, titre: r.data.titre, type: nomsTypes[r.data.type], html: r.rendered?.html ?? '', lien: r.data.lien ? (/^https?:\/\//.test(r.data.lien) ? r.data.lien : u(r.data.lien)) : null, fichier };
+    }),
+  );
+  donnees = JSON.stringify({ sel: selBase64, iterations: ITERATIONS, paquet: await chiffrerTexte(JSON.stringify(paquet)) });
+}
 ---
 
 <BaseLayout
   title="Ressources"
-  description="Des outils et supports en libre accès proposés par ÉQUO pour prendre soin de ses équilibres au quotidien : mouvement, émotions, modes de vie."
+  description="Des outils et supports proposés par ÉQUO pour prendre soin de ses équilibres au quotidien : en libre accès, et un espace réservé aux adhérents."
 >
   <PageHero
     eyebrow="Ressources"
     title="Des outils pour prendre soin de soi, à son rythme"
-    lead="En libre accès, sans inscription. Ces ressources prolongent nos ateliers : vous pouvez les utiliser seul, en famille ou en groupe."
-  />
+    lead="Des ressources pour prolonger nos ateliers, seul, en famille ou en groupe. Certaines sont en libre accès ; d’autres sont réservées aux adhérents de l’association."
+  >
+    <nav aria-label="Rubriques" class="reveal mt-8 flex flex-wrap gap-2" style="--delai:240ms">
+      <a href="#libre-acces" class="inline-flex items-center gap-2 rounded-full bg-creme px-4 py-2 text-sm font-bold text-foret ring-1 ring-sable hover:ring-sauge">En libre accès</a>
+      <a href="#adherents" class="inline-flex items-center gap-2 rounded-full bg-creme px-4 py-2 text-sm font-bold text-foret ring-1 ring-sable hover:ring-sauge"><Icon name="cadenas" class="h-4 w-4" />Espace adhérents</a>
+    </nav>
+  </PageHero>
 
-  <section class="py-16 sm:py-20" aria-labelledby="liste-titre">
+  <!-- ============ En libre accès ============ -->
+  <section id="libre-acces" class="scroll-mt-20 py-16 sm:py-20" aria-labelledby="libre-titre">
     <div class="container-equo">
-      <h2 id="liste-titre" class="sr-only">Toutes les ressources</h2>
-      <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {ressources.map((r) => (
-          <li class="reveal">
-            <a
-              href={u(r.href)}
-              class="group flex h-full flex-col overflow-hidden rounded-[var(--radius-carte)] bg-white shadow-douce ring-1 ring-sable transition-[box-shadow,transform] duration-300 hover:-translate-y-1 hover:shadow-relief"
-            >
-              <div class="grid aspect-[16/10] place-items-center bg-sable-clair">
-                <img src={u(r.image)} alt="" width="120" height="120" class="h-28 w-28 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6" loading="lazy" />
-              </div>
-              <div class="flex flex-1 flex-col gap-3 p-6">
-                <div class="flex flex-wrap gap-2 text-xs font-extrabold uppercase tracking-[0.1em]">
-                  <span class="rounded-full bg-sauge-clair px-2.5 py-1 text-foret">{r.type}</span>
-                  <span class="rounded-full bg-sable px-2.5 py-1 text-or-texte">{nomsDomaines[r.domaine]}</span>
-                </div>
-                <h3 class="text-2xl font-medium">{r.titre}</h3>
-                <p class="font-bold text-anthracite">{r.accroche}</p>
-                <p class="text-[0.95rem] leading-relaxed text-anthracite/80">{r.description}</p>
-                <p class="mt-auto pt-2 text-sm text-gris">{r.public} · {r.duree}</p>
-                <span class="lien-fleche">Découvrir<Icon name="fleche" class="h-4 w-4" /></span>
-              </div>
-            </a>
-          </li>
-        ))}
-      </ul>
+      <h2 id="libre-titre" class="reveal text-3xl font-medium sm:text-4xl">En libre accès</h2>
+      <p class="reveal mt-3 max-w-2xl text-anthracite/80">Sans inscription, pour tout le monde.</p>
+      {publiques.length ? (
+        <ul class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {publiques.map((r) => <li class="reveal"><RessourceCarte r={r} /></li>)}
+        </ul>
+      ) : (
+        <p class="mt-8 text-gris">Les premières ressources seront publiées très bientôt.</p>
+      )}
+    </div>
+  </section>
 
-      <div class="reveal mt-12 flex flex-col gap-5 rounded-[var(--radius-carte)] border border-dashed border-sauge p-7 sm:flex-row sm:items-center sm:justify-between sm:p-9">
-        <div class="max-w-2xl">
-          <h2 class="text-2xl font-medium">D’autres ressources en préparation</h2>
-          <p class="mt-2 text-anthracite/80">
-            Fiches pratiques, exercices de respiration, supports pour les ateliers : de nouvelles ressources seront
-            publiées ici au fil des mois.
+  <!-- ============ Espace adhérents ============ -->
+  <section id="adherents" class="scroll-mt-20 bg-sable-clair py-16 sm:py-20" aria-labelledby="adh-titre">
+    <div class="container-equo">
+      <div class="grid gap-8 lg:grid-cols-12 lg:items-end">
+        <div class="lg:col-span-7">
+          <p class="eyebrow reveal"><span>Espace adhérents</span></p>
+          <h2 id="adh-titre" class="reveal mt-3 text-3xl font-medium sm:text-4xl">Ressources réservées aux adhérents</h2>
+          <p class="reveal mt-4 max-w-2xl text-lg leading-relaxed text-anthracite/85">
+            Articles, fiches d’atelier, exercices audio : l’adhésion vous ouvre l’accès à toutes les ressources de
+            l’association. Le code d’accès vous est envoyé avec la confirmation de votre adhésion.
           </p>
         </div>
-        <Button href="/actions" variant="secondaire">Voir nos actions</Button>
+
+        <div class="reveal lg:col-span-5">
+          {donnees ? (
+            <div id="acces" class="rounded-[var(--radius-carte)] bg-white p-6 shadow-douce ring-1 ring-sable">
+              <form id="form-code" class="flex flex-col gap-3" novalidate>
+                <label for="code-adherent" class="form-label !mb-0">Code d’accès adhérent</label>
+                <div class="flex flex-col gap-2 sm:flex-row">
+                  <input id="code-adherent" name="code" type="password" autocomplete="off" required class="form-champ" placeholder="Votre code" />
+                  <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-full bg-foret px-6 py-3 font-extrabold text-creme shadow-douce transition-colors hover:bg-foret-sombre disabled:opacity-60">
+                    <Icon name="cadenas-ouvert" class="h-4 w-4" />Ouvrir
+                  </button>
+                </div>
+                <label class="flex items-center gap-2 text-sm text-gris">
+                  <input id="se-souvenir" type="checkbox" checked class="h-4 w-4 accent-[var(--color-foret)]" />
+                  Se souvenir du code sur cet appareil
+                </label>
+                <p id="message-code" class="form-erreur !mt-0 min-h-[1.25rem]" role="status" aria-live="polite"></p>
+              </form>
+              <div id="acces-ouvert" class="flex flex-col gap-3" hidden>
+                <p class="flex items-center gap-2 font-extrabold text-foret"><Icon name="cadenas-ouvert" class="h-5 w-5" />Accès adhérent ouvert</p>
+                <p class="text-sm text-gris">Cliquez sur une ressource pour l’ouvrir.</p>
+                <button id="verrouiller" type="button" class="self-start text-sm font-bold text-foret underline underline-offset-4">Fermer l’accès sur cet appareil</button>
+              </div>
+              <p class="mt-4 border-t border-sable pt-4 text-sm text-gris">
+                Pas encore adhérent ? <a href={u('/adherer')} class="font-extrabold text-foret underline underline-offset-4">Adhérer à ÉQUO</a>
+                · Code perdu ? <a href={u('/contact?type=adherer')} class="font-extrabold text-foret underline underline-offset-4">Écrivez-nous</a>
+              </p>
+            </div>
+          ) : (
+            <div class="rounded-[var(--radius-carte)] bg-white p-6 shadow-douce ring-1 ring-sable">
+              <p class="font-extrabold text-foret">L’espace adhérents ouvre prochainement.</p>
+              <p class="mt-2 text-sm text-gris">Les ressources ci-dessous seront accessibles avec le code envoyé aux adhérents.</p>
+              <div class="mt-4"><Button href="/adherer">Adhérer à ÉQUO</Button></div>
+            </div>
+          )}
+        </div>
       </div>
+
+      {adherents.length ? (
+        <ul class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {adherents.map((r) => <li class="reveal"><RessourceCarte r={r} /></li>)}
+        </ul>
+      ) : (
+        <p class="mt-10 rounded-[var(--radius-carte)] border border-dashed border-sauge p-7 text-anthracite/80">
+          Les premières ressources adhérents sont en préparation : fiches pratiques, exercices de respiration, supports d’ateliers.
+        </p>
+      )}
     </div>
   </section>
 
@@ -66,4 +131,157 @@ import { u } from '@/lib/url';
     primary={{ label: 'Voir l’agenda', href: '/agenda' }}
     secondary={{ label: 'Nous écrire', href: '/contact' }}
   />
+
+  <!-- Lecteur des ressources adhérents -->
+  <dialog id="lecteur" class="lecteur" aria-labelledby="lecteur-titre">
+    <div class="flex items-start justify-between gap-4 border-b border-sable px-6 py-4 sm:px-8">
+      <div>
+        <p id="lecteur-type" class="text-xs font-extrabold uppercase tracking-[0.1em] text-lagon"></p>
+        <h2 id="lecteur-titre" class="mt-1 text-2xl font-medium sm:text-3xl"></h2>
+      </div>
+      <button type="button" id="lecteur-fermer" class="grid h-10 w-10 shrink-0 place-items-center rounded-full text-foret ring-2 ring-inset ring-foret/20 hover:ring-foret" aria-label="Fermer">
+        <Icon name="fermer" class="h-5 w-5" />
+      </button>
+    </div>
+    <div class="overflow-y-auto px-6 py-6 sm:px-8">
+      <div id="lecteur-fichier" class="mb-6" hidden></div>
+      <div id="lecteur-texte" class="texte-article"></div>
+    </div>
+  </dialog>
+
+  {donnees && <script type="application/json" id="donnees-adherents" set:html={donnees} />}
 </BaseLayout>
+
+<style>
+  .lecteur { width: min(46rem, calc(100% - 2rem)); max-height: calc(100dvh - 2rem); margin: auto; padding: 0; border: 0; border-radius: var(--radius-carte); background: var(--color-creme); box-shadow: var(--shadow-relief); }
+  .lecteur[open] { display: flex; flex-direction: column; }
+  .lecteur::backdrop { background: rgb(35 70 60 / .45); backdrop-filter: blur(2px); }
+</style>
+
+<script>
+  const CLE_STOCKAGE = 'equo-code-adherents';
+  const source = document.getElementById('donnees-adherents');
+  type Item = { id: string; titre: string; type: string; html: string; lien: string | null; fichier: { url: string; nom: string; mime: string; taille: string } | null };
+
+  if (source) {
+    const { sel, iterations, paquet } = JSON.parse(source.textContent || '{}') as { sel: string; iterations: number; paquet: string };
+    const versOctets = (b64: string) => Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+    const form = document.getElementById('form-code') as HTMLFormElement;
+    const champ = document.getElementById('code-adherent') as HTMLInputElement;
+    const souvenir = document.getElementById('se-souvenir') as HTMLInputElement;
+    const message = document.getElementById('message-code') as HTMLElement;
+    const ouvert = document.getElementById('acces-ouvert') as HTMLElement;
+    const lecteur = document.getElementById('lecteur') as HTMLDialogElement;
+    let cle: CryptoKey | null = null;
+    let items = new Map<string, Item>();
+
+    const lire = (k: string) => { try { return localStorage.getItem(k); } catch { return null; } };
+    const ecrire = (k: string, v: string | null) => { try { v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch { /* stockage indisponible */ } };
+
+    async function deriver(code: string) {
+      const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(code.trim().toLowerCase()), 'PBKDF2', false, ['deriveKey']);
+      return crypto.subtle.deriveKey({ name: 'PBKDF2', salt: versOctets(sel), iterations, hash: 'SHA-256' }, base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+    }
+    async function dechiffrer(k: CryptoKey, octets: Uint8Array) {
+      return new Uint8Array(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: octets.slice(0, 12) }, k, octets.slice(12)));
+    }
+
+    async function ouvrir(code: string) {
+      const k = await deriver(code);
+      const liste = JSON.parse(new TextDecoder().decode(await dechiffrer(k, versOctets(paquet)))) as Item[];
+      cle = k;
+      items = new Map(liste.map((i) => [i.id, i]));
+      document.querySelectorAll<HTMLButtonElement>('[data-ressource]').forEach((b) => {
+        b.removeAttribute('aria-disabled');
+        b.querySelector('.etat-verrou')?.setAttribute('hidden', '');
+        b.querySelector('.icone-verrou')?.classList.add('hidden');
+        b.querySelector('.icone-ouvert')?.classList.remove('hidden');
+        const l = b.querySelector('.libelle-action'); if (l) l.textContent = 'Ouvrir';
+      });
+      form.hidden = true; ouvert.hidden = false;
+    }
+
+    function verrouiller() {
+      cle = null; items.clear(); ecrire(CLE_STOCKAGE, null);
+      document.querySelectorAll<HTMLButtonElement>('[data-ressource]').forEach((b) => {
+        b.setAttribute('aria-disabled', 'true');
+        b.querySelector('.etat-verrou')?.removeAttribute('hidden');
+        b.querySelector('.icone-verrou')?.classList.remove('hidden');
+        b.querySelector('.icone-ouvert')?.classList.add('hidden');
+        const l = b.querySelector('.libelle-action'); if (l) l.textContent = 'Réservé aux adhérents';
+      });
+      form.hidden = false; ouvert.hidden = true; champ.value = ''; message.textContent = '';
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const code = champ.value;
+      if (!code.trim()) { message.textContent = 'Saisissez le code reçu avec votre adhésion.'; champ.focus(); return; }
+      const bouton = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+      bouton.disabled = true; message.textContent = '';
+      try {
+        await ouvrir(code);
+        if (souvenir.checked) ecrire(CLE_STOCKAGE, code.trim());
+        (document.getElementById('verrouiller') as HTMLElement).focus();
+      } catch {
+        message.textContent = 'Ce code ne fonctionne pas. Vérifiez-le dans le message reçu avec votre adhésion.';
+        champ.setAttribute('aria-invalid', 'true'); champ.select();
+      } finally { bouton.disabled = false; }
+    });
+    champ.addEventListener('input', () => champ.removeAttribute('aria-invalid'));
+    document.getElementById('verrouiller')?.addEventListener('click', () => { verrouiller(); champ.focus(); });
+
+    // Code mémorisé : ouverture automatique (un code périmé est simplement oublié).
+    const memorise = lire(CLE_STOCKAGE);
+    if (memorise) ouvrir(memorise).catch(() => ecrire(CLE_STOCKAGE, null));
+
+    // ---------- Lecteur ----------
+    const zoneTexte = document.getElementById('lecteur-texte') as HTMLElement;
+    const zoneFichier = document.getElementById('lecteur-fichier') as HTMLElement;
+    let urlFichier: string | null = null;
+
+    async function afficher(item: Item) {
+      (document.getElementById('lecteur-titre') as HTMLElement).textContent = item.titre;
+      (document.getElementById('lecteur-type') as HTMLElement).textContent = item.type;
+      zoneTexte.innerHTML = item.html;
+      zoneFichier.hidden = true; zoneFichier.replaceChildren();
+      lecteur.showModal();
+      if (item.lien) {
+        const a = document.createElement('a'); a.href = item.lien; a.className = 'lien-fleche'; a.textContent = 'Ouvrir la ressource';
+        zoneFichier.append(a); zoneFichier.hidden = false;
+      }
+      if (item.fichier && cle) {
+        const f = item.fichier;
+        const attente = document.createElement('p'); attente.className = 'text-sm text-gris'; attente.textContent = 'Ouverture du fichier…';
+        zoneFichier.append(attente); zoneFichier.hidden = false;
+        try {
+          const brut = new Uint8Array(await (await fetch(f.url)).arrayBuffer());
+          if (urlFichier) URL.revokeObjectURL(urlFichier);
+          urlFichier = URL.createObjectURL(new Blob([await dechiffrer(cle, brut)], { type: f.mime }));
+          attente.remove();
+          if (f.mime.startsWith('audio/') || f.mime.startsWith('video/')) {
+            const m = document.createElement(f.mime.startsWith('audio/') ? 'audio' : 'video');
+            m.controls = true; m.src = urlFichier; m.className = 'w-full rounded-xl'; zoneFichier.append(m);
+          }
+          const a = document.createElement('a');
+          a.href = urlFichier; a.download = f.nom;
+          a.className = 'mt-3 inline-flex items-center gap-2 rounded-full bg-foret px-5 py-2.5 font-extrabold text-creme hover:bg-foret-sombre';
+          a.textContent = `Télécharger ${f.nom} (${f.taille})`;
+          zoneFichier.append(a);
+        } catch {
+          attente.textContent = 'Le fichier n’a pas pu être ouvert. Rechargez la page et réessayez.';
+        }
+      }
+    }
+
+    document.querySelectorAll<HTMLButtonElement>('[data-ressource]').forEach((b) =>
+      b.addEventListener('click', () => {
+        const item = items.get(b.dataset.ressource || '');
+        if (item) afficher(item);
+        else { document.getElementById('acces')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); champ.focus({ preventScroll: true }); }
+      }),
+    );
+    document.getElementById('lecteur-fermer')?.addEventListener('click', () => lecteur.close());
+    lecteur.addEventListener('click', (e) => { if (e.target === lecteur) lecteur.close(); });
+  }
+</script>
