@@ -52,12 +52,12 @@ Pour donner l'accès à un autre membre du bureau : invitez son compte GitHub da
 | **Activités & agenda** | Ajouter un atelier, un stage, un événement ou une activité régulière : dates, lieu, public, places, tarif, lien HelloAsso, photo. Une fiche est créée automatiquement. |
 | **Actualités** | Publier une nouvelle. Les trois dernières apparaissent sur l'accueil. |
 | **Partenaires** | Ajouter un partenaire et son logo. Affiché seulement avec son accord. |
-| **Documents associatifs** | Déposer un PDF (statuts, rapport d'activité…) téléchargeable sur la page L'association. |
-| **Textes de l'accueil** | Modifier le grand titre, la présentation, « Pourquoi ÉQUO ? », la citation. |
+| **Documents associatifs** | Déposer un PDF (statuts, rapport d'activité…) téléchargeable sur la page Qui sommes-nous. |
+| **Textes de l'accueil** | Modifier le grand titre, la présentation, « Pourquoi ÉQUO ? », les textes équilibre / écho. |
 | **Photos du site** | Remplacer les illustrations par de vraies photos (accueil, 3 domaines, partenaires). |
 | **Liens HelloAsso** | Coller l'adresse d'un formulaire HelloAsso. Vide = bouton « Prochainement ». |
 | **Tarifs** | Montants et validation (un tarif non validé n'est pas affiché). |
-| **Équipe (page L'association)** | Titre et texte de la section, membres du bureau (nom, fonction, présentation, portrait) et photos d'équipe avec légendes. Toujours avec l'accord des personnes. |
+| **Équipe (page Qui sommes-nous)** | Titre et texte de la section, membres (nom, rôle, métier, phrase personnelle, présentation, portrait), mot de la Présidente, photos d'équipe. Les portraits apparaissent aussi sur l'accueil. Toujours avec l'accord des personnes. |
 | **Coordonnées & options** | E-mail, adresse, RNA, réseaux sociaux, repères « Photo à venir », reçus fiscaux. |
 | **Envoi des formulaires** | Activer la réception des messages par e-mail (Web3Forms). |
 

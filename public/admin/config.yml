@@ -195,17 +195,17 @@ singletons:
     icon: home
     file: src/data/reglages/accueil.json
     fields:
-      - { name: heroTitre, label: Grand titre (début), widget: string }
-      - { name: heroTitreAccent, label: "Grand titre (fin, en italique vert)", widget: string }
-      - { name: heroSignature, label: Signature, widget: string }
-      - { name: heroSousSignature, label: Sous-signature, widget: string }
-      - { name: heroTexte, label: Texte de présentation, widget: text }
-      - { name: pourquoiTitre, label: "« Pourquoi ÉQUO ? » — titre", widget: string }
-      - { name: pourquoi, label: "« Pourquoi ÉQUO ? » — phrases", widget: list, field: { name: phrase, label: Phrase, widget: text } }
-      - { name: pourquoiConclusion, label: "« Pourquoi ÉQUO ? » — conclusion", widget: string }
-      - { name: citation, label: Citation, widget: text }
-      - { name: ctaTitre, label: Appel final (début), widget: string }
-      - { name: ctaTitreAccent, label: "Appel final (fin, en italique vert)", widget: string }
+      - { name: heroTitre, label: "1. Grand titre (début)", widget: string }
+      - { name: heroTitreAccent, label: "1. Grand titre (fin, en italique vert)", widget: string }
+      - { name: heroSignature, label: "1. Signature", widget: string }
+      - { name: heroSousSignature, label: "1. Sous-signature", widget: string }
+      - { name: heroTexte, label: "1. Texte de présentation", widget: text }
+      - { name: pourquoiTitre, label: "2. Pourquoi ÉQUO — titre", widget: string }
+      - { name: pourquoi, label: "2. Pourquoi ÉQUO — phrases", widget: list, field: { name: phrase, label: Phrase, widget: text } }
+      - { name: pourquoiConclusion, label: "2. Pourquoi ÉQUO — conclusion", widget: string }
+      - { name: equilibre, label: "2. ÉQUO, comme équilibre…", widget: string }
+      - { name: echo, label: "2. ÉQUO, comme écho…", widget: string }
+      - { name: equipeTitre, label: "2. Titre du trombinoscope", widget: string, hint: "Les portraits viennent de la rubrique « Équipe »." }
 
   - name: photos
     label: Photos du site
@@ -249,7 +249,7 @@ singletons:
           - { name: valide, label: Tarif validé (sinon il n'est pas affiché), widget: boolean }
 
   - name: bureau
-    label: Équipe (page L'association)
+    label: Équipe (page Qui sommes-nous)
     icon: groups
     file: src/data/reglages/bureau.json
     fields:
@@ -260,19 +260,29 @@ singletons:
         label_singular: membre
         widget: list
         summary: "{{role}} — {{nom}}"
-        hint: Ne renseigner un nom ou une photo qu'avec l'accord de la personne. L'ordre de la liste est l'ordre d'affichage.
+        hint: Ne renseigner un nom ou une photo qu'avec l'accord de la personne. L'ordre de la liste est l'ordre d'affichage (aussi sur l'accueil).
         fields:
-          - { name: role, label: Fonction, widget: string }
+          - { name: role, label: Rôle dans l'association, widget: string }
           - { name: nom, label: Prénom et nom, widget: string, required: false }
+          - { name: metier, label: Métier ou expertise, widget: string, required: false, hint: "Une ligne. Ex. : Enseignante en activité physique adaptée" }
+          - { name: phrase, label: Phrase personnelle, widget: string, required: false, hint: "Ex. : Ce qui m'anime dans ÉQUO…" }
           - { name: presentation, label: Courte présentation, widget: text, required: false }
-          - { name: photo, label: Photo (portrait), widget: image, required: false }
+          - { name: photo, label: Portrait, widget: image, required: false }
+      - name: mot
+        label: Mot de la Présidente
+        widget: object
+        hint: Affiché sous l'équipe seulement si le texte est rempli.
+        fields:
+          - { name: titre, label: Titre, widget: string, default: Le mot de la Présidente }
+          - { name: texte, label: Texte, widget: text, required: false, hint: "Pourquoi ÉQUO est né, à la première personne. Ligne vide = nouveau paragraphe." }
+          - { name: signature, label: Signature, widget: string, required: false, hint: "Ex. : Prénom Nom, Présidente" }
       - name: photos
         label: Photos de l'équipe
         label_singular: photo
         widget: list
         required: false
         summary: "{{legende}}"
-        hint: Photos de groupe, de réunions ou d'actions, affichées sous les membres. Avec l'accord des personnes photographiées.
+        hint: Photos de groupe, de réunions ou d'actions. Avec l'accord des personnes photographiées.
         fields:
           - { name: image, label: Photo, widget: image }
           - { name: alt, label: Description (accessibilité), widget: string, required: false, hint: "Ce que montre la photo, pour les personnes malvoyantes." }

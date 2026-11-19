@@ -9,12 +9,19 @@ const SITE_URL = process.env.SITE_URL ?? 'https://equo.example';
 
 // Sous-dossier éventuel (GitHub Pages : « /Equo »). Vide sur un nom de domaine.
 const BASE_PATH = process.env.BASE_PATH ?? '/';
+const PREFIXE = BASE_PATH.replace(/\/$/, '');
 
 export default defineConfig({
   site: SITE_URL,
   base: BASE_PATH,
   trailingSlash: 'ignore',
   build: { format: 'directory' },
+  // Anciennes adresses → nouvelles (liens déjà partagés).
+  redirects: {
+    '/association': `${PREFIXE}/qui-sommes-nous`,
+    '/approche': `${PREFIXE}/qui-sommes-nous#approche`,
+    '/rejoindre': `${PREFIXE}/adherer`,
+  },
   integrations: [
     sitemap({
       filter: (page) => !page.includes('/espace-membres') && !page.includes('/merci'),

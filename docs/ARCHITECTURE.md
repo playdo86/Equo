@@ -25,13 +25,13 @@
 
 ```
 /                         Accueil
-/association              L'association : histoire, nom, projet, valeurs, missions, bureau, documents
-/approche                 Notre approche : 5 principes, expertise, évaluation
+/qui-sommes-nous          Équipe, nom (équilibre / écho), approche (5 principes), projet, missions, documents
+                          (remplace /association et /approche, qui redirigent ici)
 /actions                  Nos actions : 3 domaines (#mouvement, #emotions, #education)
   /actions/[programme]      Fiches programmes (au fil de l'eau)
 /agenda                   Activités & agenda : régulières, ateliers, stages, événements
   /agenda/[activite]        Fiche activité (description, public, lieu, horaires, tarif, inscription)
-/rejoindre                Adhésion associative + pratique sport-santé / licence
+/adherer                  Adhésion associative + pratique sport-santé (ancienne adresse /rejoindre redirigée)
 /partenaires              Offre partenaires + formulaire de demande
 /soutenir                 Dons ponctuels, mensuels, mécénat, adhésion
 /contact                  Formulaire + coordonnées
@@ -42,7 +42,11 @@
 /admin                    Interface d'administration (étape 5)
 ```
 
-Navigation principale : L'association · Notre approche · Nos actions · Agenda · Partenaires · Soutenir — avec **Contact** et un bouton **Rejoindre ÉQUO** toujours visibles.
+Navigation principale : Qui sommes-nous · Nos actions · Agenda · Partenaires · Soutenir — avec **Contact** et un bouton **Adhérer** toujours visibles.
+
+Vocabulaire unique sur tout le site : **Participer** (agenda) · **Adhérer** (/adherer) · **Faire un don** (/soutenir) · **Devenir partenaire** (/partenaires).
+
+Accueil en 4 blocs (retours du bureau, novembre 2026) : 1. Construire les équilibres · 2. Pourquoi ÉQUO (équilibre / écho + trombinoscope) · 3. Ce que nous faisons · 4. S'engager.
 
 ---
 

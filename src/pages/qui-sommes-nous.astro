@@ -4,33 +4,91 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import PageHero from '@/components/PageHero.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import Icon from '@/components/Icon.astro';
+import Trombine from '@/components/Trombine.astro';
 import { site, bureau, equipe } from '@/config/site';
-import { valeurs, missions, dimensions, vision, apports } from '@/data/association';
+import { missions, dimensions, vision, apports, principesApproche, rigueur } from '@/data/association';
 import { u } from '@/lib/url';
 
 const documents = (await getCollection('documents', (d) => d.data.visibilite === 'public')).sort(
   (a, b) => a.data.ordre - b.data.ordre,
 );
+const etapes = ['Expérimenter', 'Ressentir', 'Ajuster', 'Choisir', 'S’approprier'];
+const sommaire = [
+  ['#equipe', 'L’équipe'],
+  ['#nom', 'Le nom'],
+  ['#approche', 'Notre approche'],
+  ['#vision', 'Projet associatif'],
+  ['#missions', 'Missions'],
+  ['#documents', 'Documents'],
+];
 ---
 
 <BaseLayout
-  title="L'association"
-  description="ÉQUO, association loi 1901 créée en 2026 à Mercurey : histoire du nom, projet associatif, vision de la santé positive, valeurs, missions et documents."
+  title="Qui sommes-nous"
+  description="ÉQUO, association de prévention créée en 2026 à Mercurey (Saône-et-Loire) : l'équipe, le sens du nom, notre approche de la prévention par l'expérience, nos missions."
 >
   <PageHero
-    eyebrow="L'association"
-    title="Une association de prévention fondée sur l’action et l’expertise"
+    eyebrow="Qui sommes-nous"
+    title="Une association de prévention, <em class='italic text-lagon'>portée par des personnes</em>"
     lead={`ÉQUO est une association loi 1901 créée en ${site.founded} à Mercurey, en Saône-et-Loire. Elle agit autour d’une idée centrale : le bien-être et la santé reposent sur des équilibres dynamiques, personnels et fragiles, qui se construisent dans la durée.`}
   >
     <nav aria-label="Sommaire de la page" class="reveal mt-8 flex flex-wrap gap-2" style="--delai:240ms">
-      {[['#nom', 'Le nom'], ['#vision', 'Vision'], ['#valeurs', 'Valeurs'], ['#missions', 'Missions'], ['#equipe', 'Équipe'], ['#documents', 'Documents']].map(([h, l]) => (
+      {sommaire.map(([h, l]) => (
         <a href={h} class="rounded-full bg-creme px-4 py-2 text-sm font-bold text-foret ring-1 ring-sable hover:ring-sauge">{l}</a>
       ))}
     </nav>
   </PageHero>
 
+  <!-- Équipe -->
+  <section id="equipe" class="scroll-mt-24 py-20 sm:py-24" aria-labelledby="equipe-titre">
+    <div class="container-equo">
+      <div class="max-w-3xl">
+        <p class="eyebrow reveal"><span>L’équipe</span></p>
+        <h2 id="equipe-titre" class="reveal mt-4 text-3xl leading-tight font-medium sm:text-4xl">{equipe.titre}</h2>
+        {equipe.paragraphes.map((p) => <p class="reveal mt-5 leading-relaxed text-anthracite/85">{p}</p>)}
+      </div>
+      <ul class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {bureau.map((m, i) => (
+          <li class="reveal" style={`--delai:${(i % 3) * 80}ms`}><Trombine membre={m} /></li>
+        ))}
+      </ul>
+
+      {
+        equipe.mot && (
+          <figure class="reveal mt-14 rounded-[var(--radius-carte)] bg-sauge-clair p-8 sm:p-12">
+            <h3 class="text-2xl font-medium sm:text-3xl">{equipe.mot.titre}</h3>
+            <blockquote class="mt-6 space-y-4 font-titre text-lg leading-relaxed text-foret-sombre sm:text-xl">
+              {equipe.mot.paragraphes.map((p) => <p>{p}</p>)}
+            </blockquote>
+            {equipe.mot.signature && <figcaption class="mt-6 font-extrabold text-foret">— {equipe.mot.signature}</figcaption>}
+          </figure>
+        )
+      }
+
+      {
+        equipe.photos.length > 0 && (
+          <ul class:list={['mt-14 grid gap-5', equipe.photos.length === 2 && 'sm:grid-cols-2', equipe.photos.length > 2 && 'sm:grid-cols-2 lg:grid-cols-3']}>
+            {equipe.photos.map((p, i) => (
+              <li class="reveal" style={`--delai:${(i % 3) * 80}ms`}>
+                <figure>
+                  <img
+                    src={u(p.image)}
+                    alt={p.alt ?? p.legende ?? ''}
+                    loading="lazy"
+                    class:list={['w-full rounded-[var(--radius-carte)] object-cover shadow-douce', equipe.photos.length === 1 ? 'aspect-[21/9]' : 'aspect-[4/3]']}
+                  />
+                  {p.legende && <figcaption class="mt-3 text-sm text-gris">{p.legende}</figcaption>}
+                </figure>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </section>
+
   <!-- Le nom -->
-  <section id="nom" class="scroll-mt-24 py-20 sm:py-24" aria-labelledby="nom-titre">
+  <section id="nom" class="scroll-mt-24 bg-sable-clair py-20 sm:py-24" aria-labelledby="nom-titre">
     <div class="container-equo">
       <h2 id="nom-titre" class="reveal max-w-2xl text-3xl font-medium sm:text-4xl">Un nom, deux sens</h2>
       <div class="mt-12 grid gap-6 lg:grid-cols-2">
@@ -67,6 +125,65 @@ const documents = (await getCollection('documents', (d) => d.data.visibilite ===
         </blockquote>
         <figcaption class="mt-4 text-sm font-bold text-gris">C’est cette résonance qui rend possible une appropriation durable.</figcaption>
       </figure>
+    </div>
+  </section>
+
+  <!-- Notre approche -->
+  <section id="approche" class="scroll-mt-24 py-20 sm:py-24" aria-labelledby="approche-titre">
+    <div class="container-equo">
+      <div class="max-w-3xl">
+        <p class="eyebrow reveal"><span>Une approche nouvelle de la prévention</span></p>
+        <h2 id="approche-titre" class="reveal mt-4 text-3xl leading-tight font-medium sm:text-[2.6rem]">Une prévention par l’expérience</h2>
+        <p class="reveal mt-5 text-lg leading-relaxed text-anthracite/85">
+          Plutôt que de transmettre des prescriptions ou des modèles à suivre, nous créons les conditions pour que chacun
+          puisse expérimenter, ajuster, faire des choix réalistes et construire ses propres équilibres, à son rythme.
+        </p>
+        <ol class="reveal mt-8 flex flex-wrap items-center gap-x-2 gap-y-3" aria-label="Le cheminement proposé">
+          {etapes.map((e, i) => (
+            <li class="flex items-center gap-2">
+              <span class="rounded-full bg-sauge-clair px-4 py-2 font-extrabold text-foret">{e}</span>
+              {i < etapes.length - 1 && <Icon name="fleche" class="h-4 w-4 text-or-texte" />}
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      <h3 class="reveal mt-16 text-2xl font-medium">Nos cinq principes</h3>
+      <ul class="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {principesApproche.map((p, i) => (
+          <li id={p.id} class="reveal scroll-mt-24" style={`--delai:${(i % 3) * 80}ms`}>
+            <article class="flex h-full flex-col rounded-[var(--radius-carte)] bg-creme p-6 shadow-douce ring-1 ring-sable sm:p-7">
+              <span class="grid h-12 w-12 place-items-center rounded-2xl bg-foret text-creme"><Icon name={p.icone} class="h-6 w-6" /></span>
+              <h4 class="mt-5 font-titre text-xl leading-snug text-foret-sombre">{p.titre}</h4>
+              <p class="mt-3 text-[0.95rem] leading-relaxed text-anthracite/85">{p.texte}</p>
+              <p class="mt-auto pt-4 text-sm leading-relaxed text-foret-sombre"><strong class="font-extrabold">Concrètement :</strong> {p.concret}</p>
+            </article>
+          </li>
+        ))}
+      </ul>
+
+      <div class="mt-16 grid gap-10 lg:grid-cols-12">
+        <div class="lg:col-span-4">
+          <h3 class="reveal text-2xl font-medium">Accessible, mais exigeant</h3>
+          <p class="reveal mt-4 leading-relaxed text-anthracite/85">Une approche simple dans la forme, rigoureuse dans le fond.</p>
+        </div>
+        <ul class="grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:col-span-8">
+          {rigueur.map((r, i) => (
+            <li class="reveal" style={`--delai:${(i % 2) * 80}ms`}>
+              <span class="block h-[3px] w-10 rounded-full bg-or" aria-hidden="true" />
+              <h4 class="mt-3 font-titre text-lg text-foret-sombre">{r.titre}</h4>
+              <p class="mt-2 text-[0.95rem] leading-relaxed text-anthracite/80">{r.texte}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <p class="reveal mt-14 rounded-2xl bg-sable p-5 text-[0.95rem] text-anthracite">
+        ÉQUO intervient en complémentarité des parcours de soins et des professionnels de santé. Les actions d’éducation
+        thérapeutique et d’activité physique sur prescription sont menées en lien avec des professionnels ou structures
+        habilités. <strong>Les activités proposées relèvent de la prévention et du bien-être et ne remplacent pas un suivi
+        médical, paramédical ou thérapeutique.</strong>
+      </p>
     </div>
   </section>
 
@@ -107,22 +224,6 @@ const documents = (await getCollection('documents', (d) => d.data.visibilite ===
     </div>
   </section>
 
-  <!-- Valeurs -->
-  <section id="valeurs" class="scroll-mt-24 py-20 sm:py-24" aria-labelledby="valeurs-titre">
-    <div class="container-equo">
-      <p class="eyebrow reveal"><span>Valeurs fondatrices</span></p>
-      <h2 id="valeurs-titre" class="reveal mt-4 max-w-2xl text-3xl leading-tight font-medium sm:text-4xl">Partagées par le bureau et l’ensemble des intervenants</h2>
-      <dl class="mt-12 divide-y divide-sable border-y border-sable">
-        {valeurs.map((v, i) => (
-          <div class="reveal grid gap-2 py-6 md:grid-cols-12 md:gap-8" style={`--delai:${i * 60}ms`}>
-            <dt class="font-titre text-xl text-foret-sombre md:col-span-4">{v.titre}</dt>
-            <dd class="leading-relaxed text-anthracite/85 md:col-span-8">{v.texte}</dd>
-          </div>
-        ))}
-      </dl>
-    </div>
-  </section>
-
   <!-- Missions -->
   <section id="missions" class="scroll-mt-24 bg-foret-sombre py-20 text-creme sm:py-24" aria-labelledby="missions-titre">
     <div class="container-equo">
@@ -137,56 +238,6 @@ const documents = (await getCollection('documents', (d) => d.data.visibilite ===
         ))}
       </ol>
     </div>
-  </section>
-
-  <!-- Équipe -->
-  <section id="equipe" class="scroll-mt-24 py-20 sm:py-24" aria-labelledby="equipe-titre">
-    <div class="container-equo grid gap-12 lg:grid-cols-12">
-      <div class="lg:col-span-5">
-        <p class="eyebrow reveal"><span>Équipe</span></p>
-        <h2 id="equipe-titre" class="reveal mt-4 text-3xl leading-tight font-medium sm:text-4xl">{equipe.titre}</h2>
-        {equipe.paragraphes.map((p) => (
-          <p class="reveal mt-5 leading-relaxed text-anthracite/85">{p}</p>
-        ))}
-      </div>
-      <ul class="grid gap-5 sm:grid-cols-2 lg:col-span-7 xl:grid-cols-3">
-        {bureau.map((m, i) => (
-          <li class="reveal rounded-[var(--radius-carte)] bg-sable-clair p-6 text-center" style={`--delai:${i * 80}ms`}>
-            {m.photo ? (
-              <img src={u(m.photo)} alt={m.nom ?? m.role} loading="lazy" class="mx-auto h-28 w-28 rounded-full object-cover shadow-douce" />
-            ) : (
-              <span class="mx-auto grid h-28 w-28 place-items-center rounded-full bg-creme text-sauge shadow-douce" aria-hidden="true">
-                <Icon name="personne" class="h-11 w-11" />
-              </span>
-            )}
-            <p class="mt-4 font-titre text-lg text-foret-sombre">{m.nom ?? m.role}</p>
-            <p class="mt-1 text-sm text-gris">{m.nom ? m.role : 'Présentation à venir'}</p>
-            {m.presentation && <p class="mt-3 text-sm leading-relaxed text-anthracite/80">{m.presentation}</p>}
-          </li>
-        ))}
-      </ul>
-    </div>
-    {
-      equipe.photos.length > 0 && (
-        <div class="container-equo mt-14">
-          <ul class:list={['grid gap-5', equipe.photos.length === 1 ? '' : equipe.photos.length === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-3']}>
-            {equipe.photos.map((p, i) => (
-              <li class="reveal" style={`--delai:${(i % 3) * 80}ms`}>
-                <figure>
-                  <img
-                    src={u(p.image)}
-                    alt={p.alt ?? p.legende ?? ''}
-                    loading="lazy"
-                    class:list={['w-full rounded-[var(--radius-carte)] object-cover shadow-douce', equipe.photos.length === 1 ? 'aspect-[21/9]' : 'aspect-[4/3]']}
-                  />
-                  {p.legende && <figcaption class="mt-3 text-sm text-gris">{p.legende}</figcaption>}
-                </figure>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )
-    }
   </section>
 
   <!-- Documents -->
@@ -221,9 +272,9 @@ const documents = (await getCollection('documents', (d) => d.data.visibilite ===
   </section>
 
   <CtaBand
-    title="Envie de rejoindre l’aventure ?"
-    text="Adhérez pour soutenir le projet, ou écrivez-nous pour imaginer une action ensemble."
-    primary={{ label: 'Rejoindre ÉQUO', href: '/rejoindre' }}
+    title="Envie de vous engager ?"
+    text="Participez à une activité, adhérez pour soutenir le projet, ou écrivez-nous pour imaginer une action ensemble."
+    primary={{ label: 'Adhérer', href: '/adherer' }}
     secondary={{ label: 'Nous contacter', href: '/contact' }}
   />
 </BaseLayout>

@@ -122,9 +122,20 @@ export const typesDemande = [
 /* Bureau : noms publiés uniquement avec l'accord des personnes.       */
 /* ------------------------------------------------------------------ */
 
-export const bureau = bureauData.membres.map((m) => ({
+export interface Membre {
+  role: string;
+  nom: string | null;
+  metier: string | null;
+  phrase: string | null;
+  presentation: string | null;
+  photo: string | null;
+}
+
+export const bureau: Membre[] = bureauData.membres.map((m) => ({
   role: m.role,
   nom: ou(m.nom),
+  metier: ou(m.metier),
+  phrase: ou(m.phrase),
   presentation: ou(m.presentation),
   photo: ou(m.photo),
 }));
@@ -133,6 +144,14 @@ export const bureau = bureauData.membres.map((m) => ({
 export const equipe = {
   titre: ou(bureauData.titre) ?? 'Le bureau',
   paragraphes: (bureauData.texte ?? '').split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean),
+  /** « Mot de la Présidente » : affiché seulement s'il est rempli. */
+  mot: ou(bureauData.mot?.texte)
+    ? {
+        titre: ou(bureauData.mot.titre) ?? 'Le mot de la Présidente',
+        paragraphes: bureauData.mot.texte.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean),
+        signature: ou(bureauData.mot.signature),
+      }
+    : null,
   photos: ((bureauData.photos ?? []) as { image?: string; alt?: string; legende?: string }[])
     .map((p) => ({ image: ou(p.image), alt: ou(p.alt), legende: ou(p.legende) }))
     .filter((p): p is { image: string; alt: string | null; legende: string | null } => !!p.image),
@@ -157,8 +176,7 @@ export interface NavItem {
 }
 
 export const mainNav: NavItem[] = [
-  { label: "L'association", href: '/association' },
-  { label: 'Notre approche', href: '/approche' },
+  { label: 'Qui sommes-nous', href: '/qui-sommes-nous' },
   { label: 'Nos actions', href: '/actions' },
   { label: 'Agenda', href: '/agenda' },
   { label: 'Partenaires', href: '/partenaires' },
@@ -169,7 +187,7 @@ export const footerNav: NavItem[] = [
   { label: 'Accueil', href: '/' },
   ...mainNav,
   { label: 'Actualités', href: '/actualites' },
-  { label: 'Rejoindre ÉQUO', href: '/rejoindre' },
+  { label: 'Adhérer', href: '/adherer' },
   { label: 'Contact', href: '/contact' },
 ];
 

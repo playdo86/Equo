@@ -35,7 +35,7 @@ const isCurrent = (href: string) => path === href || path.startsWith(href + '/')
 
     <div class="hidden items-center gap-2 xl:flex">
       <a href={u('/contact')} class="rounded-full px-3.5 py-2 text-[0.95rem] font-bold text-anthracite/85 hover:text-foret" aria-current={isCurrent('/contact') ? 'page' : undefined}>Contact</a>
-      <Button href="/rejoindre">Rejoindre ÉQUO</Button>
+      <Button href="/adherer">Adhérer</Button>
     </div>
 
     <button
@@ -69,7 +69,7 @@ const isCurrent = (href: string) => path === href || path.startsWith(href + '/')
         }
       </ul>
       <div class="mt-5 flex flex-col gap-3 pb-2 sm:flex-row">
-        <Button href="/rejoindre" size="lg">Rejoindre ÉQUO</Button>
+        <Button href="/adherer" size="lg">Adhérer</Button>
         <Button href="/soutenir" size="lg" variant="secondaire">Faire un don</Button>
       </div>
     </nav>

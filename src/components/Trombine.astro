@@ -1,0 +1,46 @@
+---
+/**
+ * Portrait d'un membre de l'équipe.
+ * - « compact » : trombinoscope de l'accueil (photo, nom, rôle).
+ * - « complet » : carte de la page Qui sommes-nous (avec métier, phrase, présentation).
+ */
+import type { Membre } from '@/config/site';
+import { u } from '@/lib/url';
+
+interface Props {
+  membre: Membre;
+  variante?: 'compact' | 'complet';
+}
+const { membre: m, variante = 'complet' } = Astro.props;
+const initiales = m.nom
+  ? m.nom
+      .split(/\s+/)
+      .map((x) => x[0])
+      .slice(0, 2)
+      .join('')
+      .toUpperCase()
+  : null;
+const taille = variante === 'compact' ? 'h-24 w-24 text-2xl' : 'h-32 w-32 text-3xl';
+---
+
+<div class:list={['flex flex-col items-center text-center', variante === 'complet' && 'h-full rounded-[var(--radius-carte)] bg-creme p-6 shadow-douce ring-1 ring-sable sm:p-7']}>
+  {
+    m.photo ? (
+      <img src={u(m.photo)} alt={m.nom ? `Portrait de ${m.nom}` : m.role} loading="lazy" class:list={['rounded-full object-cover shadow-douce ring-4 ring-creme', taille]} />
+    ) : (
+      <span class:list={['grid place-items-center rounded-full bg-sauge-clair font-titre text-foret shadow-douce ring-4 ring-creme', taille]} aria-hidden="true">
+        {initiales ?? (
+          <svg viewBox="0 0 24 24" class="h-1/3 w-1/3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <circle cx="12" cy="8" r="3.5" />
+            <path d="M5 20c.8-3.8 3.6-6 7-6s6.2 2.2 7 6" />
+          </svg>
+        )}
+      </span>
+    )
+  }
+  <p class:list={['mt-4 font-titre text-foret-sombre', variante === 'compact' ? 'text-lg' : 'text-xl']}>{m.nom ?? m.role}</p>
+  <p class="mt-0.5 text-sm font-bold text-lagon">{m.nom ? m.role : 'Présentation à venir'}</p>
+  {variante === 'complet' && m.metier && <p class="mt-1 text-sm text-gris">{m.metier}</p>}
+  {variante === 'complet' && m.phrase && <p class="mt-4 font-titre text-[1.05rem] leading-snug text-anthracite italic">« {m.phrase} »</p>}
+  {variante === 'complet' && m.presentation && <p class="mt-3 text-sm leading-relaxed text-anthracite/80">{m.presentation}</p>}
+</div>

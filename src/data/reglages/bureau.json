@@ -5,21 +5,32 @@
     {
       "role": "Présidente",
       "nom": "",
+      "metier": "",
+      "phrase": "",
       "presentation": "",
       "photo": ""
     },
     {
       "role": "Trésorière",
       "nom": "",
+      "metier": "",
+      "phrase": "",
       "presentation": "",
       "photo": ""
     },
     {
       "role": "Secrétaire",
       "nom": "",
+      "metier": "",
+      "phrase": "",
       "presentation": "",
       "photo": ""
     }
   ],
+  "mot": {
+    "titre": "Le mot de la Présidente",
+    "texte": "",
+    "signature": ""
+  },
   "photos": []
 }
