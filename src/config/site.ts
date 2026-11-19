@@ -148,7 +148,11 @@ export const equipe = {
   mot: ou(bureauData.mot?.texte)
     ? {
         titre: ou(bureauData.mot.titre) ?? 'Le mot de la Présidente',
-        paragraphes: bureauData.mot.texte.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean),
+        // Apostrophes typographiques (’) pour un rendu soigné.
+        paragraphes: bureauData.mot.texte
+          .split(/\n\s*\n/)
+          .map((p) => p.trim().replace(/'/g, '’'))
+          .filter(Boolean),
         signature: ou(bureauData.mot.signature),
       }
     : null,
