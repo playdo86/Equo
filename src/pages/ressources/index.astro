@@ -106,7 +106,11 @@ if (codeConfigure && adherents.length) {
           ) : (
             <div class="rounded-[var(--radius-carte)] bg-white p-6 shadow-douce ring-1 ring-sable">
               <p class="font-extrabold text-foret">L’espace adhérents ouvre prochainement.</p>
-              <p class="mt-2 text-sm text-gris">Les ressources ci-dessous seront accessibles avec le code envoyé aux adhérents.</p>
+              <p class="mt-2 text-sm text-gris">
+                {adherents.length
+                  ? 'Les ressources ci-dessous seront accessibles avec le code envoyé aux adhérents.'
+                  : 'Les ressources seront accessibles avec le code envoyé aux adhérents.'}
+              </p>
               <div class="mt-4"><Button href="/adherer">Adhérer à ÉQUO</Button></div>
             </div>
           )}
