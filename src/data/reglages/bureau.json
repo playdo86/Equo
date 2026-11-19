@@ -4,27 +4,27 @@
   "membres": [
     {
       "role": "Présidente",
-      "nom": "",
-      "metier": "",
+      "nom": "Anne Theurel",
+      "metier": "Docteure en Psychologie de la santé",
       "phrase": "",
       "presentation": "",
-      "photo": ""
+      "photo": "/uploads/annebis.webp"
     },
     {
       "role": "Trésorière",
-      "nom": "",
-      "metier": "",
+      "nom": "Bérénice Bres",
+      "metier": "Coordinatrice régionale- GRADeS",
       "phrase": "",
       "presentation": "",
-      "photo": ""
+      "photo": "/uploads/berenice-bres.webp"
     },
     {
       "role": "Secrétaire",
-      "nom": "",
-      "metier": "",
+      "nom": "Maggie Chevassu",
+      "metier": "Chargée de mission CPTS du Grand Lons",
       "phrase": "",
-      "presentation": "",
-      "photo": ""
+      "presentation": "Depuis 25 ans, Maggie fait de la santé communautaire. Bien avant que les consultants ne découvrent les vertus de l'intelligence collective et que LinkedIn ne transforme la coopération en hashtag.\n\nSon terrain de jeu ? Réunir autour d'une même table des professionnels, des institutions, des habitants et parfois quelques sceptiques convaincus que \"ça ne marchera jamais\". Son petit plaisir ? Leur montrer que si.\n\nDepuis un quart de siècle, Maggie construit donc des projets qui bousculent les approches descendantes, valorise les savoirs expérientiels, redonnent du pouvoir d'agir et démontrent qu'une autre façon de penser la santé est possible.\n\nParticulièrement engagée pour la santé des femmes, elle s'attache à rendre visibles les sujets longtemps relégués dans les angles morts des politiques de santé : santé menstruelle, santé sexuelle, santé mentale, douleurs minimisées, retards de diagnostics ou violences. Pour elle, promouvoir la santé des femmes n'est pas un sujet parmi tant d’autres : c'est tout simplement une exigence de santé publique !",
+      "photo": "/uploads/image0.webp"
     }
   ],
   "mot": {
